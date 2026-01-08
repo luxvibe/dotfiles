@@ -33,7 +33,6 @@ fi
 (( $+commands[hyperfine] )) && alias benchmark=hyperfine
 (( $+commands[gping] )) && alias ping=gping
 (( $+commands[paru] )) && alias yay=paru
-(( $+commands[nvim] )) && alias vim=nvim
 
 # Git
 alias gtr='git tag -d $(git tag) && git fetch --tags'
@@ -82,14 +81,34 @@ elif [[ $OSTYPE == linux* ]]; then
     if (( $+commands[apt-get] )); then
         zinit snippet OMZP::ubuntu
         alias agua='aguu -y && agar -y && aga -y'
-        alias kclean+='sudo aptitude remove -P "?and(~i~nlinux-(ima|hea),\
-                            ?not(?or(~n`uname -r | cut -d'\''-'\'' -f-2`,\
-                            ~nlinux-generic,\
-                            ~n(linux-(virtual|headers-virtual|headers-generic|image-virtual|image-generic|image-`dpkg --print-architecture`)))))"'
+        
+        # Kernel cleanup function (replaced old complex alias)
+        function kclean() {
+            local kernel_version=$(uname -r | cut -d'-' -f-2)
+            sudo aptitude remove -P "?and(~i~nlinux-(ima|hea),
+                                ?not(?or(~n$kernel_version,
+                                ~nlinux-generic,
+                                ~n(linux-(virtual|headers-virtual|headers-generic|image-virtual|image-generic|image-$(dpkg --print-architecture))))))"
+        }
     elif (( $+commands[pacman] )); then
         zinit snippet OMZP::archlinux
     fi
 fi
+
+# Upgrade Helpers
+function upgrade_pip_packages() {
+    local cmd="$1" # pip or pip3
+    echo "Upgrading packages using $cmd..."
+    $cmd list --outdated --format=json | python3 -c '
+import json, sys
+try:
+    data = json.loads(sys.stdin.read())
+    for item in data:
+        print(item["name"])
+except Exception:
+    pass
+' | xargs -n1 $cmd install -U
+}
 
 # Upgrade
 alias upgrade_repo='git pull --rebase --stat origin master'
@@ -101,18 +120,34 @@ alias upgrade_zinit='zinit self-update && zinit update -a -p && zinit compinit'
 (( $+commands[gem] )) && alias upgrade_gem='gem update && gem cleanup'
 (( $+commands[go] )) && alias upgrade_go='$DOTFILES/install_go.sh'
 (( $+commands[npm] )) && alias upgrade_npm='for package in $(npm -g outdated --parseable --depth=0 | cut -d: -f2); do npm -g install "$package"; done'
-(( ! $+commands[brew] )) && (( $+commands[pip] )) && alias upgrade_pip="pip list --outdated --format=json | python -c '
-import json
-import sys
 
-for item in json.loads(sys.stdin.read()):
-    print(\"=\".join([item[\"name\"], item[\"latest_version\"]]))
-' | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip install -U"
-(( ! $+commands[brew] )) && (( $+commands[pip3] )) && alias upgrade_pip3="pip3 list --outdated --format=json | python3 -c '
-import json
-import sys
+if (( ! $+commands[brew] )); then
+    (( $+commands[pip] )) && alias upgrade_pip='upgrade_pip_packages pip'
+    (( $+commands[pip3] )) && alias upgrade_pip3='upgrade_pip_packages pip3'
+fi
 
-for item in json.loads(sys.stdin.read()):
-    print(\"=\".join([item[\"name\"], item[\"latest_version\"]]))
-' | grep -v '^\-e' | cut -d = -f 1 | xargs -n1 pip3 install -U"
 (( $+commands[brew] )) && alias upgrade_brew='brew bundle --global; bua'
+# Use bat as man pager
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+# Lazygit alias
+alias lg='lazygit'
+
+# TheFuck: Correct previous console command
+if command -v thefuck &>/dev/null; then
+    eval $(thefuck --alias)
+    alias fk='fuck'
+fi
+
+# --- Advanced Aliases ---
+
+# Global aliases (expand anywhere on the line)
+alias -g G='| grep'
+alias -g L='| less'
+alias -g ...='../..'
+alias -g ....='../../..'
+
+# Suffix aliases (open files by extension)
+alias -s {md,txt,conf,cfg,json,yaml,yml,toml}=vim
+alias -s {png,jpg,jpeg,gif,webp}=open
+alias -s {pdf}=open

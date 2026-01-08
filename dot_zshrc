@@ -8,14 +8,21 @@ source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-# Load plugins
-source "$XDG_CONFIG_HOME/zsh/plugins.zsh"
+# 1. Add custom completions to fpath BEFORE initializing plugins/compinit
+fpath=( "$HOME/.zsh/completions" $fpath )
 
-# Load aliases
-source "$XDG_CONFIG_HOME/zsh/aliases.zsh"
+# 2. Define config path safely
+ZSH_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 
-# Load Powerlevel10k theme
+# 3. Load Main Configurations
+source "$ZSH_CONFIG_DIR/plugins.zsh"
+source "$ZSH_CONFIG_DIR/aliases.zsh"
+
+# 4. Load Powerlevel10k theme
 [[ ! -f "$HOME/.p10k.zsh" ]] || source "$HOME/.p10k.zsh"
 
-# Load local customizations
+# 5. Load local customizations
 [[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
+
+# 6. iTerm2 Shell Integration
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true

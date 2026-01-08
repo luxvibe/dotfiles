@@ -1,23 +1,42 @@
 # ~/.config/zsh/plugins.zsh
 # Zsh plugins configuration
 
-# Load Zinit annexes
+# ------------------------------------------------------------------------------
+# 1. Environment Setup (MUST BE FIRST)
+# ------------------------------------------------------------------------------
+
+# Homebrew Setup
+if (( $+commands[brew] )); then
+    eval "$(brew shellenv)"
+    FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
+fi
+
+# Mise Setup
+if (( $+commands[mise] )); then
+    eval "$(mise activate zsh)"
+fi
+
+# ------------------------------------------------------------------------------
+# 2. Zinit Configuration
+# ------------------------------------------------------------------------------
+
 zinit light-mode depth"1" for \
       zdharma-continuum/zinit-annex-bin-gem-node \
       zdharma-continuum/zinit-annex-patch-dl
 
-# Oh My Zsh
+# Oh My Zsh core
 zinit for \
-      OMZL::correction.zsh \
       OMZL::directories.zsh \
       OMZL::history.zsh \
       OMZL::key-bindings.zsh \
       OMZL::theme-and-appearance.zsh \
       OMZP::common-aliases
 
+# Async Plugins
 zinit wait lucid for \
       OMZP::colored-man-pages \
       OMZP::cp \
+      OMZP::sudo \
       OMZP::tmux \
       OMZP::ansible \
       OMZP::git \
@@ -32,8 +51,19 @@ zinit wait lucid for \
       OMZP::fnm \
       OMZP::chezmoi \
       OMZP::uv \
-      OMZP::ansible \
-      OMZP::fancy-ctrl-z
+      OMZP::fancy-ctrl-z \
+      MichaelAquilina/zsh-you-should-use
+
+# Navi - Interactive Cheatsheet (Official Setup)
+# First, ensure navi is installed (prefer GitHub release binary for speed)
+if ! (( $+commands[navi] )); then
+    zinit ice from"gh-r" as"program"
+    zinit light denisidoro/navi
+fi
+# Then, load the widget immediately (not async) to ensure keybinding works
+if (( $+commands[navi] )); then
+    eval "$(navi widget zsh)"
+fi
 
 # Completion enhancements
 zinit wait lucid depth"1" for \
@@ -43,7 +73,6 @@ zinit wait lucid depth"1" for \
       zsh-users/zsh-completions \
       atload"!_zsh_autosuggest_start" \
       zsh-users/zsh-autosuggestions \
-      djui/alias-tips \
       zsh-users/zsh-history-substring-search \
       hlissner/zsh-autopair
 
@@ -57,129 +86,98 @@ if (( $+commands[zoxide] )); then
            --preview '(eza --tree --icons --level 3 --color=always \
            --group-directories-first {2} || tree -NC {2} || \
            ls --color=always --group-directories-first {2}) 2>/dev/null | head -200'"
-else
-    zinit ice wait lucid depth"1"
-    zinit light agkozak/zsh-z
 fi
 
-# Git extras
-if (( $+commands[brew] )); then
-    if (( ! $+commands[git-summary] )); then
-        alias install_git_extras='brew install git-extras'
-    fi
-else
-    zinit ice wait lucid depth"1" as"program" pick"$ZPFX/bin/git-*" \
-          src"etc/git-extras-completion.zsh" make"PREFIX=$ZPFX" \
-          if'(( $+commands[make] ))'
-    zinit light tj/git-extras
-fi
-
-# FZF: fuzzy finder
+# FZF: fuzzy finder settings
 if (( $+commands[brew] )); then
     FZF="$(brew --prefix)/opt/fzf/shell/"
-elif (( $+commands[apt-get] )); then
-    FZF="/usr/share/doc/fzf/examples/"
-else
+elif [[ -d "/usr/share/fzf" ]]; then
     FZF="/usr/share/fzf/"
 fi
 
-if [[ -f "$FZF/completion.zsh" ]]; then
-    source "$FZF/completion.zsh"
-fi
-
-if [[ -f "$FZF/key-bindings.zsh" ]]; then
-    source "$FZF/key-bindings.zsh"
-fi
+[[ -f "$FZF/completion.zsh" ]] && source "$FZF/completion.zsh"
+[[ -f "$FZF/key-bindings.zsh" ]] && source "$FZF/key-bindings.zsh"
 
 # Git utilities powered by FZF
 zinit ice wait lucid depth"1"
 zinit light wfxr/forgit
 
-# Replace zsh's default completion selection menu with fzf
+# FZF-tab
 zinit ice wait lucid depth"1" atload"zicompinit; zicdreplay" blockf
 zinit light Aloxaf/fzf-tab
 
 # FZF settings
-export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git || \
-                               git ls-tree -r --name-only HEAD || \
-                               rg --files --hidden --follow --glob '!.git' || \
-                               find ."
+export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='--height 40% --tmux 100%,60% --border'
-export FZF_CTRL_T_OPTS="--preview '(bat --style=numbers --color=always {} || \
-                       cat {} || tree -NC {}) 2>/dev/null | head -200'"
-export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview' --exact"
-export FZF_ALT_C_OPTS="--preview '(eza --tree --icons --level 3 --color=always --group-directories-first {} || \
-                       tree -NC {} || ls --color=always --group-directories-first {}) 2>/dev/null | head -200'"
+
+# Completion Styles
+
+# Initialize LS_COLORS using system defaults (safe fallback)
+
+# This prevents "zsh: command not found: di=..." errors while keeping iTerm2 colors
+
+if [[ -z "$LS_COLORS" ]]; then
+
+  if (( $+commands[dircolors] )); then
+
+    # GNU/Linux or brew coreutils
+
+    eval "$(dircolors -b)"
+
+  elif (( $+commands[gdircolors] )); then
+
+    # macOS with brew coreutils
+
+    eval "$(gdircolors -b)"
+
+  else
+
+    # BSD/macOS default (uses LSCOLORS -> LS_COLORS mapping)
+
+    export CLICOLOR=1
+
+    zstyle ':completion:*' list-colors ''
+
+  fi
+
+fi
+
+
+
+# Apply colors to completion list if LS_COLORS is present
+
+if [[ -n "$LS_COLORS" ]]; then
+
+  zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+
+fi
+
+
 
 zstyle ':completion:*' menu no
+
 zstyle ':completion:*:descriptions' format '[%d]'
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-zstyle ':completion:complete:*:options' sort false
 
-# Switch group using `<` and `>`
 zstyle ':fzf-tab:*' switch-group '<' '>'
-
-# Preview contents
-zstyle ':fzf-tab:complete:*:*' fzf-preview 'less ${(Q)realpath}'
-export LESSOPEN='|$DOTFILES/.lessfilter %s'
-
-# Preview environment variables
-zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' \
-       fzf-preview 'echo ${(P)word}'
-
-# Preview `kill` and `ps` commands
-zstyle ':completion:*:*:*:*:processes' command 'ps -u $USER -o pid,user,comm -w -w'
-zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
-       '[[ $group == "[process ID]" ]] &&
-        if [[ $OSTYPE == darwin* ]]; then
-            ps -p $word -o comm="" -w -w
-        elif [[ $OSTYPE == linux* ]]; then
-            ps --pid=$word -o cmd --no-headers -w -w
-        fi'
-zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags '--preview-window=down:3:wrap'
-zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
-
-# Preview `git` commands
-zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview \
-       'git diff $word | delta'
-zstyle ':fzf-tab:complete:git-log:*' fzf-preview \
-       'git log --color=always $word'
-zstyle ':fzf-tab:complete:git-help:*' fzf-preview \
-       'git help $word | bat -plman --color=always'
-zstyle ':fzf-tab:complete:git-show:*' fzf-preview \
-       'case "$group" in
-    "commit tag") git show --color=always $word ;;
-    *) git show --color=always $word | delta ;;
-    esac'
-zstyle ':completion:*:git-checkout:*' sort false
-zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
-       'case "$group" in
-    "modified file") git diff $word | delta ;;
-    "recent commit object name") git show --color=always $word | delta ;;
-    *) git log --color=always $word ;;
-    esac'
-
-# Preview help
-zstyle ':fzf-tab:complete:(\\|*/|)man:*' fzf-preview 'man $word | bat -plman --color=always'
-zstyle ':fzf-tab:complete:tldr:argument-1' fzf-preview 'tldr --color always $word'
-
-# Preview brew
-zstyle ':fzf-tab:complete:brew-(install|uninstall|search|info):*-argument-rest' fzf-preview 'brew info $word'
-
-# Preview systemd
-zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
-
-# Ingore Input Sensitive
-autoload -Uz compinit && compinit
-zstyle ':completion:*' matcher-list 'm:{[:lower:][:upper:]}={[:upper:][:lower:]}' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*' 'm:{[:lower:][:upper:]}={[:upper:][:lower:]} l:|=* r:|=*'
 
 # Powerlevel10k
 zinit ice depth"1"
 zinit light romkatv/powerlevel10k
+# --- Fzf-tab Advanced Configuration ---
+zstyle ':completion:*:git-checkout:*' sort false
+zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' fzf-preview 'echo ${(P)word}'
+zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
+zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview 'ps -p $word -o command= -w'
+zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview 'git diff $word | delta'
+zstyle ':fzf-tab:complete:git-log:*' fzf-preview 'git log --color=always $word'
+zstyle ':fzf-tab:complete:git-show:*' fzf-preview 'git show --color=always $word | delta'
+zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview '[ -f "$realpath" ] && git diff $word | delta || git log --color=always $word'
 
-# Mise
-if (( $+commands[mise] )); then
-    eval "$(mise activate zsh)"
+# Atuin Initialization
+if command -v atuin &>/dev/null; then
+    eval "$(atuin init zsh)"
 fi
-
