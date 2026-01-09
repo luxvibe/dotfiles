@@ -1,0 +1,39 @@
+# --- Appearance ---
+theme = "Catppuccin Macchiato"
+
+# Make blur effective (requires opacity < 1.0)
+background-opacity = 0.95 
+background-blur-radius = 20
+
+# Background Image
+background-image = "/Users/lux/Library/Mobile Documents/com~apple~CloudDocs/Wallpapers/luffy.png"
+background-image-opacity = 0.1
+background-image-fit = cover
+
+# --- Font & Text ---
+font-family = "Iosevka Nerd Font Mono"
+font-family = "LXGW WenKai"
+font-size = 14
+font-feature = liga,calt,dlig
+# Adjusted to pixels (no percentage allowed)
+adjust-cell-height = 2
+
+# --- Window ---
+window-height = 35
+window-width = 120
+window-padding-x = 12
+window-padding-y = 8
+macos-titlebar-style = tabs
+macos-option-as-alt = true
+
+# --- Cursor & Mouse ---
+cursor-style = block
+cursor-style-blink = true
+# Hide mouse when typing
+mouse-hide-while-typing = true
+# Scroll speed multiplier
+mouse-scroll-multiplier = 1.0
+
+# --- Performance & System ---
+copy-on-select = clipboard
+quit-after-last-window-closed = true

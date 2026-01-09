@@ -1,11 +1,20 @@
+# ~/.config/mise/config.toml
+# Global tool versions - Conservative Strategy
+
 [tools]
-node = "20"
+# Runtimes (Locked to stable LTS versions)
+node = "20"                # Active LTS
+python = "3.11"            # Stable 3.11.x
+java = ["17", "21"]        # Dual LTS support
+dotnet = "8.0"             # Current LTS
+go = ["1.23", "1.24"]      # Recent stable versions
+
+# Compilers
+rust = "stable"            # Always use stable channel
+
+# Tooling (Keep updated)
 pnpm = "latest"
 uv = "latest"
-rust = "latest"
-python = ["3.11.6"]
-# lua = ["5.4", "5.1"]
-go = ["1.24", "1.23"]
-# "ubi:adwinying/php" = "8.2"
-# "ubi:composer/composer" = "latest"
-java = ["17", "21"]
+
+[settings]
+experimental = false       # Disable experimental features for stability

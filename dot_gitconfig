@@ -6,6 +6,7 @@
     editor = nvim
     quotepath = false
 	pager = delta
+	fileMode = false
 
 [interactive]
 	  diffFilter = delta --color-only
@@ -40,6 +41,17 @@
 	name = shenyuchao
 	email = shenyuchao@kiwiing.com
 
-[github]
-	user =
-	oauth-token =
+[rebase]
+	updateRefs = true
+[rerere]
+	enabled = true
+[fetch]
+	prune = true
+[init]
+	defaultBranch = main
+[commit]
+	verbose = true
+[help]
+	autocorrect = 10
+[url "git@github.com:"]
+	insteadOf = https://github.com/
