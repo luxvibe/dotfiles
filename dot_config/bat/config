@@ -1,0 +1,10 @@
+# ~/.config/bat/config
+
+# Set the theme to Catppuccin Macchiato
+--theme="Catppuccin Macchiato"
+
+# Show line numbers, Git modifications and file header (but no grid)
+--style="numbers,changes,header"
+
+# Use italic text on the terminal (not supported on all terminals)
+--italic-text=always

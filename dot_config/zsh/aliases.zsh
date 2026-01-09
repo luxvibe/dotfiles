@@ -5,12 +5,12 @@
 alias edc="$EDITOR $HOME/.zshrc; $EDITOR $HOME/.zshrc.local"
 
 # Modern Unix commands
-if (( $+commands[eza] )); then
+if (( $+commands[eza])); then
     alias ls='eza --color=auto --icons --group-directories-first'
     alias l='ls -lhF'
     alias la='ls -lhAF'
     alias tree='ls --tree'
-elif (( $+commands[exa] )); then
+elif (( $+commands[exa])); then
     alias ls='exa --color=auto --icons --group-directories-first'
     alias l='ls -lhF'
     alias la='ls -lahF'
@@ -18,29 +18,29 @@ elif (( $+commands[exa] )); then
 else
     alias ls='ls --color=tty --group-directories-first'
 fi
-(( $+commands[bat] )) && alias cat='bat -p --wrap character'
-(( $+commands[fd] )) && alias find=fd
-if (( $+commands[btop] )); then
+(( $+commands[bat])) && alias cat='bat -p --wrap character'
+(( $+commands[fd])) && alias find=fd
+if (( $+commands[btop])); then
     alias top=btop
-elif (( $+commands[btm] )); then
+elif (( $+commands[btm])); then
     alias top=btm
 fi
-(( $+commands[rg] )) && alias grep=rg
-(( $+commands[tldr] )) && alias help=tldr
-(( $+commands[delta] )) && alias diff=delta
-(( $+commands[duf] )) && alias df=duf
-(( $+commands[dust] )) && alias du=dust
-(( $+commands[hyperfine] )) && alias benchmark=hyperfine
-(( $+commands[gping] )) && alias ping=gping
-(( $+commands[paru] )) && alias yay=paru
+(( $+commands[rg])) && alias grep=rg
+(( $+commands[tldr])) && alias help=tldr
+(( $+commands[delta])) && alias diff=delta
+(( $+commands[duf])) && alias df=duf
+(( $+commands[dust])) && alias du=dust
+(( $+commands[hyperfine])) && alias benchmark=hyperfine
+(( $+commands[gping])) && alias ping=gping
+(( $+commands[paru])) && alias yay=paru
 
 # Git
 alias gtr='git tag -d $(git tag) && git fetch --tags'
 
 # Ripgrep integration
-function rgv () {
-    rg --color=always --line-number --no-heading --smart-case "${*:-}" |
-        fzf --ansi --height 80% --tmux 100%,80% \
+function rgv() {
+    rg --color=always --line-number --no-heading --smart-case "${*:-}" \
+        | fzf --ansi --height 80% --tmux 100%,80% \
             --color "hl:-1:underline,hl+:-1:underline:reverse" \
             --delimiter : \
             --preview 'bat --color=always {1} --highlight-line {2}' \
@@ -63,7 +63,7 @@ else
 fi
 
 # Homebrew completion
-if (( $+commands[brew] )); then
+if (( $+commands[brew])); then
     FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
     autoload -Uz compinit
     compinit
@@ -72,16 +72,16 @@ fi
 # OS bundles
 if [[ $OSTYPE == darwin* ]]; then
     zinit snippet PZTM::osx
-    if (( $+commands[brew] )); then
+    if (( $+commands[brew])); then
         alias bu='brew update; brew upgrade; brew cleanup'
         alias bcu='brew cu --all --yes --cleanup'
         alias bua='bu; bcu'
     fi
 elif [[ $OSTYPE == linux* ]]; then
-    if (( $+commands[apt-get] )); then
+    if (( $+commands[apt-get])); then
         zinit snippet OMZP::ubuntu
         alias agua='aguu -y && agar -y && aga -y'
-        
+
         # Kernel cleanup function (replaced old complex alias)
         function kclean() {
             local kernel_version=$(uname -r | cut -d'-' -f-2)
@@ -90,7 +90,7 @@ elif [[ $OSTYPE == linux* ]]; then
                                 ~nlinux-generic,
                                 ~n(linux-(virtual|headers-virtual|headers-generic|image-virtual|image-generic|image-$(dpkg --print-architecture))))))"
         }
-    elif (( $+commands[pacman] )); then
+    elif (( $+commands[pacman])); then
         zinit snippet OMZP::archlinux
     fi
 fi
@@ -116,17 +116,17 @@ alias upgrade_dotfiles='cd $DOTFILES && upgrade_repo; cd - >/dev/null'
 alias upgrade_omt='cd $HOME/.tmux && upgrade_repo; cd - >/dev/null'
 alias upgrade_zinit='zinit self-update && zinit update -a -p && zinit compinit'
 
-(( $+commands[cargo] )) && alias upgrade_cargo='cargo install cargo-update; cargo install-update -a'
-(( $+commands[gem] )) && alias upgrade_gem='gem update && gem cleanup'
-(( $+commands[go] )) && alias upgrade_go='$DOTFILES/install_go.sh'
-(( $+commands[npm] )) && alias upgrade_npm='for package in $(npm -g outdated --parseable --depth=0 | cut -d: -f2); do npm -g install "$package"; done'
+(( $+commands[cargo])) && alias upgrade_cargo='cargo install cargo-update; cargo install-update -a'
+(( $+commands[gem])) && alias upgrade_gem='gem update && gem cleanup'
+(( $+commands[go])) && alias upgrade_go='$DOTFILES/install_go.sh'
+(( $+commands[npm])) && alias upgrade_npm='for package in $(npm -g outdated --parseable --depth=0 | cut -d: -f2); do npm -g install "$package"; done'
 
-if (( ! $+commands[brew] )); then
-    (( $+commands[pip] )) && alias upgrade_pip='upgrade_pip_packages pip'
-    (( $+commands[pip3] )) && alias upgrade_pip3='upgrade_pip_packages pip3'
+if (( ! $+commands[brew])); then
+    (( $+commands[pip])) && alias upgrade_pip='upgrade_pip_packages pip'
+    (( $+commands[pip3])) && alias upgrade_pip3='upgrade_pip_packages pip3'
 fi
 
-(( $+commands[brew] )) && alias upgrade_brew='brew bundle --global; bua'
+(( $+commands[brew])) && alias upgrade_brew='brew bundle --global; bua'
 # Use bat as man pager
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
@@ -134,7 +134,7 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 alias lg='lazygit'
 
 # TheFuck: Correct previous console command
-if command -v thefuck &>/dev/null; then
+if command -v thefuck &> /dev/null; then
     eval $(thefuck --alias)
     alias fk='fuck'
 fi
@@ -151,3 +151,9 @@ alias -g ....='../../..'
 alias -s {md,txt,conf,cfg,json,yaml,yml,toml}=vim
 alias -s {png,jpg,jpeg,gif,webp}=open
 alias -s {pdf}=open
+
+# --- Theme & Visuals (Catppuccin Macchiato) ---
+
+# Bat Theme
+
+# Fzf Theme (Catppuccin Macchiato)
