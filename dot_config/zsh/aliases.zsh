@@ -157,3 +157,7 @@ alias -s {pdf}=open
 # Bat Theme
 
 # Fzf Theme (Catppuccin Macchiato)
+
+# --- Brewfile Management ---
+alias brew-dump="brew bundle dump --force --file=~/.config/brew/Brewfile"
+alias brew-install="brew bundle --file=~/.config/brew/Brewfile"
