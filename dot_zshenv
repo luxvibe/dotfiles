@@ -20,7 +20,7 @@ export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/sbin:$PATH
 export PATH=$HOME/.local/share/zinit/polaris/bin:$PATH
 
 # Workspace
-export WORKSPACE=$HOME/WORKSPACE
+export WORKSPACE=$HOME/Workspace
 
 # Development environments
 # Golang

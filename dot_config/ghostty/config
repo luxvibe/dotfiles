@@ -1,5 +1,5 @@
 # --- Appearance ---
-theme = "Catppuccin Macchiato"
+theme = "Catppuccin Mocha"
 
 # Make blur effective (requires opacity < 1.0)
 background-opacity = 0.95 
@@ -7,16 +7,17 @@ background-blur-radius = 20
 
 # Background Image
 background-image = "/Users/lux/Library/Mobile Documents/com~apple~CloudDocs/Wallpapers/luffy.png"
-background-image-opacity = 0.1
+background-image-opacity = 0.03
 background-image-fit = cover
 
 # --- Font & Text ---
-font-family = "Iosevka Nerd Font Mono"
+font-family = "DankMono Nerd Font Mono"
 font-family = "LXGW WenKai"
 font-size = 14
 font-feature = liga,calt,dlig
+font-thicken = true
 # Adjusted to pixels (no percentage allowed)
-adjust-cell-height = 2
+adjust-cell-height = 4%
 
 # --- Window ---
 window-height = 35
