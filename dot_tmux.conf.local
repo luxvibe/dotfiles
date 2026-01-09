@@ -384,7 +384,7 @@ tmux_conf_urlscan_options="--compact --dedupe"
 # this is the place to override or undo settings
 
 # increase history size
-#set -g history-limit 10000
+set -g history-limit 50000
 
 # start with mouse mode enabled
 set -g mouse on
@@ -537,3 +537,7 @@ tmux_conf_theme_status_bg="#24273a"
 tmux_conf_theme_status_fg="#cad3f5"
 tmux_conf_theme_pane_border_style=thin
 tmux_conf_theme_pane_active_border="#c6a0f6" # Mauve
+
+# --- Force Disable C-a Prefix ---
+set -gu prefix2
+unbind C-a
