@@ -1,10 +1,13 @@
 #!/bin/bash
 
-# Brewfile hash: {{ include "dot_Brewfile" | sha256sum }}
+# Brewfile hash: {{ include "dot_config/brew/Brewfile" | sha256sum }}
 
 if command -v brew >/dev/null 2>&1; then
-    echo "🍺  Installing Homebrew packages..."
-    brew bundle --global
+    echo "🍺  Installing Homebrew packages from ~/.config/brew/Brewfile..."
+    # 确保目标目录存在（对于首次运行）
+    mkdir -p ~/.config/brew
+    # 执行 bundle
+    brew bundle --file=~/.config/brew/Brewfile
 else
     echo "⚠️  Homebrew not found. Skipping package installation."
 fi
