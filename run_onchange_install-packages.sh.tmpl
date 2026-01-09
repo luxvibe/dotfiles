@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Brewfile hash: {{ include "dot_Brewfile" | sha256sum }}
+
+if command -v brew >/dev/null 2>&1; then
+    echo "🍺  Installing Homebrew packages..."
+    brew bundle --global
+else
+    echo "⚠️  Homebrew not found. Skipping package installation."
+fi
