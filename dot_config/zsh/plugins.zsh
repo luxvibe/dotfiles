@@ -12,13 +12,35 @@ if (( $+commands[mise] )); then
 fi
 
 # --- Zinit Setup ---
-zinit light-mode depth"1" for       zdharma-continuum/zinit-annex-bin-gem-node       zdharma-continuum/zinit-annex-patch-dl
+zinit light-mode depth"1" for \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-patch-dl
 
 # --- Oh My Zsh Core ---
-zinit for       OMZL::directories.zsh       OMZL::history.zsh       OMZL::key-bindings.zsh       OMZL::theme-and-appearance.zsh       OMZP::common-aliases
+zinit for \
+    OMZL::directories.zsh \
+    OMZL::history.zsh \
+    OMZL::key-bindings.zsh \
+    OMZL::theme-and-appearance.zsh \
+    OMZP::common-aliases
 
 # --- Async Plugins ---
-zinit wait lucid for       OMZP::colored-man-pages       OMZP::cp       OMZP::sudo       OMZP::tmux       OMZP::ansible       OMZP::git       OMZP::laravel       OMZP::python       OMZP::kubectl       OMZP::docker       OMZP::docker-compose       OMZP::extract       OMZP::fnm       OMZP::chezmoi       OMZP::uv       OMZP::fancy-ctrl-z       MichaelAquilina/zsh-you-should-use
+zinit wait lucid for \
+    OMZP::colored-man-pages \
+    OMZP::cp \
+    OMZP::sudo \
+    OMZP::tmux \
+    OMZP::ansible \
+    OMZP::git \
+    OMZP::kubectl \
+    OMZP::docker \
+    OMZP::docker-compose \
+    OMZP::extract \
+    OMZP::chezmoi \
+    OMZP::uv \
+    OMZP::mise \
+    OMZP::fancy-ctrl-z \
+    MichaelAquilina/zsh-you-should-use
 
 # --- Tools ---
 # Navi
@@ -32,7 +54,15 @@ fi
 
 # --- Completion Enhancements ---
 # (Must be loaded before Fzf-tab to ensure compinit is handled correctly)
-zinit wait lucid depth"1" for       blockf       zsh-users/zsh-completions       atload"!_zsh_autosuggest_start"       zsh-users/zsh-autosuggestions       zsh-users/zsh-history-substring-search       hlissner/zsh-autopair       atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay"       zdharma-continuum/fast-syntax-highlighting
+zinit wait lucid depth"1" for \
+    blockf \
+    zsh-users/zsh-completions \
+    atload"!_zsh_autosuggest_start" \
+    zsh-users/zsh-autosuggestions \
+    zsh-users/zsh-history-substring-search \
+    hlissner/zsh-autopair \
+    atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+    zdharma-continuum/fast-syntax-highlighting
 
 # --- Zoxide ---
 if (( $+commands[zoxide] )); then

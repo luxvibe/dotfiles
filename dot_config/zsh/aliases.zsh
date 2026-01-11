@@ -20,6 +20,7 @@ else
 fi
 (( $+commands[bat])) && alias cat='bat -p --wrap character'
 (( $+commands[fd])) && alias find=fd
+(( $+commands[nvim])) && alias vim=nvim
 if (( $+commands[btop])); then
     alias top=btop
 elif (( $+commands[btm])); then

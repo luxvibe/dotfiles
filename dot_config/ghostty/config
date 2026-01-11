@@ -4,6 +4,8 @@ theme = "Catppuccin Mocha"
 # Make blur effective (requires opacity < 1.0)
 background-opacity = 0.95 
 background-blur-radius = 20
+background-opacity-cells = true
+background-blur = true
 
 # Background Image
 # background-image = "/Users/lux/Library/Mobile Documents/com~apple~CloudDocs/Wallpapers/cyberpunk.jpg"
@@ -20,12 +22,12 @@ font-thicken = true
 adjust-cell-height = 6%
 
 # --- Window ---
-window-height = 35
-window-width = 120
-window-padding-x = 12
-window-padding-y = 8
+window-decoration = auto
+window-padding-y = 0,0
+window-padding-balance = true
 macos-titlebar-style = tabs
 macos-option-as-alt = true
+maximize = true
 
 # --- Cursor & Mouse ---
 cursor-style = block
@@ -42,8 +44,9 @@ mouse-hide-while-typing = true
 mouse-scroll-multiplier = 1.0
 
 # --- Performance & System ---
-shell-integration = zsh
-shell-integration-features = no-cursor
+shell-integration = detect
+title = " "
+shell-integration-features = cursor,sudo,no-title
 copy-on-select = clipboard
 quit-after-last-window-closed = true
 link-url = true
