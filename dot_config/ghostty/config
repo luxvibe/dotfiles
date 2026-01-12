@@ -1,35 +1,30 @@
 # --- Appearance ---
-theme = Catppuccin Mocha
+theme = dark:Catppuccin Mocha,light:Gruvbox Light
 
 # Make blur effective (requires opacity < 1.0)
-background-opacity = 0.95 
-background-blur-radius = 20
-
-# Background Image
-background-image = "/Users/lux/Pictures/Wallpapers/cyberpunk_grid.jpg"
-background-image-opacity = 0.2
-background-image-fit = cover
+background-opacity = 1.0
+background-blur-radius = 0
+background-opacity-cells = false
+background-blur = false
 
 # --- Font & Text ---
 font-family = "BerkeleyMono Nerd Font"
 font-family = "LXGW WenKai Mono"
 font-size = 12.5
-font-feature = liga,calt,dlig
 font-thicken = true
-# Adjusted to pixels (no percentage allowed)
 adjust-cell-height = 6%
 
 # --- Window ---
-window-height = 35
-window-width = 120
-window-padding-x = 12
-window-padding-y = 8
+window-decoration = auto
+window-padding-y = 0,0
+window-padding-balance = true
 macos-titlebar-style = tabs
 macos-option-as-alt = true
+maximize = true
 
 # --- Cursor & Mouse ---
-cursor-style = block
-cursor-style-blink = true
+cursor-style = bar
+cursor-style-blink = false
 # Hide mouse when typing
 mouse-hide-while-typing = true
 # Scroll speed multiplier
@@ -38,3 +33,6 @@ mouse-scroll-multiplier = 1.0
 # --- Performance & System ---
 copy-on-select = clipboard
 quit-after-last-window-closed = true
+shell-integration = detect
+title = " "
+shell-integration-features = cursor,sudo,no-title
