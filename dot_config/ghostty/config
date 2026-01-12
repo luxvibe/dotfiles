@@ -1,11 +1,11 @@
 # --- Appearance ---
-theme = dark:Catppuccin Mocha,light:Gruvbox Light
+theme = dark:Catppuccin Mocha,light:Material Design Colors
 
 # Make blur effective (requires opacity < 1.0)
-background-opacity = 1.0
-background-blur-radius = 0
-background-opacity-cells = false
-background-blur = false
+background-opacity = 0.95
+background-blur-radius = 20
+background-opacity-cells = true
+background-blur = true
 
 # --- Font & Text ---
 font-family = "BerkeleyMono Nerd Font"
