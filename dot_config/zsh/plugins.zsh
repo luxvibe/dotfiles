@@ -74,9 +74,9 @@ fi
 
 # --- LS_COLORS (Vivid) ---
 # Generate Catppuccin Mocha colors for ls/eza
-if (( $+commands[vivid] )); then
-    export LS_COLORS="$(vivid generate catppuccin-mocha)"
-fi
+# if (( $+commands[vivid] )); then
+#     export LS_COLORS="$(vivid generate catppuccin-mocha)"
+# fi
 
 # --- Atuin ---
 if (( $+commands[atuin] )); then

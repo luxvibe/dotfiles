@@ -1,38 +1,21 @@
-# --- Appearance ---
-theme = Catppuccin Mocha
-
-# Make blur effective (requires opacity < 1.0)
-background-opacity = 0.95
-background-blur-radius = 20
-background-opacity-cells = true
-background-blur = true
-
-# --- Font & Text ---
-font-family = "Berkeley Mono"
-font-family = "LXGW WenKai Mono"
-font-size = 13
+font-family = BerkeleyMono Nerd Font
+font-size = 14
 font-thicken = true
-# adjust-cell-height = 6%
+theme = gruvbox-dark
+shell-integration-features = no-cursor,sudo,no-title
+cursor-style = block
+adjust-cell-height = 35%
 
-# --- Window ---
-window-decoration = false
-window-padding-y = 0,0
-window-padding-balance = true
-macos-titlebar-style = tabs
-macos-option-as-alt = true
-
-# --- Cursor & Mouse ---
-# cursor-style = bar
-cursor-style-blink = false
-# Hide mouse when typing
 mouse-hide-while-typing = true
-# Scroll speed multiplier
-mouse-scroll-multiplier = 1.0
+mouse-scroll-multiplier = 2
 
-# --- Performance & System ---
+window-padding-balance = true 
+window-save-state = always
+macos-titlebar-style=transparent
+window-colorspace = "display-p3"
+
+custom-shader = ./shaders/shader.glsl
+
 copy-on-select = clipboard
-quit-after-last-window-closed = true
-shell-integration = detect
-title = " "
-shell-integration-features = cursor,sudo,no-title
+copy-on-select = clipboard
 link-url = true
