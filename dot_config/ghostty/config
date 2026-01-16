@@ -1,5 +1,5 @@
 # --- Appearance ---
-theme = dark:Catppuccin Mocha,light:Material Design Colors
+theme = Catppuccin Mocha
 
 # Make blur effective (requires opacity < 1.0)
 background-opacity = 0.95
@@ -8,22 +8,21 @@ background-opacity-cells = true
 background-blur = true
 
 # --- Font & Text ---
-font-family = "BerkeleyMono Nerd Font"
+font-family = "Berkeley Mono"
 font-family = "LXGW WenKai Mono"
-font-size = 12.5
+font-size = 13
 font-thicken = true
-adjust-cell-height = 6%
+# adjust-cell-height = 6%
 
 # --- Window ---
-window-decoration = auto
+window-decoration = false
 window-padding-y = 0,0
 window-padding-balance = true
 macos-titlebar-style = tabs
 macos-option-as-alt = true
-maximize = true
 
 # --- Cursor & Mouse ---
-cursor-style = bar
+# cursor-style = bar
 cursor-style-blink = false
 # Hide mouse when typing
 mouse-hide-while-typing = true
@@ -36,3 +35,4 @@ quit-after-last-window-closed = true
 shell-integration = detect
 title = " "
 shell-integration-features = cursor,sudo,no-title
+link-url = true

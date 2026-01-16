@@ -1,18 +1,44 @@
 # ~/.config/fzf/fzf.zsh
 # FZF Ecosystem Configuration (Theming, Plugins, Previews)
 
-# --- 1. Theming (Catppuccin Macchiato) ---
-export FZF_DEFAULT_OPTS=" \
---color=bg+:#313244,bg:#1E1E2E,spinner:#F5E0DC,hl:#F38BA8 \
---color=fg:#CDD6F4,header:#F38BA8,info:#CBA6F7,pointer:#F5E0DC \
---color=marker:#B4BEFE,fg+:#CDD6F4,prompt:#CBA6F7,hl+:#F38BA8 \
---color=selected-bg:#45475A \
---color=border:#6C7086,label:#CDD6F4"
+# --- 1. Theming ---
 
 # --- 2. Default Command ---
 # Use fd for blazing fast file finding (respects .gitignore)
 export FZF_DEFAULT_COMMAND="fd --type f --hidden --follow --exclude .git"
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# --- Carapace (Fallback completions) ---
+__carapace_register() {
+  (( $+commands[carapace] )) || return 0
+  (( $+_comps )) || return 0
+
+  local carapace_init compdef_line
+  local -a lines eval_lines
+  carapace_init="$(carapace _carapace zsh)"
+  lines=("${(@f)carapace_init}")
+  for line in $lines; do
+    if [[ $line == compdef\ _carapace_completer* ]]; then
+      compdef_line=$line
+    else
+      eval_lines+=("$line")
+    fi
+  done
+
+  # 只为没有现成补全的命令注册 Carapace
+  eval "${(F)eval_lines}"
+  [[ -z $compdef_line ]] && return 0
+
+  local -a carapace_cmds
+  eval "carapace_cmds=(${compdef_line#compdef _carapace_completer })"
+
+  local cmd
+  for cmd in $carapace_cmds; do
+    if [[ -z ${_comps[$cmd]} ]]; then
+      compdef _carapace_completer "$cmd"
+    fi
+  done
+}
 
 # --- 3. Plugins (Loaded via Zinit) ---
 
@@ -22,15 +48,18 @@ zinit light wfxr/forgit
 
 # Fzf-tab: The killer feature (replaces zsh completion menu)
 # Needs to run after compinit
-zinit ice wait lucid depth"1" atload"zicompinit; zicdreplay" blockf
+# 若补全异常，可删除 ~/.zcompdump* 后重开终端
+zinit ice wait lucid depth"1" atload' zicompinit; zicdreplay; __carapace_register' blockf
 zinit light Aloxaf/fzf-tab
 
 # --- 4. Fzf-tab Configuration (Previews & Behaviors) ---
 
 # Basic behavior
 zstyle ':fzf-tab:*' switch-group '<' '>'
+# 避免用完整输入作为查询，导致候选被过滤为空
+zstyle ':fzf-tab:*' query-string prefix
 zstyle ':completion:*' menu no
-zstyle ':completion:*:descriptions' format '[%d]'
+zstyle ':completion:*:descriptions' format ''
 zstyle ':completion:*:git-checkout:*' sort false
 
 # Colors

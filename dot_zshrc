@@ -1,4 +1,3 @@
-# Load Zinit
 if [[ ! -f $HOME/.local/share/zinit/zinit.git/zinit.zsh ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing Zinit…%f"
     command mkdir -p "$HOME/.local/share/zinit" && command chmod g-rwX "$HOME/.local/share/zinit"
@@ -8,21 +7,15 @@ source "$HOME/.local/share/zinit/zinit.git/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-# 1. Add custom completions to fpath BEFORE initializing plugins/compinit
 fpath=( "$HOME/.zsh/completions" $fpath )
 
-# 2. Define config path safely
 ZSH_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 
-# 3. Load Main Configurations
 source "$ZSH_CONFIG_DIR/plugins.zsh"
 source "$ZSH_CONFIG_DIR/aliases.zsh"
 
-# 4. Load Powerlevel10k theme
-[[ ! -f "$HOME/.p10k.zsh" ]] || source "$HOME/.p10k.zsh"
+if (( $+commands[starship] )); then
+    eval "$(starship init zsh)"
+fi
 
-# 5. Load local customizations
 [[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"
-
-# 6. iTerm2 Shell Integration
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh" || true

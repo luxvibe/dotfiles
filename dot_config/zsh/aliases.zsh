@@ -143,8 +143,6 @@ fi
 # --- Advanced Aliases ---
 
 # Global aliases (expand anywhere on the line)
-alias -g G='| grep'
-alias -g L='| less'
 alias -g ...='../..'
 alias -g ....='../../..'
 
@@ -159,6 +157,8 @@ alias -s {pdf}=open
 
 # Fzf Theme (Catppuccin Macchiato)
 
-# --- Brewfile Management ---
-alias brew-dump="brew bundle dump --force --file=~/.config/brew/Brewfile"
+# --- Brewfile Management --- alias brew-dump="brew bundle dump --force --file=~/.config/brew/Brewfile"
 alias brew-install="brew bundle --file=~/.config/brew/Brewfile"
+
+# clear
+alias c='clear'

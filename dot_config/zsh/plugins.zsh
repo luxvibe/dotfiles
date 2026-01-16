@@ -33,6 +33,7 @@ zinit wait lucid for \
     OMZP::ansible \
     OMZP::git \
     OMZP::kubectl \
+    OMZP::helm \
     OMZP::docker \
     OMZP::docker-compose \
     OMZP::extract \
@@ -71,25 +72,15 @@ if (( $+commands[zoxide] )); then
     export _ZO_FZF_OPTS="--scheme=path --tiebreak=end,chunk,index            --bind=ctrl-z:ignore,btab:up,tab:down --cycle --keep-right            --border=sharp --height=45% --info=inline --layout=reverse            --tabstop=1 --exit-0 --select-1            --preview '(eza --tree --icons --level 3 --color=always            --group-directories-first {2} || tree -NC {2} ||            ls --color=always --group-directories-first {2}) 2>/dev/null | head -200'"
 fi
 
-# --- LS_COLORS ---
-if [[ -z "$LS_COLORS" ]]; then
-  if (( $+commands[dircolors] )); then
-    eval "$(dircolors -b)"
-  elif (( $+commands[gdircolors] )); then
-    eval "$(gdircolors -b)"
-  else
-    export CLICOLOR=1
-    zstyle ':completion:*' list-colors ''
-  fi
+# --- LS_COLORS (Vivid) ---
+# Generate Catppuccin Mocha colors for ls/eza
+if (( $+commands[vivid] )); then
+    export LS_COLORS="$(vivid generate catppuccin-mocha)"
 fi
 
-# --- Powerlevel10k ---
-zinit ice depth"1"
-zinit light romkatv/powerlevel10k
-
 # --- Atuin ---
-if command -v atuin &>/dev/null; then
-    eval "$(atuin init zsh)"
+if (( $+commands[atuin] )); then
+    eval "$(atuin init zsh --disable-up-arrow)"
 fi
 
 # --- Load FZF Ecosystem ---

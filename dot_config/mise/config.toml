@@ -15,6 +15,7 @@ rust = "stable"            # Always use stable channel
 # Tooling (Keep updated)
 pnpm = "latest"
 uv = "latest"
+bun = "latest"
 
 [settings]
 experimental = false       # Disable experimental features for stability
