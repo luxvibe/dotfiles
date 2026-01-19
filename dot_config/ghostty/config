@@ -1,38 +1,25 @@
-# --- Appearance ---
-theme = gruvbox-dark
-
-# Make blur effective (requires opacity < 1.0)
-background-opacity = 0.95
-background-blur-radius = 20
-background-opacity-cells = true
-background-blur = true
-
-# --- Font & Text ---
-font-family = "BerkeleyMono Nerd Font"
+theme = Catppuccin Mocha
+font-family = BerkeleyMono Nerd Font Mono
+font-family = LXGW WenKai
 font-size = 14
 font-thicken = true
-adjust-cell-height = 35%
-
-# --- Window ---
-window-decoration = false
-window-padding-y = 0,0
-window-padding-balance = true
-macos-titlebar-style = tabs
-macos-option-as-alt = true
-
-# --- Cursor & Mouse ---
+shell-integration-features = no-cursor,sudo,no-title
 cursor-style = block
-cursor-style-blink = false
-# Hide mouse when typing
-mouse-hide-while-typing = true
-# Scroll speed multiplier
-mouse-scroll-multiplier = 2.0
 
-# --- Performance & System ---
-copy-on-select = clipboard
-quit-after-last-window-closed = true
-shell-integration = detect
-title = " "
-shell-integration-features = cursor,sudo,no-title
-link-url = true
+mouse-hide-while-typing = true
+macos-window-buttons = hidden
+mouse-scroll-multiplier = 2
+
+background-opacity = 0.95
+background-blur-radius = 20
+window-padding-balance = true 
+window-save-state = always
+window-colorspace = "display-p3"
+macos-titlebar-style=tabs
+macos-non-native-fullscreen = visible-menu
+
 custom-shader = ./shaders/shader.glsl
+
+copy-on-select = clipboard
+link-url = true
+
