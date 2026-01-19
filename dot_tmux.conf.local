@@ -69,7 +69,7 @@ tmux_conf_new_pane_reconnect_ssh=false
 # automatic detection relies on the COLORTERM environment variable being defined
 # to 'truecolor' or '24bit' or '$ tput colors' answering '16777216'
 # see https://github.com/termstandard/colors
-tmux_conf_24b_colour=true
+tmux_conf_24b_colour=auto
 
 
 # -- theming -------------------------------------------------------------------
@@ -370,7 +370,7 @@ tmux_conf_theme_clock_style="24"
 #   - false (default)
 #   - disabled
 # on Linux, this requires xsel, xclip or wl-copy
-tmux_conf_copy_to_os_clipboard=true
+tmux_conf_copy_to_os_clipboard=false
 
 
 # -- urlscan -------------------------------------------------------------------
@@ -384,10 +384,11 @@ tmux_conf_urlscan_options="--compact --dedupe"
 # this is the place to override or undo settings
 
 # increase history size
-set -g history-limit 50000
+#set -g history-limit 10000
+set -g history-limit 1000000
 
 # start with mouse mode enabled
-set -g mouse on
+#set -g mouse on
 
 # force Vi mode
 #   really you should export VISUAL or EDITOR environment variable, see manual
@@ -395,8 +396,9 @@ set -g mouse on
 #set -g mode-keys vi
 
 # replace C-b by C-a instead of using both prefixes
-# set -gu prefix2
-# unbind C-a
+set -gu prefix2
+unbind -n C-a
+unbind C-a
 # unbind C-b
 # set -g prefix C-a
 # bind C-a send-prefix
@@ -447,11 +449,11 @@ tmux_conf_uninstall_plugins_on_reload=true
 # /!\ the 'set -g @tpm_plugins' syntax is not supported
 # to enable a plugin, use the 'set -g @plugin' syntax:
 # visit https://github.com/tmux-plugins for available plugins
-#set -g @plugin 'tmux-plugins/tmux-copycat'
-#set -g @plugin 'tmux-plugins/tmux-cpu'
-#set -g @plugin 'tmux-plugins/tmux-resurrect'
-#set -g @plugin 'tmux-plugins/tmux-continuum'
-#set -g @continuum-restore 'on'
+set -g @plugin 'tmux-plugins/tmux-copycat'
+set -g @plugin 'tmux-plugins/tmux-cpu'
+set -g @plugin 'tmux-plugins/tmux-resurrect'
+set -g @plugin 'tmux-plugins/tmux-continuum'
+set -g @continuum-restore 'on'
 
 
 # -- custom variables ----------------------------------------------------------
@@ -507,37 +509,3 @@ tmux_conf_uninstall_plugins_on_reload=true
 # "$@"
 # # /!\ do not remove the previous line
 # #     do not write below this line
-
-# --- Custom Bindings (Modern) ---
-
-# Split panes with | and -
-bind | split-window -h -c "#{pane_current_path}"
-bind - split-window -v -c "#{pane_current_path}"
-unbind '"'
-unbind %
-
-# Reload config with r
-bind r source-file ~/.tmux.conf \; display "Config reloaded!"
-
-# --- Plugins (TPM) ---
-
-# Vim-Tmux Navigator (Must-have for Vim users)
-# Allows Ctrl-h/j/k/l to switch between Vim splits and Tmux panes
-set -g @plugin 'christoomey/vim-tmux-navigator'
-
-# Persistence (Auto-save sessions)
-set -g @plugin 'tmux-plugins/tmux-resurrect'
-set -g @plugin 'tmux-plugins/tmux-continuum'
-set -g @continuum-restore 'on'
-
-# --- Catppuccin Theme Adaptation ---
-# Overriding standard colours to match Catppuccin Macchiato
-# Background: #24273a, Foreground: #cad3f5
-tmux_conf_theme_status_bg="#24273a"
-tmux_conf_theme_status_fg="#cad3f5"
-tmux_conf_theme_pane_border_style=thin
-tmux_conf_theme_pane_active_border="#c6a0f6" # Mauve
-
-# --- Force Disable C-a Prefix ---
-set -gu prefix2
-unbind C-a

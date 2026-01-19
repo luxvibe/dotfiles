@@ -14,8 +14,4 @@ ZSH_CONFIG_DIR="${XDG_CONFIG_HOME:-$HOME/.config}/zsh"
 source "$ZSH_CONFIG_DIR/plugins.zsh"
 source "$ZSH_CONFIG_DIR/aliases.zsh"
 
-if (( $+commands[starship] )); then
-    eval "$(starship init zsh)"
-fi
-
 [[ -f "$HOME/.zshrc.local" ]] && source "$HOME/.zshrc.local"

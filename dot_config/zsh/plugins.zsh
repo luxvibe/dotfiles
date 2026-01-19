@@ -16,6 +16,15 @@ zinit light-mode depth"1" for \
     zdharma-continuum/zinit-annex-bin-gem-node \
     zdharma-continuum/zinit-annex-patch-dl
 
+# --- Starship Theme ---
+if command -v starship &>/dev/null; then
+    eval "$(starship init zsh)"
+fi
+
+# --- Powerlevel10k Theme ---
+# zinit ice depth=1
+# zinit light romkatv/powerlevel10k
+
 # --- Oh My Zsh Core ---
 zinit for \
     OMZL::directories.zsh \
@@ -86,3 +95,7 @@ fi
 # --- Load FZF Ecosystem ---
 # (This handles fzf theme, plugins like fzf-tab/forgit, and previews)
 [[ -f ~/.config/fzf/fzf.zsh ]] && source ~/.config/fzf/fzf.zsh
+
+# --- Powerlevel10k Configuration ---
+# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
