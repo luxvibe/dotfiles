@@ -1,8 +1,10 @@
-theme = Catppuccin Mocha
+# theme = Catppuccin Mocha
+theme = Nord
 font-family = BerkeleyMono Nerd Font Mono
 font-family = LXGW WenKai
 font-size = 14
 font-thicken = true
+adjust-cell-height = 25%
 shell-integration-features = no-cursor,sudo,no-title
 cursor-style = block
 
@@ -10,7 +12,7 @@ mouse-hide-while-typing = true
 macos-window-buttons = hidden
 mouse-scroll-multiplier = 2
 
-background-opacity = 0.95
+background-opacity = 0.99
 background-blur-radius = 20
 window-padding-balance = true 
 window-save-state = always
