@@ -24,4 +24,4 @@ custom-shader = ./shaders/shader.glsl
 
 copy-on-select = clipboard
 link-url = true
-
+auto-update = off
