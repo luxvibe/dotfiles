@@ -17,13 +17,13 @@ zinit light-mode depth"1" for \
     zdharma-continuum/zinit-annex-patch-dl
 
 # --- Starship Theme ---
-if command -v starship &>/dev/null; then
-    eval "$(starship init zsh)"
-fi
+# if command -v starship &>/dev/null; then
+#     eval "$(starship init zsh)"
+# fi
 
 # --- Powerlevel10k Theme ---
-# zinit ice depth=1
-# zinit light romkatv/powerlevel10k
+zinit ice depth=1
+zinit light romkatv/powerlevel10k
 
 # --- Oh My Zsh Core ---
 zinit for \
@@ -40,6 +40,7 @@ zinit wait lucid for \
     OMZP::sudo \
     OMZP::tmux \
     OMZP::ansible \
+    OMZP::terraform \
     OMZP::git \
     OMZP::kubectl \
     OMZP::helm \
@@ -63,6 +64,9 @@ if (( $+commands[navi] )); then
 fi
 
 # --- Completion Enhancements ---
+# Enable case-insensitive completion
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+
 # (Must be loaded before Fzf-tab to ensure compinit is handled correctly)
 zinit wait lucid depth"1" for \
     blockf \
@@ -84,7 +88,7 @@ fi
 # --- LS_COLORS (Vivid) ---
 # Generate Catppuccin Mocha colors for ls/eza
 # if (( $+commands[vivid] )); then
-#     export LS_COLORS="$(vivid generate catppuccin-mocha)"
+#     export LS_COLORS="$(vivid generate molokai)"
 # fi
 
 # --- Atuin ---
@@ -97,5 +101,5 @@ fi
 [[ -f ~/.config/fzf/fzf.zsh ]] && source ~/.config/fzf/fzf.zsh
 
 # --- Powerlevel10k Configuration ---
-# [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
