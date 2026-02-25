@@ -34,6 +34,7 @@ fi
 (( $+commands[hyperfine])) && alias benchmark=hyperfine
 (( $+commands[gping])) && alias ping=gping
 (( $+commands[paru])) && alias yay=paru
+(( $+commands[z])) && alias cd=z
 
 # Git
 alias gtr='git tag -d $(git tag) && git fetch --tags'
@@ -160,5 +161,3 @@ alias -s {pdf}=open
 # --- Brewfile Management --- alias brew-dump="brew bundle dump --force --file=~/.config/brew/Brewfile"
 alias brew-install="brew bundle --file=~/.config/brew/Brewfile"
 
-# clear
-alias c='clear'

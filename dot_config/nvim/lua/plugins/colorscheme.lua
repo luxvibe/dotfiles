@@ -1,17 +1,10 @@
 return {
   {
-    "gbprod/nord.nvim",
+    "folke/tokyonight.nvim",
     lazy = false,
     priority = 1000,
-    config = function()
-      require("nord").setup({})
-      vim.cmd.colorscheme("nord")
-    end,
-  },
-  {
-    "LazyVim/LazyVim",
     opts = {
-      colorscheme = "nord",
+      terminal_colors = true,
     },
   },
 }

@@ -16,6 +16,7 @@ rust = "stable"            # Always use stable channel
 pnpm = "latest"
 uv = "latest"
 bun = "latest"
+aws = "latest"
 
 [settings]
 experimental = false       # Disable experimental features for stability
