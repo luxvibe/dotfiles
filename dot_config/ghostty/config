@@ -1,26 +1,30 @@
-theme = Catppuccin Mocha
-font-family = BerkeleyMono Nerd Font Mono
+font-family = JetbrainsMono Nerd Font
 font-family = LXGW WenKai
-font-size = 13
+font-size = 14
 font-thicken = true
 adjust-cell-height = 25%
 shell-integration-features = no-cursor,sudo,no-title
 cursor-style = block
 
+window-padding-x = 5
+window-padding-y = 5
+
+macos-titlebar-style = hidden
 mouse-hide-while-typing = true
 macos-window-buttons = hidden
 mouse-scroll-multiplier = 2
 
-background-opacity = 0.98
-# background-blur-radius = 20
+background-opacity = 0.94
+background-blur = 20
 window-padding-balance = true 
 window-save-state = always
 window-colorspace = "display-p3"
 macos-titlebar-style=tabs
 macos-non-native-fullscreen = visible-menu
 
-custom-shader = ./shaders/shader.glsl
+# custom-shader = ./shaders/shader.glsl
 
 copy-on-select = clipboard
 link-url = true
 auto-update = off
+confirm-close-surface = false
