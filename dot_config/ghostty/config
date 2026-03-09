@@ -1,3 +1,4 @@
+theme = Dracula
 font-size = 14
 font-thicken = true
 adjust-cell-height = 25%
@@ -12,8 +13,8 @@ mouse-hide-while-typing = true
 macos-window-buttons = hidden
 mouse-scroll-multiplier = 2
 
-# background-opacity = 1
-# background-blur = 20
+background-opacity = 0.98
+# background-blur = 10
 window-padding-balance = true 
 window-save-state = always
 window-colorspace = "display-p3"
