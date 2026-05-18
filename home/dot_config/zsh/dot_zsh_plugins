@@ -1,0 +1,50 @@
+# antidote 插件列表
+# 格式：<repo> [annotations]
+# kind:defer  → 延迟加载（启动后异步加载，不阻塞提示符）
+# kind:fpath  → 只加入 FPATH，不 source
+
+# ── Oh My Zsh 库（同步，启动必需）──────────────────────────
+# Powerlevel10k 直接 source，主题和命令一并加载
+romkatv/powerlevel10k
+
+ohmyzsh/ohmyzsh path:lib/correction.zsh
+# directories：cd .. 等别名由 aliases.zsh 自定义，不重复加载
+ohmyzsh/ohmyzsh path:lib/history.zsh
+ohmyzsh/ohmyzsh path:lib/key-bindings.zsh
+ohmyzsh/ohmyzsh path:lib/theme-and-appearance.zsh
+# common-aliases 已移除：与 aliases.zsh 中的自定义别名大量重叠
+
+# ── OMZ 插件（延迟加载）─────────────────────────────────────
+ohmyzsh/ohmyzsh path:plugins/colored-man-pages kind:defer
+ohmyzsh/ohmyzsh path:plugins/cp               kind:defer
+ohmyzsh/ohmyzsh path:plugins/extract          kind:defer
+ohmyzsh/ohmyzsh path:plugins/fancy-ctrl-z     kind:defer
+ohmyzsh/ohmyzsh path:plugins/git              kind:defer
+ohmyzsh/ohmyzsh path:plugins/sudo             kind:defer
+ohmyzsh/ohmyzsh path:plugins/macos            kind:defer
+# docker/docker-compose：补全由 plugins.zsh _setup_completions 动态生成，不重复加载
+# kubectl：补全由 plugins.zsh _setup_completions 动态生成，不重复加载
+
+# ── 补全增强（顺序敏感）──────────────────────────────────────
+zsh-users/zsh-completions kind:fpath
+zdharma-continuum/fast-syntax-highlighting kind:defer
+zsh-users/zsh-autosuggestions              kind:defer
+
+# ── 实用插件（延迟加载）─────────────────────────────────────
+djui/alias-tips                    kind:defer
+# zsh-history-substring-search 需要 post hook 绑定 ↑/↓ 按键
+zsh-users/zsh-history-substring-search kind:defer post:_hss_bindkey
+hlissner/zsh-autopair              kind:defer
+
+# ── Git 工作流增强 ───────────────────────────────────────────
+wfxr/forgit                        kind:defer
+
+# ── Python 虚拟环境自动切换 ──────────────────────────────────
+MichaelAquilina/zsh-autoswitch-virtualenv kind:defer
+
+# ── fzf-tab（补全预览，需在 compinit 后加载）────────────────
+# 用 kind:fpath 只让 antidote 把目录加进 fpath，不自动 source；
+# 真正的 source 在 plugins.zsh 里 compinit 之后同步执行，
+# 这样能避免 zsh-defer 队列里 fast-syntax-highlighting / zsh-autosuggestions
+# 抢在 fzf-tab 前包装 widget，也避免新 shell 早按 Tab 时 fzf-tab 还没装上。
+Aloxaf/fzf-tab                     kind:fpath

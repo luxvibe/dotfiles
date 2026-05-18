@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# macOS 系统设置 — run_once（chezmoi 首次 apply 时执行一次）
+set -euo pipefail
+
+# CHEZMOI_SOURCE_DIR 指向 home/ 子目录（因为 .chezmoiroot=home）
+# defaults.sh 在仓库根的 scripts/ 下，需要上一级
+DEFAULTS_SCRIPT="$(dirname "${CHEZMOI_SOURCE_DIR:-$HOME/.local/share/chezmoi/home}")/scripts/defaults.sh"
+[[ -f "$DEFAULTS_SCRIPT" ]] || DEFAULTS_SCRIPT="$HOME/.dotfiles/scripts/defaults.sh"
+[[ -f "$DEFAULTS_SCRIPT" ]] && bash "$DEFAULTS_SCRIPT"

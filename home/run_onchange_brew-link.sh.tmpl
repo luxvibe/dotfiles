@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Brewfile hash: {{ include (joinPath .chezmoi.sourceDir "../Brewfile") | sha256sum }}
+# Brewfile 变化时重新执行 link
+
+set -euo pipefail
+
+command -v brew &>/dev/null || exit 0
+
+echo "Linking keg-only brew packages..."
+
+# lua@5.4：keg-only，cmake find_package(Lua) 需要 link 后才能找到头文件和库
+if brew list lua@5.4 &>/dev/null; then
+    brew link --overwrite --force lua@5.4
+    echo "lua@5.4 linked"
+fi
+
+# php@8.1：keg-only，需要 link 才能使用 php/pecl 命令
+if brew list php@8.1 &>/dev/null; then
+    brew link --overwrite --force php@8.1
+    echo "php@8.1 linked"
+fi
+
+echo "brew link complete"

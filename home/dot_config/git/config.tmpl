@@ -1,0 +1,81 @@
+[user]
+    name       = {{ .name }}
+    email      = {{ .email }}
+    signingkey = ~/.ssh/id_ed25519.pub
+
+[gpg]
+    format = ssh
+
+[gpg "ssh"]
+    allowedSignersFile = ~/.config/git/allowed_signers
+
+[commit]
+    gpgsign = true
+
+[tag]
+    gpgsign = true
+
+[core]
+    pager       = delta
+    excludesfile = ~/.config/git/ignore
+    editor      = nvim
+
+[credential]
+    helper = osxkeychain
+
+[interactive]
+    diffFilter = delta --color-only
+
+[init]
+    defaultBranch = main
+
+[pull]
+    rebase = true
+
+[rebase]
+    autoStash  = true
+    updateRefs = true
+
+[rerere]
+    enabled = true
+
+[fetch]
+    prune = true
+
+[push]
+    autoSetupRemote = true
+
+[diff]
+    colorMoved = default
+    algorithm  = histogram
+
+[merge]
+    conflictstyle = zdiff3
+
+[delta]
+    navigate    = true
+    line-numbers = true
+    side-by-side = true
+    hyperlinks  = true
+
+[alias]
+    l   = log --oneline --graph --decorate -20
+    la  = log --oneline --graph --decorate --all -20
+    st  = status -sb
+    co  = checkout
+    br  = branch
+    rb  = rebase
+    cp  = cherry-pick
+    sw  = switch
+    up  = pull --rebase --autostash
+
+[url "git@github.com:"]
+    insteadOf = https://github.com/
+
+# Per-identity overrides
+{{- $workGitHost := .workGitHost | default "" -}}
+{{- if $workGitHost }}
+# Work: match any repo whose remote URL contains the work Git host
+[includeIf "hasconfig:remote.*.url:*{{ $workGitHost }}*"]
+    path = ~/.config/git/config-work
+{{- end }}

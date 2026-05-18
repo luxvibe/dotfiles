@@ -1,0 +1,36 @@
+# ~/.config/zsh/.zshrc
+# 编辑源文件：chezmoi edit ~/.config/zsh/.zshrc
+
+# ── Powerlevel10k instant prompt（必须最先执行）──────────────
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+ZDOTDIR="${ZDOTDIR:-$HOME/.config/zsh}"
+
+source "$ZDOTDIR/path.zsh"
+source "$ZDOTDIR/plugins.zsh"
+source "$ZDOTDIR/aliases.zsh"
+source "$ZDOTDIR/functions.zsh"
+source "$ZDOTDIR/ai.zsh"
+
+# 私有配置（token、proxy、GOPRIVATE 等，不入仓库）
+[[ -f "$ZDOTDIR/private.zsh" ]] && source "$ZDOTDIR/private.zsh"
+
+# ── 工具初始化 ────────────────────────────────────────────────
+if (( $+commands[zoxide] )); then
+    eval "$(zoxide init zsh)"
+fi
+
+(( $+commands[mise]   )) && eval "$(mise activate zsh)"
+(( $+commands[atuin]  )) && eval "$(atuin init zsh --disable-up-arrow)"
+
+# 加载 p10k 配置
+[[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
+
+# iTerm2 shell integration
+[[ -f "$HOME/.iterm2_shell_integration.zsh" ]] && \
+    source "$HOME/.iterm2_shell_integration.zsh"
+
+# 本机局部覆盖（不入仓库）
+[[ -f "$ZDOTDIR/local.zsh" ]] && source "$ZDOTDIR/local.zsh"

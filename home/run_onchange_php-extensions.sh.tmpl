@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+# PHP extensions hash: {{ include (joinPath .chezmoi.sourceDir "../Brewfile") | sha256sum }}
+# 当 Brewfile 变化时重新检查扩展安装状态
+
+set -euo pipefail
+
+PHP_BIN="$(brew --prefix shivammathur/php/php@8.1 2>/dev/null)/bin/php"
+PECL_BIN="$(brew --prefix shivammathur/php/php@8.1 2>/dev/null)/bin/pecl"
+
+# PHP 8.1 未安装则跳过
+[[ -x "$PHP_BIN" ]] || { echo "php@8.1 not found, skipping extensions"; exit 0; }
+
+echo "Checking PHP 8.1 extensions..."
+
+# ── swoole 5.1.8（PHP 8.1 支持的最新 5.x 版本）──────────────
+if ! "$PHP_BIN" -r "echo extension_loaded('swoole');" | grep -q 1; then
+    echo "Installing swoole 5.1.8..."
+    # swoole 编译依赖：pcre2 头文件（php_pcre.h 需要）
+    export LDFLAGS="-L$(brew --prefix pcre2)/lib"
+    export CPPFLAGS="-I$(brew --prefix pcre2)/include"
+    # 所有可选特性均关闭（macOS 开发环境不需要）
+    # 注意：brotli 默认 yes，需显式关闭；enable-swoole-curl 对应 --enable-swoole-curl
+    "$PECL_BIN" install -D \
+        'enable-sockets="no" enable-openssl="no" enable-mysqlnd="no" enable-swoole-curl="no" enable-cares="no" enable-brotli="no" enable-swoole-pgsql="no" enable-swoole-odbc="no" enable-swoole-oracle="no" enable-swoole-sqlite="no"' \
+        swoole-5.1.8
+    echo "swoole installed"
+    # swoole.use_shortname 必须关闭，否则与部分框架（如 Hyperf）不兼容
+    PHP_INI="$("$PHP_BIN" --ini | grep 'Loaded Configuration' | awk '{print $NF}')"
+    if [[ -f "$PHP_INI" ]] && ! grep -q "swoole.use_shortname" "$PHP_INI"; then
+        echo "swoole.use_shortname = 'Off'" >> "$PHP_INI"
+        echo "swoole.use_shortname set to Off in $PHP_INI"
+    fi
+else
+    echo "swoole already installed, skipping"
+fi
+
+# ── phpredis 6.1.0（PHP 8.x 兼容）───────────────────────────
+if ! "$PHP_BIN" -r "echo extension_loaded('redis');" | grep -q 1; then
+    echo "Installing redis extension..."
+    # 禁用可选压缩依赖，避免交互式提问
+    "$PECL_BIN" install -D \
+        'enable-redis-igbinary="no" enable-redis-lzf="no" enable-redis-zstd="no" enable-redis-msgpack="no" enable-redis-lz4="no" with-liblz4="no"' \
+        redis-6.1.0
+    echo "redis extension installed"
+else
+    echo "redis extension already installed, skipping"
+fi
+
+echo "PHP extensions setup complete"

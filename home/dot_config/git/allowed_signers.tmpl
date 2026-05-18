@@ -1,0 +1,5 @@
+# SSH 签名白名单
+# 格式：<email> <key-type> <public-key>
+# 用 `ssh-keygen -L -f ~/.ssh/id_ed25519.pub` 查看公钥类型和内容
+
+{{ .email }} ssh-ed25519 AAAA_REPLACE_WITH_YOUR_PUBLIC_KEY

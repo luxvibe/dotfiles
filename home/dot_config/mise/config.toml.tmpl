@@ -1,0 +1,55 @@
+[tools]
+# ── JavaScript / TypeScript ──────────────────────────────────
+node    = "lts"
+pnpm    = "latest"
+deno    = "latest"
+bun     = "latest"
+
+# ── Python ───────────────────────────────────────────────────
+python  = "3.12"
+uv      = "latest"    # 现代 Python 包管理器（10× pip）
+
+# ── Go ───────────────────────────────────────────────────────
+go      = "latest"
+
+# Go 工具链（go: backend，mise 统一管理版本）
+"go:github.com/air-verse/air"                                    = "latest"  # 热重载
+"go:github.com/sqlc-dev/sqlc/cmd/sqlc"                          = "latest"  # SQL → 类型安全 Go 代码
+"go:github.com/golang-migrate/migrate/v4/cmd/migrate"            = "latest"  # 数据库迁移
+golangci-lint                                                    = "latest"  # Go linter v2（mise 原生支持，官方推荐安装方式）
+"go:mvdan.cc/sh/v3/cmd/shfmt"                                    = "latest"  # shell 格式化
+# actionlint → brew 安装（mise go backend 不支持子包路径）
+
+# ── Rust ─────────────────────────────────────────────────────
+rust    = "stable"
+
+# ── .NET / C# ────────────────────────────────────────────────
+dotnet  = "8"         # Unity 脚本 & 后端 C#；Unity 2022+ 需要 .NET 6/8
+
+# ── JVM ──────────────────────────────────────────────────────
+java    = "temurin-21"    # JDK 21 LTS
+maven   = "latest"
+gradle  = "latest"
+kotlin  = "latest"
+
+# ── Ruby ─────────────────────────────────────────────────────
+ruby    = "3.3"
+
+# ── PHP ──────────────────────────────────────────────────────
+# php 通过 brew 安装（mise 编译安装在 macOS 上有 iconv 兼容问题）
+# php = "8.3"
+
+# ── DevOps 工具链（mise 原生支持，可按项目锁版本）────────────
+buf        = "latest"   # Protobuf / gRPC 工具链（从 brew 迁移）
+terraform  = "latest"   # IaC 核心（从 brew 迁移，支持多版本切换）
+terragrunt = "latest"   # Terraform DRY 封装（从 brew 迁移）
+kubectl    = "latest"   # K8s CLI（从 brew 迁移，可按集群锁版本）
+helm       = "latest"   # K8s 包管理（从 brew 迁移）
+shellcheck = "latest"   # shell 静态分析（从 brew 迁移）
+
+[settings]
+experimental = true
+# 识别项目根的 .tool-versions / .mise.toml / .node-version / .python-version 等
+idiomatic_version_file_enable_tools = [
+    "python", "node", "go", "java", "ruby", "php"
+]

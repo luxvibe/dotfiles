@@ -1,0 +1,18 @@
+Host *
+    AddKeysToAgent yes
+    UseKeychain yes
+    IdentityFile ~/.ssh/id_ed25519
+    ServerAliveInterval 60
+    ServerAliveCountMax 3
+
+# ── GitHub ───────────────────────────────────────────────────
+Host github.com
+    HostName github.com
+    User git
+    IdentityFile ~/.ssh/id_ed25519
+
+# ── 自建 GitLab（按实际 HostName 修改）──────────────────────
+# Host gitlab.company.com
+#     HostName gitlab.company.com
+#     User git
+#     IdentityFile ~/.ssh/id_ed25519

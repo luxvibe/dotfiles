@@ -1,0 +1,21 @@
+# atuin 历史配置
+
+[history]
+store_failed = false    # 不存储失败的命令
+
+[stats]
+common_subcommands = [
+    "cargo", "go", "git", "npm", "pnpm", "yarn",
+    "kubectl", "helm", "docker", "mise"
+]
+
+[keys]
+scroll_exits = true
+
+[search]
+# 搜索默认显示最近 N 条
+default_filter = "global"
+
+[sync]
+# 如需跨机同步，填入 atuin 账号后执行 atuin login
+# records_sync = true

@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Brewfile hash: {{ include (joinPath .chezmoi.sourceDir "../Brewfile") | sha256sum }}
+# 上面注释用于 chezmoi 检测 Brewfile 变化并触发重跑
+
+set -euo pipefail
+
+# CHEZMOI_SOURCE_DIR 指向 home/ 子目录（因为 .chezmoiroot=home）
+# Brewfile 在仓库根，需要上一级
+BREWFILE="$(dirname "${CHEZMOI_SOURCE_DIR:-$HOME/.local/share/chezmoi/home}")/Brewfile"
+[[ -f "$BREWFILE" ]] || BREWFILE="$HOME/.dotfiles/Brewfile"
+
+command -v brew &>/dev/null || exit 0
+
+echo "Running brew bundle..."
+brew bundle --file="$BREWFILE"

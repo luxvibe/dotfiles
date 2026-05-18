@@ -1,0 +1,12 @@
+{{- $name := promptStringOnce . "name" "Full name" -}}
+{{- $email := promptStringOnce . "email" "Email" -}}
+{{- $workName := promptStringOnce . "workName" "Work full name (leave blank to use default)" -}}
+{{- $workEmail := promptStringOnce . "workEmail" "Work email (leave blank to use default)" -}}
+{{- $workGitHost := promptStringOnce . "workGitHost" "Work Git host (e.g. gitlab.company.com, leave blank to skip)" -}}
+
+[data]
+    name        = {{ $name | quote }}
+    email       = {{ $email | quote }}
+    workName    = {{ $workName | quote }}
+    workEmail   = {{ $workEmail | quote }}
+    workGitHost = {{ $workGitHost | quote }}
