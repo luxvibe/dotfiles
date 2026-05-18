@@ -1,5 +1,16 @@
 # ── 通用工具 ─────────────────────────────────────────────────
 
+# 安全删除：移入垃圾桶而非永久删除，用法与 rm 一致
+rm() {
+    if ! (( $+commands[trash] )); then
+        command rm "$@"
+        return
+    fi
+    local targets=()
+    for arg in "$@"; do [[ "$arg" != -* ]] && targets+=("$arg"); done
+    trash "${targets[@]}"
+}
+
 # 创建目录并进入
 mkcd() { mkdir -p "$1" && cd "$1"; }
 
