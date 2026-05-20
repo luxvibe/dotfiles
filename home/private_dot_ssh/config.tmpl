@@ -1,3 +1,8 @@
+# ── 本地私有配置（不入仓库，chezmoi 不管理）─────────────────
+# 在 ~/.ssh/config.local 中添加本机专属的 Host 配置
+Include ~/.orbstack/ssh/config
+Include config.local
+
 Host *
     AddKeysToAgent yes
     UseKeychain yes
