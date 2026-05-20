@@ -11,8 +11,7 @@ alias ....='cd ../../..'
 # ── 现代 Unix 替代 ───────────────────────────────────────────
 if (( $+commands[eza] )); then
     alias ls='eza --color=auto --icons=auto --group-directories-first'
-    alias l='ls -lh'
-    alias ll='ls -lhA'
+    alias ll='ls -lh'
     alias la='ls -lhA'
     alias lg='ls -lhA --git'
     alias tree='ls --tree'
