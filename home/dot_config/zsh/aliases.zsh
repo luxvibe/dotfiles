@@ -12,6 +12,7 @@ alias ....='cd ../../..'
 if (( $+commands[eza] )); then
     alias ls='eza --color=auto --icons=auto --group-directories-first'
     alias l='ls -lh'
+    alias ll='ls -lhA'
     alias la='ls -lhA'
     alias lg='ls -lhA --git'
     alias tree='ls --tree'

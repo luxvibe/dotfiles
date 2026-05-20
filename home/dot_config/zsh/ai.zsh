@@ -22,9 +22,6 @@
 # ── Claude Code ──────────────────────────────────────────────
 (( $+commands[claude] )) && alias cc='claude'
 
-# ── Gemini CLI ───────────────────────────────────────────────
-(( $+commands[gemini] )) && alias gm='gemini'
-
 # ── Ollama（本地 LLM）────────────────────────────────────────
 (( $+commands[ollama] )) && {
     alias oll='ollama run'              # oll llama3
@@ -33,7 +30,7 @@
 }
 
 # ── AI 命令解释（替代 tldr / man / cheat）────────────────────
-# 优先级：aichat → mods → ollama，均不可用时降级到 tldr
+# 优先级：aichat → mods → agy → ollama，均不可用时提示安装
 #
 # 用法：
 #   exp "kubectl drain"           → 解释命令用途和常用参数
@@ -53,6 +50,12 @@ exp() {
         else
             echo "$*" | mods "用简洁的中文解释这个命令"
         fi
+    elif (( $+commands[agy] )); then
+        if [[ -p /dev/stdin ]]; then
+            agy "用简洁的中文解释以下内容：$(cat)"
+        else
+            agy "$prompt"
+        fi
     elif (( $+commands[ollama] )); then
         ollama run llama3 "$prompt"
     else
@@ -69,6 +72,8 @@ how() {
         aichat -e "$prompt"             # -e 模式可直接执行建议的命令
     elif (( $+commands[mods] )); then
         echo "$*" | mods "给出完成这个任务的 shell 命令（macOS/zsh），只输出命令和简短说明"
+    elif (( $+commands[agy] )); then
+        agy "$prompt"
     elif (( $+commands[gh] )); then
         gh copilot suggest -t shell "$*"
     else

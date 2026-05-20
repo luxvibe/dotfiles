@@ -126,6 +126,7 @@ export _ZO_FZF_OPTS="--scheme=path --tiebreak=end,chunk,index \
 zstyle ':completion:*:descriptions' format '[%d]'
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 zstyle ':completion:*' menu no
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'
 
 # 让 _files 把 dotfile 也算进候选（cd ~/<Tab> 能看到 .config、.ssh、.claude 等）
 _comp_options+=(globdots)
