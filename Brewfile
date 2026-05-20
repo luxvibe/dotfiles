@@ -136,7 +136,7 @@ cask "font-jetbrains-mono-nerd-font"
 # 生产力 / 窗口
 cask "raycast"
 cask "rectangle"
-cask "stats"
+cask "istat-menus"
 cask "hiddenbar"
 cask "karabiner-elements"
 
