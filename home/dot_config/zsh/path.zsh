@@ -14,3 +14,6 @@ export PATH="${GOPATH}/bin:$PATH"
 
 # Rust
 export PATH="$HOME/.cargo/bin:$PATH"
+
+# 用户私有可执行文件
+export PATH="$HOME/.bin:$PATH"
