@@ -34,3 +34,6 @@ fi
 
 # 本机局部覆盖（不入仓库）
 [[ -f "$ZDOTDIR/local.zsh" ]] && source "$ZDOTDIR/local.zsh"
+
+# 确保 .zshrc 以退出码 0 结束（某些工具如 atuin init 的末尾 bindkey 可能返回 1）
+true
