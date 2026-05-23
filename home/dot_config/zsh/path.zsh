@@ -8,7 +8,7 @@ elif [[ -x /usr/local/bin/brew ]]; then
 fi
 
 # Go
-export GOPATH="$HOME/go"
+export GOPATH="$HOME/Workspace/golang"
 export PATH="${GOPATH}/bin:$PATH"
 # GOPROXY 在 private.zsh 中按网络环境配置
 
