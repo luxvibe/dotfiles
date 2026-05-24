@@ -16,7 +16,7 @@ if (( $+commands[eza] )); then
     alias lg='ls -lhA --git'
     alias tree='ls --tree'
 fi
-(( $+commands[bat]       )) && alias cat='bat -p --wrap character'
+# bat 保留原名使用，不覆盖 cat（带空格文件名转义兼容性问题）
 (( $+commands[fd]        )) && alias find='fd'
 (( $+commands[btop]      )) && alias top='btop'
 (( $+commands[rg]        )) && alias grep='rg'
