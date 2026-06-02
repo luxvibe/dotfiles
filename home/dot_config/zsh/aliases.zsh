@@ -84,4 +84,4 @@ alias unsetproxy='unset http_proxy https_proxy all_proxy no_proxy; showproxy'
 alias toggleproxy='[[ -n "$http_proxy" ]] && unsetproxy || setproxy'
 
 # Proxyman 抓包
-alias proxyman_on='set -a && source "$HOME/.proxyman/proxyman_env_automatic_setup.sh" && set +a && echo "→ Proxyman 抓包已开启（关闭此 shell 窗口恢复环境）"'
+alias proxyman_on='set -a 2>/dev/null || true; source "$HOME/Library/Application Support/com.proxyman.NSProxy-setapp/app-data/proxyman_env_automatic_setup.sh"; set +a 2>/dev/null || true && echo "→ Proxyman 抓包已开启（关闭此 shell 窗口恢复环境）"'
