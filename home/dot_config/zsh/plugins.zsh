@@ -43,11 +43,9 @@ _setup_completions() {
 
     # mise（语言版本管理）
     (( $+commands[mise]    )) && mise completion zsh >| "$comp_dir/_mise" 2>/dev/null
-    # kubectl / helm 补全：由 OMZ 插件提供，此处不重复生成
+    # kubectl / helm / docker / docker-compose 补全：由 OMZ 插件提供，此处不重复生成
     # gh（GitHub CLI）
     (( $+commands[gh]      )) && gh completion -s zsh >| "$comp_dir/_gh" 2>/dev/null
-    # docker（如果没有 brew 版补全）
-    (( $+commands[docker]  )) && docker completion zsh >| "$comp_dir/_docker" 2>/dev/null
     # uv（Python 包管理）
     (( $+commands[uv]      )) && uv generate-shell-completion zsh >| "$comp_dir/_uv" 2>/dev/null
 }

@@ -22,9 +22,10 @@ ohmyzsh/ohmyzsh path:plugins/fancy-ctrl-z     kind:defer
 ohmyzsh/ohmyzsh path:plugins/git              kind:defer
 ohmyzsh/ohmyzsh path:plugins/kubectl          kind:defer
 ohmyzsh/ohmyzsh path:plugins/helm             kind:defer
+ohmyzsh/ohmyzsh path:plugins/docker           kind:defer
+ohmyzsh/ohmyzsh path:plugins/docker-compose   kind:defer
 ohmyzsh/ohmyzsh path:plugins/sudo             kind:defer
 ohmyzsh/ohmyzsh path:plugins/macos            kind:defer
-# docker/docker-compose：补全由 plugins.zsh _setup_completions 动态生成，不重复加载
 
 # ── 补全增强（顺序敏感）──────────────────────────────────────
 zsh-users/zsh-completions kind:fpath
