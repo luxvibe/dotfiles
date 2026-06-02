@@ -43,10 +43,7 @@ _setup_completions() {
 
     # mise（语言版本管理）
     (( $+commands[mise]    )) && mise completion zsh >| "$comp_dir/_mise" 2>/dev/null
-    # kubectl
-    (( $+commands[kubectl] )) && kubectl completion zsh >| "$comp_dir/_kubectl" 2>/dev/null
-    # helm
-    (( $+commands[helm]    )) && helm completion zsh >| "$comp_dir/_helm" 2>/dev/null
+    # kubectl / helm 补全：由 OMZ 插件提供，此处不重复生成
     # gh（GitHub CLI）
     (( $+commands[gh]      )) && gh completion -s zsh >| "$comp_dir/_gh" 2>/dev/null
     # docker（如果没有 brew 版补全）
