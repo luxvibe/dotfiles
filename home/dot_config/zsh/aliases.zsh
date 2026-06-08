@@ -8,6 +8,12 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
 
+# ── chezmoi ──────────────────────────────────────────────────
+alias cz='chezmoi'
+alias czd='chezmoi diff'
+alias cza='chezmoi apply'
+alias cze='chezmoi edit'
+
 # ── 现代 Unix 替代 ───────────────────────────────────────────
 if (( $+commands[eza] )); then
     alias ls='eza --color=auto --icons=auto --group-directories-first'
