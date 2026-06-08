@@ -1,0 +1,3 @@
+# 与 nvim / tmux 保持一致的 Catppuccin Mocha 配色
+[flavor]
+use = "catppuccin-mocha"

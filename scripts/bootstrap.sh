@@ -99,6 +99,15 @@ setup_antidote() {
     fi
 }
 
+# ── yazi 包（主题等）──────────────────────────────────────
+setup_yazi() {
+    if command -v ya &>/dev/null; then
+        info "安装 yazi 包（catppuccin 主题）..."
+        ya pack -i
+        success "yazi 包安装完成"
+    fi
+}
+
 # ── main ───────────────────────────────────────────────────
 main() {
     info "开始 dotfiles 安装 ..."
@@ -110,6 +119,7 @@ main() {
     setup_defaults
     setup_mise
     setup_antidote
+    setup_yazi
 
     success "全部完成！请重启终端或执行：source ~/.config/zsh/.zshrc"
 }

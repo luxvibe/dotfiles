@@ -126,3 +126,13 @@ mitmweb_off() {
     unset http_proxy https_proxy no_proxy
     echo "终端代理已清除"
 }
+
+# ── Yazi（退出后自动 cd 到最后所在目录）─────────────────────
+y() {
+    local tmp cwd
+    tmp=$(mktemp -t "yazi-cwd.XXXXXX")
+    yazi "$@" --cwd-file="$tmp"
+    cwd=$(cat "$tmp" 2>/dev/null)
+    [[ -n "$cwd" && "$cwd" != "$PWD" ]] && cd "$cwd"
+    rm -f "$tmp"
+}
