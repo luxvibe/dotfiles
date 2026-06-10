@@ -204,7 +204,7 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /tmp init --apply luxvibe
 
 | 工具 | 用途 | 替代关系 |
 |---|---|---|
-| terraform | IaC 核心（mise 管理，支持多版本） | — |
+| opentofu | IaC 核心（terraform 开源替代，mise 管理，支持多版本） | terraform |
 | terragrunt | Terraform DRY 封装（mise 管理） | — |
 | sops | secrets 文件加密，配合 git 存储敏感配置 | — |
 | age | 现代加密工具，sops 的加密后端 | gpg |
