@@ -50,7 +50,7 @@ brew "redis"        # 含 redis-cli
 brew "mongosh"
 
 # ── PHP（brew 安装，避免 macOS iconv 编译问题）────────────
-tap "shivammathur/php"
+tap "shivammathur/php", trusted: true
 brew "shivammathur/php/php@8.1"
 # PHP 扩展（swoole/redis）由 run_onchange_php-extensions.sh 通过 pecl 安装
 # 依赖的编译头文件
@@ -67,7 +67,6 @@ cask "mitmproxy"    # HTTP/HTTPS 中间人代理调试
 
 # ── 容器 / Kubernetes ─────────────────────────────────────
 brew "dive"           # Docker 镜像层 analysis
-brew "fluxcd/tap/flux"  # GitOps CD 工具（brew tap 专属，mise 暂不支持）
 
 # ── AI / LLM ──────────────────────────────────────────────
 # brew "ollama"
