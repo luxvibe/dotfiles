@@ -50,8 +50,8 @@ _setup_completions() {
     (( $+commands[uv]      )) && uv generate-shell-completion zsh >| "$comp_dir/_uv" 2>/dev/null
 }
 
-# 将自定义补全目录加入 FPATH（必须在 compinit 之前）
-[[ -d "$ZDOTDIR/completions" ]] && FPATH="$ZDOTDIR/completions:${FPATH}"
+# 将自定义补全目录加入 FPATH（必须在 compinit 之前，无论目录是否已存在）
+FPATH="$ZDOTDIR/completions:${FPATH}"
 
 # 每天重新生成一次补全脚本（避免每次启动都执行）
 _comp_cache="$ZDOTDIR/.comp_setup_date"

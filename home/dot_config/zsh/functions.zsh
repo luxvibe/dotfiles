@@ -8,6 +8,7 @@ rm() {
     fi
     local targets=()
     for arg in "$@"; do [[ "$arg" != -* ]] && targets+=("$arg"); done
+    [[ ${#targets[@]} -eq 0 ]] && return
     trash "${targets[@]}"
 }
 
@@ -25,7 +26,7 @@ fkill() {
     pid=$(command ps -u "$USER" -o pid,ppid,comm,args | fzf --header-lines=1 --multi \
           --preview 'command ps -p {1} -o pid,ppid,user,comm,args,etime,pcpu,pmem --no-headers 2>/dev/null' \
           --preview-window=down:4 | awk '{print $1}')
-    [[ -n "$pid" ]] && echo "$pid" | xargs kill -9 && echo "已终止 PID: $pid"
+    [[ -n "$pid" ]] && echo "$pid" | xargs kill -15 && echo "已发送终止信号 PID: $pid（SIGTERM）"
 }
 
 # fzf 选目录并进入（递归）
@@ -134,5 +135,5 @@ y() {
     yazi "$@" --cwd-file="$tmp"
     cwd=$(cat "$tmp" 2>/dev/null)
     [[ -n "$cwd" && "$cwd" != "$PWD" ]] && cd "$cwd"
-    rm -f "$tmp"
+    command rm -f "$tmp"
 }

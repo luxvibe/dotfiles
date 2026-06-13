@@ -70,7 +70,11 @@ brew "dive"           # Docker 镜像层 analysis
 
 # ── AI / LLM ──────────────────────────────────────────────
 # brew "ollama"
+cask "claude"          # Claude Desktop App（Anthropic）
 cask "codex"           # OpenAI Codex CLI coding agent
+cask "kiro"            # Amazon Kiro IDE（spec-driven development）
+cask "kiro-cli"        # Kiro CLI（AI 命令行工具）
+# Claude Code CLI、cursor-agent 需手动安装，见 docs/INSTALL.md
 
 # ── 开发效率 ───────────────────────────────────────────────
 brew "topgrade"     # 一键升级所有包管理器（upgrade_all 别名依赖此工具）

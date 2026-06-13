@@ -23,11 +23,10 @@ if (( $+commands[eza] )); then
     alias tree='ls --tree'
 fi
 # bat 保留原名使用，不覆盖 cat（带空格文件名转义兼容性问题）
-(( $+commands[fd]        )) && alias find='fd'
+(( $+commands[fd]        )) && alias ff='fd'
 (( $+commands[btop]      )) && alias top='btop'
 (( $+commands[rg]        )) && alias grep='rg'
-# help/tldr 已由 ai.zsh 中的 exp() 函数替代（AI 解释更准确）
-(( $+commands[delta]     )) && alias diff='delta'
+# delta 仅作为 git/pager 渲染器，不覆盖系统 diff 命令（接口不兼容）
 (( $+commands[duf]       )) && alias df='duf'
 (( $+commands[dust]      )) && alias du='dust'
 (( $+commands[hyperfine] )) && alias benchmark='hyperfine'
@@ -79,7 +78,7 @@ alias art='php artisan'   # PHP
 
 # ── Proxy ────────────────────────────────────────────────────
 PROXY_ADDR="${PROXY_ADDR:-http://127.0.0.1:7897}"
-NO_PROXY_LIST="10.*.*.*,192.168.*.*,*.local,localhost,127.0.0.1"
+NO_PROXY_LIST="10.0.0.0/8,192.168.0.0/16,*.local,localhost,127.0.0.1"
 
 alias showproxy='echo "http_proxy=$http_proxy"'
 alias setproxy='export http_proxy=$PROXY_ADDR https_proxy=$PROXY_ADDR all_proxy=$PROXY_ADDR no_proxy=$NO_PROXY_LIST; showproxy'

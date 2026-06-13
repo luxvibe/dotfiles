@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# macOS 系统设置 — run_once（chezmoi 首次 apply 时执行一次）
+# macOS 系统设置 — run_onchange（defaults.sh 内容变化时自动重跑）
+# defaults.sh hash: {{ include (joinPath .chezmoi.sourceDir "../scripts/defaults.sh") | sha256sum }}
 set -euo pipefail
 
 # CHEZMOI_SOURCE_DIR 指向 home/ 子目录（因为 .chezmoiroot=home）

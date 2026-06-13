@@ -75,6 +75,17 @@ chezmoi apply --force
 mise install node@18   # 安装特定版本
 ```
 
+## AI 编码工具
+
+通过 `chezmoi apply` 自动安装（Brewfile 管理）：Claude Desktop App、Codex CLI、Kiro IDE、Kiro CLI、Cursor IDE。
+
+以下工具需手动安装，各自有自更新机制：
+
+- **Claude Code CLI**：`curl -fsSL https://claude.ai/install.sh | sh`，之后 `claude update` 升级
+- **cursor-agent**：打开 Cursor → 命令面板 → `Install cursor-agent`
+
+---
+
 ## 验证安装
 
 安装完成后，运行以下命令验证关键组件：
