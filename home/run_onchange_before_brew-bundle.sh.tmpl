@@ -11,5 +11,6 @@ BREWFILE="$(dirname "${CHEZMOI_SOURCE_DIR:-$HOME/.local/share/chezmoi/home}")/Br
 
 command -v brew &>/dev/null || exit 0
 
-echo "Running brew bundle..."
-brew bundle --file="$BREWFILE"
+echo "Running brew bundle (with verbose logs)..."
+export HOMEBREW_NO_AUTO_UPDATE=1
+brew bundle --file="$BREWFILE" --verbose
