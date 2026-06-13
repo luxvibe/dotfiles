@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+# PHP/Lua setup hash: {{ include (joinPath .chezmoi.sourceDir "../Brewfile") | sha256sum }}
+# 当 Brewfile 变化时重新执行 link 并安装 PHP 扩展
+
+set -euo pipefail
+
+command -v brew &>/dev/null || exit 0
+
+# ── 1. 链接 Keg-Only 软件 (PHP & Lua) ─────────────────────────
+echo "Linking keg-only packages..."
+LUA_FORMULA=$(brew list --formula | grep -E "^lua@[0-9.]+" | head -n 1 || true)
+if [[ -n "$LUA_FORMULA" ]]; then
+    brew link --overwrite --force "$LUA_FORMULA"
+    echo "$LUA_FORMULA linked"
+fi
+
+PHP_FORMULA=$(brew list --formula | grep -E "^php@[0-9.]+" | head -n 1 || true)
+if [[ -n "$PHP_FORMULA" ]]; then
+    brew link --overwrite --force "$PHP_FORMULA"
+    echo "$PHP_FORMULA linked"
+fi
+
+# ── 2. 安装 PHP 扩展 (Pecl swoole & redis) ──────────────────
+# ── 配置区：在此定义需要安装的扩展及其版本/参数 ─────────────────
+SWOOLE_VERSION_81="5.1.8"                 # PHP 8.1 锁定的 Swoole 版本
+SWOOLE_PECL_FLAGS='enable-sockets="no" enable-openssl="no" enable-mysqlnd="no" enable-swoole-curl="no" enable-cares="no" enable-brotli="no" enable-swoole-pgsql="no" enable-swoole-odbc="no" enable-swoole-oracle="no" enable-swoole-sqlite="no"'
+
+REDIS_VERSION="6.1.0"
+REDIS_PECL_FLAGS='enable-redis-igbinary="no" enable-redis-lzf="no" enable-redis-zstd="no" enable-redis-msgpack="no" enable-redis-lz4="no" with-liblz4="no"'
+
+# 直接从环境变量或常用路径获取 Homebrew 根路径 (M1/M2/M3: /opt/homebrew, Intel: /usr/local)
+BREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}"
+[[ -d "$BREW_PREFIX" ]] || BREW_PREFIX="/usr/local"
+
+# 自动探测已安装的 PHP 目录 (支持 php@8.1, php@8.2 等)
+PHP_OPT_DIR=""
+for dir in "${BREW_PREFIX}/opt"/php@[0-9]*; do
+    if [[ -d "$dir" && -x "$dir/bin/php" ]]; then
+        PHP_OPT_DIR="$dir"
+        break
+    fi
+done
+
+# 如果未安装任何 php 则优雅跳过扩展安装
+if [[ -z "$PHP_OPT_DIR" ]]; then
+    echo "No Homebrew PHP installation found, skipping extensions"
+    exit 0
+fi
+
+PHP_BIN="$PHP_OPT_DIR/bin/php"
+PECL_BIN="$PHP_OPT_DIR/bin/pecl"
+PHP_VERSION="$("$PHP_BIN" -r 'echo PHP_MAJOR_VERSION.".".PHP_MINOR_VERSION;')"
+
+echo "Checking PHP $PHP_VERSION extensions in $PHP_OPT_DIR..."
+
+# ── swoole 扩展 ─────────────────────────────────────────────
+if [[ "$PHP_VERSION" == "8.1" ]]; then
+    SWOOLE_TARGET="swoole-${SWOOLE_VERSION_81}"
+else
+    SWOOLE_TARGET="swoole" # 其他版本默认使用最新稳定版
+fi
+
+if ! "$PHP_BIN" -r "echo extension_loaded('swoole');" | grep -q 1; then
+    echo "Installing swoole ($SWOOLE_TARGET)..."
+    # swoole 编译依赖：pcre2 头文件
+    export LDFLAGS="-L${BREW_PREFIX}/opt/pcre2/lib"
+    export CPPFLAGS="-I${BREW_PREFIX}/opt/pcre2/include"
+    
+    # 注入配置参数执行安装
+    "$PECL_BIN" install -D "${SWOOLE_PECL_FLAGS}" "$SWOOLE_TARGET"
+    echo "swoole installed"
+    
+    # swoole.use_shortname 必须关闭，否则与部分框架（如 Hyperf）不兼容
+    PHP_INI="$("$PHP_BIN" --ini | grep 'Loaded Configuration' | awk '{print $NF}')"
+    if [[ -f "$PHP_INI" ]] && ! grep -q "swoole.use_shortname" "$PHP_INI"; then
+        echo "swoole.use_shortname = 'Off'" >> "$PHP_INI"
+        echo "swoole.use_shortname set to Off in $PHP_INI"
+    fi
+else
+    echo "swoole already installed, skipping"
+fi
+
+# ── phpredis 扩展 ───────────────────────────────────────────
+REDIS_TARGET="redis-${REDIS_VERSION}"
+
+if ! "$PHP_BIN" -r "echo extension_loaded('redis');" | grep -q 1; then
+    echo "Installing redis ($REDIS_TARGET)..."
+    "$PECL_BIN" install -D "${REDIS_PECL_FLAGS}" "$REDIS_TARGET"
+    echo "redis extension installed"
+else
+    echo "redis extension already installed, skipping"
+fi
+
+echo "PHP/Lua setup complete"

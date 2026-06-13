@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# mise config hash: {{ include (joinPath .chezmoi.sourceDir "dot_config/mise/config.toml.tmpl") | sha256sum }}
+# 上面注释让 chezmoi 在 config.toml.tmpl 内容变化时自动重跑此脚本
+
+set -uo pipefail   # 不加 -e，允许单个工具安装失败不中断整体
+
+command -v mise &>/dev/null || { echo "mise not found, skipping"; exit 0; }
+
+echo "Installing/updating mise-managed runtimes from config.toml..."
+mise install --yes 2>&1 | tail -20
+
+echo "mise install complete"

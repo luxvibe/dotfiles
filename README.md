@@ -24,8 +24,7 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /tmp init --apply luxvibe
 │   │   ├── nvim/         → ~/.config/nvim/（LazyVim 精简）
 │   │   ├── mise/         → ~/.config/mise/（多语言版本管理）
 │   │   ├── atuin/        → ~/.config/atuin/
-│   │   ├── bat/          → ~/.config/bat/
-│   │   └── direnv/       → ~/.config/direnv/
+│   │   └── bat/          → ~/.config/bat/
 │   └── private_dot_ssh/  → ~/.ssh/（权限 0700）
 ├── Brewfile              所有 brew + cask
 ├── scripts/
@@ -59,7 +58,6 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /tmp init --apply luxvibe
 | tmux | 终端复用器，会话持久化（无插件，单文件配置） | — |
 | powerlevel10k | zsh 提示符主题（instant prompt，极速启动） | oh-my-zsh 主题 |
 | atuin | Shell 历史记录（SQLite + 同步） | fzf history / `Ctrl-R` |
-| direnv | 目录级环境变量自动加载 | — |
 | antidote | zsh 插件管理器（静态加载，brew 安装） | zinit / oh-my-zsh / antigen |
 | iTerm2 | macOS 终端模拟器 | Terminal.app |
 
@@ -80,7 +78,6 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /tmp init --apply luxvibe
 | nvim-treesitter | 语法高亮与代码结构解析 | — |
 | telescope.nvim | 模糊查找（文件、符号、grep） | fzf.vim |
 | gitsigns.nvim | 行级 git 状态显示 | — |
-| lazygit.nvim | 在 Neovim 内调用 lazygit TUI | — |
 | catppuccin | Mocha 配色主题 | — |
 | lualine.nvim | 状态栏 | — |
 | which-key.nvim | 按键提示 | — |
@@ -134,7 +131,6 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /tmp init --apply luxvibe
 | 工具 | 用途 | 替代关系 |
 |---|---|---|
 | git | 版本控制 | — |
-| lazygit | git TUI 客户端（`lzg` 别名） | tig / gitui |
 | forgit | fzf 增强 git 工作流（fuzzy add/checkout/log/stash） | 手写 fzf 函数 |
 | gh | GitHub CLI（PR、issue、Copilot） | — |
 | glab | GitLab CLI | — |
@@ -153,7 +149,6 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /tmp init --apply luxvibe
 | stern | 多 Pod 日志聚合 | kubectl logs |
 | kustomize | Kubernetes 配置定制 | — |
 | dive | 分析 Docker 镜像层 | — |
-| lazydocker | Docker TUI 管理器 | — |
 
 ### 数据库 CLI
 

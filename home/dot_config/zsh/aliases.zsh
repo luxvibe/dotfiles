@@ -41,9 +41,6 @@ alias vim='nvim'
 
 # ── Git ──────────────────────────────────────────────────────
 # git 别名由 OMZP::git 插件提供，此处不重复定义
-# lazygit（避免与 eza 的 lg='ls -lhA --git' 冲突）
-(( $+commands[lazygit]   )) && alias lzg='lazygit'
-(( $+commands[lazydocker] )) && alias lzd='lazydocker'
 
 # ── SSH ──────────────────────────────────────────────────────
 (( $+commands[sshs] )) && alias s='sshs'   # fzf 选择 SSH 主机

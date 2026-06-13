@@ -64,7 +64,6 @@
 | `<Space>fb` | Telescope Buffers |
 | `<Space>fr` | 最近文件 |
 | `<Space>fc` | Git commits |
-| `<Space>gg` | LazyGit |
 | `<Space>gb` | git blame 行 |
 | `<Space>w`  | 保存文件 |
 | `<Space>W`  | 保存所有文件 |
@@ -88,8 +87,6 @@
 
 | 别名 | 功能 |
 |---|---|
-| `lzg` | lazygit（避免与 eza 的 `lg` 冲突）|
-| `lzd` | lazydocker |
 | `v`   | nvim |
 
 ## Rectangle（窗口管理）

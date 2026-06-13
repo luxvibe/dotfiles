@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# Yazi package hash: {{ include (joinPath .chezmoi.sourceDir "dot_config/yazi/package.toml") | sha256sum }}
+# 当 package.toml 变化时重新运行 ya pack -i
+
+set -uo pipefail
+
+command -v ya &>/dev/null || exit 0
+
+echo "Installing/updating Yazi packages from package.toml..."
+ya pack -i
+echo "Yazi packages installed"

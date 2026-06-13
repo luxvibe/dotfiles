@@ -18,7 +18,7 @@ go      = "latest"
 "go:github.com/golang-migrate/migrate/v4/cmd/migrate"            = "latest"  # 数据库迁移
 golangci-lint                                                    = "latest"  # Go linter v2（mise 原生支持，官方推荐安装方式）
 "go:mvdan.cc/sh/v3/cmd/shfmt"                                    = "latest"  # shell 格式化
-# actionlint → brew 安装（mise go backend 不支持子包路径）
+actionlint                                                       = "latest"  # GitHub Actions 静态分析
 
 # ── Rust ─────────────────────────────────────────────────────
 rust    = "stable"
@@ -40,16 +40,34 @@ ruby    = "3.3"
 # php = "8.3"
 
 # ── DevOps 工具链（mise 原生支持，可按项目锁版本）────────────
-buf        = "latest"   # Protobuf / gRPC 工具链（从 brew 迁移）
-opentofu   = "latest"   # IaC 核心（opentofu，terraform 开源替代）
-terragrunt = "latest"   # Terraform DRY 封装（从 brew 迁移）
-kubectl    = "latest"   # K8s CLI（从 brew 迁移，可按集群锁版本）
-helm       = "latest"   # K8s 包管理（从 brew 迁移）
-shellcheck = "latest"   # shell 静态分析（从 brew 迁移）
+buf        = "latest"   # Protobuf / gRPC 工具链
+opentofu   = "latest"   # IaC 核心（terraform 开源替代）
+terragrunt = "latest"   # Terraform DRY 封装
+kubectl    = "latest"   # K8s CLI（可按集群锁版本，多集群必备）
+helm       = "latest"   # K8s 包管理
+shellcheck = "latest"   # shell 静态分析
+
+# ── K8s 周边 CLI（版本与集群/API 对齐）──────────
+kustomize   = "latest"  # K8s 配置定制
+stern       = "latest"  # 多 Pod 日志聚合
+k9s         = "latest"  # K8s TUI 管理器
+kubeconform = "latest"  # K8s manifest 结构校验
+kubectx     = "latest"  # 含 kubens，切换 context/namespace
+kind        = "latest"  # K8s-in-Docker（本地测试集群）
+
+# ── 安全 / Secrets ───────────────────────────────────────────
+trivy     = "latest"    # 容器 / 代码 / IaC 安全扫描
+sops      = "latest"    # secrets 文件加密，配合 git 存储敏感配置
+age       = "latest"    # 现代加密工具，sops 的加密后端
+
+# ── 其他 DevOps ──────────────────────────────────────────────
+aws-vault = "latest"    # AWS 凭证安全存储与切换
+awscli    = "latest"    # AWS 命令行工具
+k6        = "latest"    # 性能 / 负载测试工具
 
 [settings]
 experimental = true
 # 识别项目根的 .tool-versions / .mise.toml / .node-version / .python-version 等
 idiomatic_version_file_enable_tools = [
-    "python", "node", "go", "java", "ruby", "php"
+    "python", "node", "go", "java", "ruby"
 ]

@@ -26,6 +26,7 @@ ohmyzsh/ohmyzsh path:plugins/docker           kind:defer
 ohmyzsh/ohmyzsh path:plugins/docker-compose   kind:defer
 ohmyzsh/ohmyzsh path:plugins/sudo             kind:defer
 ohmyzsh/ohmyzsh path:plugins/macos            kind:defer
+ohmyzsh/ohmyzsh path:plugins/opentofu        kind:defer
 
 # ── 补全增强（顺序敏感）──────────────────────────────────────
 zsh-users/zsh-completions kind:fpath
