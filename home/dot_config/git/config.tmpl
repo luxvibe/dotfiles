@@ -58,6 +58,12 @@
     side-by-side = true
     hyperlinks  = true
 
+[branch]
+    sort = -committerdate
+
+[help]
+    autocorrect = prompt
+
 [alias]
     l   = log --oneline --graph --decorate -20
     la  = log --oneline --graph --decorate --all -20
@@ -70,7 +76,7 @@
     up  = pull --rebase --autostash
 
 [url "git@github.com:"]
-    insteadOf = https://github.com/
+    pushInsteadOf = https://github.com/
 
 # Per-identity overrides
 {{- $workGitHost := .workGitHost | default "" -}}

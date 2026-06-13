@@ -25,7 +25,7 @@ fi
 # bat 保留原名使用，不覆盖 cat（带空格文件名转义兼容性问题）
 (( $+commands[fd]        )) && alias ff='fd'
 (( $+commands[btop]      )) && alias top='btop'
-(( $+commands[rg]        )) && alias grep='rg'
+(( $+commands[rg]        )) && alias gg='rg'
 # delta 仅作为 git/pager 渲染器，不覆盖系统 diff 命令（接口不兼容）
 (( $+commands[duf]       )) && alias df='duf'
 (( $+commands[dust]      )) && alias du='dust'

@@ -28,12 +28,13 @@ dotnet  = "8"         # Unity 脚本 & 后端 C#；Unity 2022+ 需要 .NET 6/8
 
 # ── JVM ──────────────────────────────────────────────────────
 java    = "temurin-21"    # JDK 21 LTS
-maven   = "latest"
-gradle  = "latest"
-kotlin  = "latest"
+# maven / gradle / kotlin 按项目在 .mise.toml 中声明，避免全局 install 过慢
+# maven   = "latest"
+# gradle  = "latest"
+# kotlin  = "latest"
 
 # ── Ruby ─────────────────────────────────────────────────────
-ruby    = "3.3"
+ruby    = "latest"
 
 # ── PHP ──────────────────────────────────────────────────────
 # php 通过 brew 安装（mise 编译安装在 macOS 上有 iconv 兼容问题）
@@ -69,5 +70,5 @@ k6        = "latest"    # 性能 / 负载测试工具
 experimental = true
 # 识别项目根的 .tool-versions / .mise.toml / .node-version / .python-version 等
 idiomatic_version_file_enable_tools = [
-    "python", "node", "go", "java", "ruby"
+    "python", "node", "go", "java", "ruby", "rust", "dotnet"
 ]

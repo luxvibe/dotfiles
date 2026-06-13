@@ -7,7 +7,6 @@
 # Powerlevel10k 直接 source，主题和命令一并加载
 romkatv/powerlevel10k
 
-ohmyzsh/ohmyzsh path:lib/correction.zsh
 # directories：cd .. 等别名由 aliases.zsh 自定义，不重复加载
 ohmyzsh/ohmyzsh path:lib/history.zsh
 ohmyzsh/ohmyzsh path:lib/key-bindings.zsh
@@ -41,9 +40,6 @@ hlissner/zsh-autopair              kind:defer
 
 # ── Git 工作流增强 ───────────────────────────────────────────
 wfxr/forgit                        kind:defer
-
-# ── Python 虚拟环境自动切换 ──────────────────────────────────
-MichaelAquilina/zsh-autoswitch-virtualenv kind:defer
 
 # ── fzf-tab（补全预览，需在 compinit 后加载）────────────────
 # 用 kind:fpath 只让 antidote 把目录加进 fpath，不自动 source；
