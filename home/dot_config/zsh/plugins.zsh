@@ -11,6 +11,10 @@ _hss_bindkey() {
     bindkey '^N' history-substring-search-down
 }
 
+# OMZ 插件依赖此变量存放补全缓存（kubectl / npm 插件）
+export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh"
+mkdir -p "$ZSH_CACHE_DIR/completions"
+
 (( $+commands[sheldon] )) || { print -P "%F{33}sheldon not found, run: brew install sheldon%f"; return }
 
 # 缓存 sheldon source 输出，config 变化时重新生成
@@ -37,13 +41,12 @@ _setup_completions() {
     local comp_dir="$ZDOTDIR/completions"
     mkdir -p "$comp_dir"
 
-    # mise（语言版本管理）
     (( $+commands[mise]    )) && mise completion zsh >| "$comp_dir/_mise" 2>/dev/null
-    # kubectl/helm 补全由 mise completion zsh 生成；docker/docker-compose 由 OrbStack 注入
-    # gh（GitHub CLI）
+    (( $+commands[kubectl] )) && kubectl completion zsh >| "$comp_dir/_kubectl" 2>/dev/null
+    (( $+commands[helm]    )) && helm completion zsh >| "$comp_dir/_helm" 2>/dev/null
     (( $+commands[gh]      )) && gh completion -s zsh >| "$comp_dir/_gh" 2>/dev/null
-    # uv（Python 包管理）
     (( $+commands[uv]      )) && uv generate-shell-completion zsh >| "$comp_dir/_uv" 2>/dev/null
+    # docker/docker-compose 由 OrbStack 注入；aws 由 OMZ aws 插件处理
 }
 
 # 将自定义补全目录加入 FPATH（必须在 compinit 之前，无论目录是否已存在）

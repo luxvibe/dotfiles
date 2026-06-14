@@ -65,7 +65,6 @@ cask "mitmproxy"    # HTTP/HTTPS 中间人代理调试
 brew "dive"           # Docker 镜像层 analysis
 
 # ── AI / LLM ──────────────────────────────────────────────
-# brew "ollama"
 cask "claude"          # Claude Desktop App（Anthropic）
 cask "codex"           # OpenAI Codex CLI coding agent
 cask "kiro"            # Amazon Kiro IDE（spec-driven development）
