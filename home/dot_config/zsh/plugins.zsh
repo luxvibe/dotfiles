@@ -40,18 +40,19 @@ fi
 _setup_completions() {
     local comp_dir="$ZDOTDIR/completions"
     mkdir -p "$comp_dir"
-
-    (( $+commands[mise]    )) && mise completion zsh >| "$comp_dir/_mise" 2>/dev/null
+    # 只生成 mise 管理且 Homebrew site-functions 未提供的工具
+    # mise/gh/atuin/eza/fd/rg 等已由 Homebrew 在 site-functions 自动提供，无需重复生成
     (( $+commands[kubectl] )) && kubectl completion zsh >| "$comp_dir/_kubectl" 2>/dev/null
     (( $+commands[helm]    )) && helm completion zsh >| "$comp_dir/_helm" 2>/dev/null
-    (( $+commands[gh]      )) && gh completion -s zsh >| "$comp_dir/_gh" 2>/dev/null
     (( $+commands[uv]      )) && uv generate-shell-completion zsh >| "$comp_dir/_uv" 2>/dev/null
     (( $+commands[uvx]     )) && uvx --generate-shell-completion zsh >| "$comp_dir/_uvx" 2>/dev/null
-    # docker/docker-compose 由 OrbStack 的 fpath 注入；aws 由 carapace 聚合处理
+    # docker/docker-compose: OrbStack fpath 注入
+    # aws/k9s/trivy/terragrunt/tofu 等: carapace 聚合处理
 }
 
 # 将自定义补全目录加入 FPATH（必须在 compinit 之前，无论目录是否已存在）
 FPATH="$ZDOTDIR/completions:${FPATH}"
+typeset -U fpath  # 去除重复项（OrbStack/sheldon 的 fpath+= 可能造成重复）
 
 # 每天重新生成一次补全脚本（避免每次启动都执行）
 _comp_cache="$ZDOTDIR/.comp_setup_date"
@@ -88,6 +89,14 @@ if (( $+commands[carapace] )); then
     fi
     [[ -f "$_carapace_cache" ]] && source "$_carapace_cache"
     unset _carapace_cache
+    # carapace 的 compdef 会覆盖 compinit 注册的原生补全函数；
+    # 对已有本地高质量补全文件的工具恢复原生优先级（动态资源补全更准确）
+    local _cd="$ZDOTDIR/completions"
+    [[ -f "$_cd/_kubectl" ]] && compdef _kubectl kubectl
+    [[ -f "$_cd/_helm"    ]] && compdef _helm helm
+    [[ -f "$_cd/_uv"      ]] && compdef _uv uv
+    [[ -f "$_cd/_uvx"     ]] && compdef _uvx uvx
+    unset _cd
 fi
 
 # ── FZF 集成 ─────────────────────────────────────────────────
