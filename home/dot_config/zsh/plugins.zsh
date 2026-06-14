@@ -39,7 +39,7 @@ _setup_completions() {
 
     # mise（语言版本管理）
     (( $+commands[mise]    )) && mise completion zsh >| "$comp_dir/_mise" 2>/dev/null
-    # kubectl / helm / docker / docker-compose 补全：由 OMZ 插件提供，此处不重复生成
+    # kubectl/helm 补全由 mise completion zsh 生成；docker/docker-compose 由 OrbStack 注入
     # gh（GitHub CLI）
     (( $+commands[gh]      )) && gh completion -s zsh >| "$comp_dir/_gh" 2>/dev/null
     # uv（Python 包管理）
@@ -51,13 +51,15 @@ FPATH="$ZDOTDIR/completions:${FPATH}"
 
 # 每天重新生成一次补全脚本（避免每次启动都执行）
 _comp_cache="$ZDOTDIR/.comp_setup_date"
-if [[ ! -f "$_comp_cache" || $(date +%Y%m%d) != $(cat "$_comp_cache" 2>/dev/null) ]]; then
+zmodload zsh/datetime
+strftime -s _today '%Y%m%d' $EPOCHSECONDS
+if [[ ! -f "$_comp_cache" || "$_today" != "$(<$_comp_cache)" ]]; then
     _setup_completions
-    date +%Y%m%d >| "$_comp_cache"
+    print -r -- "$_today" >| "$_comp_cache"
     # 生成新补全后强制刷新 zcompdump
     [[ -f "${ZSH_COMPDUMP:-$HOME/.zcompdump}" ]] && rm -f "${ZSH_COMPDUMP:-$HOME/.zcompdump}"
 fi
-unset _comp_cache
+unset _comp_cache _today
 
 # 补全初始化（在所有插件加载后、FPATH 设置完成后执行）
 # 用 -C 跳过安全检查（每天的 _setup_completions 已处理 zcompdump 刷新）
@@ -76,7 +78,7 @@ unset _fzf_tab_plugin
 # 缓存到文件避免每次启动都 fork carapace 进程（约 50-100ms）
 if (( $+commands[carapace] )); then
     _carapace_cache="$ZDOTDIR/completions/_carapace_init.zsh"
-    if [[ ! -f "$_carapace_cache" || "$_carapace_cache" -ot "$(command -v carapace)" ]]; then
+    if [[ ! -f "$_carapace_cache" || "$_carapace_cache" -ot "${commands[carapace]}" ]]; then
         mkdir -p "$ZDOTDIR/completions"
         carapace _carapace zsh >| "$_carapace_cache" 2>/dev/null || command rm -f "$_carapace_cache"
     fi

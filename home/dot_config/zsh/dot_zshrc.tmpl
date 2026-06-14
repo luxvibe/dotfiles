@@ -15,13 +15,21 @@ source "$ZDOTDIR/functions.zsh"
 # 私有配置（token、proxy、GOPRIVATE 等，不入仓库）
 [[ -f "$ZDOTDIR/private.zsh" ]] && source "$ZDOTDIR/private.zsh"
 
-# ── 工具初始化 ────────────────────────────────────────────────
-if (( $+commands[zoxide] )); then
-    eval "$(zoxide init zsh)"
-fi
-
-(( $+commands[mise]   )) && eval "$(mise activate zsh)"
-(( $+commands[atuin]  )) && eval "$(atuin init zsh --disable-up-arrow)"
+# ── 工具初始化（缓存输出，binary 更新时才重新生成）──────────
+_cached_eval() {
+    local name="$1" bin="${commands[$1]}" cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/$1.zsh"
+    shift
+    [[ -z "$bin" ]] && return
+    if [[ ! -f "$cache" || "$bin" -nt "$cache" ]]; then
+        mkdir -p "${cache:h}"
+        "$bin" "$@" >| "$cache" 2>/dev/null || command rm -f "$cache"
+    fi
+    [[ -f "$cache" ]] && source "$cache"
+}
+_cached_eval zoxide init zsh
+_cached_eval mise   activate zsh
+_cached_eval atuin  init zsh --disable-up-arrow
+unfunction _cached_eval
 
 # 加载 p10k 配置
 [[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
