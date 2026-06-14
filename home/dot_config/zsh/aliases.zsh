@@ -29,8 +29,6 @@ fi
 # delta 仅作为 git/pager 渲染器，不覆盖系统 diff 命令（接口不兼容）
 (( $+commands[duf]       )) && alias df='duf'
 (( $+commands[dust]      )) && alias du='dust'
-(( $+commands[hyperfine] )) && alias benchmark='hyperfine'
-(( $+commands[gping]     )) && alias ping='gping'
 (( $+commands[procs]     )) && alias ps='procs'
 
 # ── 编辑器 ───────────────────────────────────────────────────
@@ -48,6 +46,7 @@ alias vim='nvim'
 alias bu='brew upgrade'
 alias bua='brew update && brew upgrade && brew autoremove && brew cleanup --prune=30'
 alias bbd='brew bundle dump --force --file=~/.dotfiles/Brewfile'
+alias bbc='brew bundle cleanup --file=~/.dotfiles/Brewfile --force'  # 卸载不在 Brewfile 里的包
 alias flush_dns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
 alias flush_comp='rm -f $ZDOTDIR/.comp_setup_date $ZDOTDIR/.zsh_plugins.zsh ~/.zcompdump && reload'  # 强制刷新所有补全缓存
 
