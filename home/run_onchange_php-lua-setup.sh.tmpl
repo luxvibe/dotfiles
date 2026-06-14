@@ -12,19 +12,30 @@ set -euo pipefail
 
 command -v brew &>/dev/null || exit 0
 
-# ── 1. 链接 Keg-Only 软件 (PHP & Lua) ─────────────────────────
-echo "Linking keg-only packages..."
-LUA_FORMULA=$(brew list --formula | grep -E "^lua@[0-9.]+" | head -n 1 || true)
-if [[ -n "$LUA_FORMULA" ]]; then
-    brew link --overwrite --force "$LUA_FORMULA"
-    echo "$LUA_FORMULA linked"
-fi
+# Homebrew 根路径（Apple Silicon: /opt/homebrew，Intel: /usr/local）
+BREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}"
+[[ -d "$BREW_PREFIX" ]] || BREW_PREFIX="/usr/local"
 
-PHP_FORMULA=$(brew list --formula | grep -E "^php@[0-9.]+" | head -n 1 || true)
-if [[ -n "$PHP_FORMULA" ]]; then
-    brew link --overwrite --force "$PHP_FORMULA"
-    echo "$PHP_FORMULA linked"
-fi
+# ── 1. 链接 Keg-Only 软件 (PHP & Lua) ─────────────────────────
+# 直接从 opt/ 目录探测，不依赖 brew list 输出格式
+# （tap 安装的包在不同环境下可能带或不带 tap 前缀，grep 不可靠）
+echo "Linking keg-only packages..."
+
+for dir in "${BREW_PREFIX}/opt"/lua@[0-9]*; do
+    [[ -d "$dir" ]] || continue
+    formula=$(basename "$dir")
+    brew link --overwrite --force "$formula" 2>/dev/null \
+        && echo "$formula linked" \
+        || echo "Warning: failed to link $formula (may already be linked by another formula)"
+done
+
+for dir in "${BREW_PREFIX}/opt"/php@[0-9]*; do
+    [[ -d "$dir" ]] || continue
+    formula=$(basename "$dir")
+    brew link --overwrite --force "$formula" 2>/dev/null \
+        && echo "$formula linked" \
+        || echo "Warning: failed to link $formula (may already be linked by another formula)"
+done
 
 # ── 2. 安装 PHP 扩展 (Pecl swoole & redis) ──────────────────
 # ── 配置区：在此定义需要安装的扩展及其版本/参数 ─────────────────
@@ -33,10 +44,6 @@ SWOOLE_PECL_FLAGS='enable-sockets="no" enable-openssl="no" enable-mysqlnd="no" e
 
 REDIS_VERSION="6.1.0"
 REDIS_PECL_FLAGS='enable-redis-igbinary="no" enable-redis-lzf="no" enable-redis-zstd="no" enable-redis-msgpack="no" enable-redis-lz4="no" with-liblz4="no"'
-
-# 直接从环境变量或常用路径获取 Homebrew 根路径 (M1/M2/M3: /opt/homebrew, Intel: /usr/local)
-BREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}"
-[[ -d "$BREW_PREFIX" ]] || BREW_PREFIX="/usr/local"
 
 # 自动探测已安装的 PHP 目录 (支持 php@8.1, php@8.2 等)
 PHP_OPT_DIR=""
