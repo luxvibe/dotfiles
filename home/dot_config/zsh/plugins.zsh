@@ -93,12 +93,13 @@ if (( $+commands[carapace] )); then
     unset _carapace_cache
     # carapace 的 compdef 会覆盖 compinit 注册的原生补全函数；
     # 对已有本地高质量补全文件的工具恢复原生优先级（动态资源补全更准确）
-    local _cd="$ZDOTDIR/completions"
+    local _cd="$ZDOTDIR/completions" _hb="$HOMEBREW_PREFIX/share/zsh/site-functions"
     [[ -f "$_cd/_kubectl" ]] && compdef _kubectl kubectl
     [[ -f "$_cd/_helm"    ]] && compdef _helm helm
     [[ -f "$_cd/_uv"      ]] && compdef _uv uv
     [[ -f "$_cd/_uvx"     ]] && compdef _uvx uvx
-    unset _cd
+    [[ -f "$_hb/_gh"      ]] && compdef _gh gh
+    unset _cd _hb
 fi
 
 # ── FZF 集成 ─────────────────────────────────────────────────
