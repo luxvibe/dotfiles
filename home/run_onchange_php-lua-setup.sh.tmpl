@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 # PHP/Lua setup hash: {{ include (joinPath .chezmoi.sourceDir "../Brewfile") | sha256sum }}
-# 当 Brewfile 变化时重新执行 link 并安装 PHP 扩展
+{{- $brew_prefix := "/opt/homebrew" -}}
+{{- if eq .chezmoi.arch "amd64" -}}
+  {{- $brew_prefix = "/usr/local" -}}
+{{- end -}}
+# PHP link status: {{ if stat (printf "%s/bin/php" $brew_prefix) }}linked{{ else }}missing{{ end }}
+# Lua link status: {{ if stat (printf "%s/bin/lua" $brew_prefix) }}linked{{ else }}missing{{ end }}
+# 当 Brewfile 变化或 PHP/Lua 软链丢失时重新执行 link 并安装 PHP 扩展
 
 set -euo pipefail
 
