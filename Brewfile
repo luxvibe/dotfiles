@@ -43,8 +43,7 @@ brew "evans"          # gRPC 交互式 REPL 客户端
 brew "mise"
 
 # ── 数据库 CLI ─────────────────────────────────────────────
-brew "mysql-client"
-brew "mycli"        # MySQL 增强 CLI（语法高亮 + 自动补全，.myclirc 已同步）
+brew "mycli"        # MySQL 增强 CLI（语法高亮 + 自动补全）
 brew "libpq"        # 含 psql / pg_dump
 brew "redis"        # 含 redis-cli
 brew "mongosh"
