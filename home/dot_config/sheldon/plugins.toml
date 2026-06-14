@@ -1,0 +1,72 @@
+shell = "zsh"
+
+# defer 模板：每个文件独立包装为 zsh-defer source
+[templates]
+defer = "{% for file in files %}zsh-defer source \"{{ file }}\"\n{% endfor %}"
+
+# ── zsh-defer（defer 模板依赖，必须同步加载）────────────────
+[plugins.zsh-defer]
+github = "romkatv/zsh-defer"
+
+# ── 主题（同步，instant prompt 需要）────────────────────────
+[plugins.powerlevel10k]
+github = "romkatv/powerlevel10k"
+
+# ── Oh My Zsh 库（同步）─────────────────────────────────────
+[plugins.omz-libs]
+github = "ohmyzsh/ohmyzsh"
+use = ["lib/history.zsh", "lib/key-bindings.zsh", "lib/theme-and-appearance.zsh"]
+
+# ── fpath 注册（compinit 前，不 source）──────────────────────
+[plugins.zsh-completions]
+github = "zsh-users/zsh-completions"
+apply = ["fpath"]
+
+# fzf-tab 仅注册 fpath，由 plugins.zsh 在 compinit 后手动 source
+[plugins.fzf-tab]
+github = "Aloxaf/fzf-tab"
+apply = ["fpath"]
+
+# ── Oh My Zsh 插件（延迟）───────────────────────────────────
+[plugins.omz-plugins]
+github = "ohmyzsh/ohmyzsh"
+use = [
+    "plugins/colored-man-pages/*.plugin.zsh",
+    "plugins/cp/*.plugin.zsh",
+    "plugins/extract/*.plugin.zsh",
+    "plugins/fancy-ctrl-z/*.plugin.zsh",
+    "plugins/git/*.plugin.zsh",
+    "plugins/kubectl/*.plugin.zsh",
+    "plugins/helm/*.plugin.zsh",
+    "plugins/docker/*.plugin.zsh",
+    "plugins/docker-compose/*.plugin.zsh",
+    "plugins/sudo/*.plugin.zsh",
+    "plugins/macos/*.plugin.zsh",
+    "plugins/opentofu/*.plugin.zsh",
+]
+apply = ["defer"]
+
+# ── 实用插件（延迟）─────────────────────────────────────────
+[plugins.zsh-history-substring-search]
+github = "zsh-users/zsh-history-substring-search"
+apply = ["defer"]
+
+[plugins.fast-syntax-highlighting]
+github = "zdharma-continuum/fast-syntax-highlighting"
+apply = ["defer"]
+
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+apply = ["defer"]
+
+[plugins.alias-tips]
+github = "djui/alias-tips"
+apply = ["defer"]
+
+[plugins.zsh-autopair]
+github = "hlissner/zsh-autopair"
+apply = ["defer"]
+
+[plugins.forgit]
+github = "wfxr/forgit"
+apply = ["defer"]

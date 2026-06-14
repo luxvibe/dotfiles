@@ -1,34 +1,30 @@
-# antidote 插件管理
-# brew 安装，路径通过 HOMEBREW_PREFIX 获取（由 path.zsh 的 brew shellenv 设置）
+# sheldon 插件管理（配置：~/.config/sheldon/plugins.toml）
 
-# zsh-history-substring-search 的按键绑定（post hook 在插件加载后调用）
+# zsh-history-substring-search 按键绑定，由 zsh-defer 在插件加载后调用
 _hss_bindkey() {
     zmodload zsh/terminfo
     for keymap in main emacs viins; do
         bindkey -M "$keymap" "$terminfo[kcuu1]" history-substring-search-up
         bindkey -M "$keymap" "$terminfo[kcud1]" history-substring-search-down
     done
-    # 同时绑定 Ctrl-P / Ctrl-N 作为备用
     bindkey '^P' history-substring-search-up
     bindkey '^N' history-substring-search-down
 }
 
-ANTIDOTE_HOME="${HOMEBREW_PREFIX}/opt/antidote/share/antidote"
-[[ -d "$ANTIDOTE_HOME" ]] || {
-    print -P "%F{33}antidote not found, run: brew install antidote%f"
-    return
-}
+(( $+commands[sheldon] )) || { print -P "%F{33}sheldon not found, run: brew install sheldon%f"; return }
 
-# 插件列表文件（antidote bundle 的输入和输出）
-zsh_plugins_src="$ZDOTDIR/.zsh_plugins"
-zsh_plugins_out="$ZDOTDIR/.zsh_plugins.zsh"
-
-# 静态加载：若插件列表有变化则重新生成
-if [[ ! "$zsh_plugins_out" -nt "$zsh_plugins_src" ]]; then
-    source "$ANTIDOTE_HOME/antidote.zsh"
-    antidote bundle <"$zsh_plugins_src" >"$zsh_plugins_out" || command rm -f "$zsh_plugins_out"
+# 缓存 sheldon source 输出，config 变化时重新生成
+_sheldon_cache="${XDG_CACHE_HOME:-$HOME/.cache}/sheldon/init.zsh"
+_sheldon_toml="${XDG_CONFIG_HOME:-$HOME/.config}/sheldon/plugins.toml"
+if [[ ! -f "$_sheldon_cache" || "$_sheldon_toml" -nt "$_sheldon_cache" ]]; then
+    mkdir -p "${_sheldon_cache:h}"
+    sheldon source >| "$_sheldon_cache" || command rm -f "$_sheldon_cache"
 fi
-[[ -f "$zsh_plugins_out" ]] && source "$zsh_plugins_out"
+[[ -f "$_sheldon_cache" ]] && source "$_sheldon_cache"
+unset _sheldon_cache _sheldon_toml
+
+# 在所有 deferred 插件加载完成后绑定 history-substring-search 按键
+zsh-defer _hss_bindkey
 
 # ── Homebrew 补全 ─────────────────────────────────────────────
 if [[ -n "$HOMEBREW_PREFIX" ]]; then
@@ -72,7 +68,7 @@ compinit -C -d "${ZSH_COMPDUMP:-$HOME/.zcompdump}"
 # 必须在 compinit 之后、fast-syntax-highlighting / zsh-autosuggestions 之前
 # 包装补全 widget。antidote 那边用 kind:fpath，仅把目录加进 fpath，
 # 这里再显式 source 一次，避免 defer 队列导致的加载顺序错乱和早按 Tab 落空。
-_fzf_tab_plugin="$ANTIDOTE_HOME/github.com/Aloxaf/fzf-tab/fzf-tab.plugin.zsh"
+_fzf_tab_plugin="${XDG_DATA_HOME:-$HOME/.local/share}/sheldon/repos/github.com/Aloxaf/fzf-tab/fzf-tab.plugin.zsh"
 [[ -f "$_fzf_tab_plugin" ]] && source "$_fzf_tab_plugin"
 unset _fzf_tab_plugin
 

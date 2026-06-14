@@ -20,7 +20,7 @@ brew "dust"         # du 替代
 # ── Shell / 终端核心 ───────────────────────────────────────
 brew "zsh"
 brew "tmux"
-brew "antidote"     # zsh 插件管理器
+brew "sheldon"      # zsh 插件管理器
 brew "atuin"
 brew "chezmoi"      # dotfiles 管理
 brew "carapace"     # 通用命令补全聚合器（500+ 命令）
