@@ -22,6 +22,9 @@ if (( $+commands[eza] )); then
     alias tree='ls --tree'
 fi
 # bat 保留原名使用，不覆盖 cat（带空格文件名转义兼容性问题）
+# bat 接管 man 手册，显示带语法高亮的彩色文档
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+export MANROFFOPT="-c"
 (( $+commands[fd]        )) && alias ff='fd'
 (( $+commands[btop]      )) && alias top='btop'
 (( $+commands[rg]        )) && alias gg='rg'

@@ -79,6 +79,7 @@ brew "tlrc"         # tldr 客户端，快速查命令用法
 brew "git-cliff"    # 从 commit 自动生成 CHANGELOG
 brew "trufflehog"   # git 历史 secrets 扫描，防止敏感信息泄露
 brew "trash"        # 安全删除，移入垃圾桶（rm 函数依赖）
+brew "navi"         # Ctrl+G 命令速查表（可自定义 cheatsheet）
 
 # ── App 管理 ───────────────────────────────────────────────
 cask "pearcleaner"  # 彻底卸载 App 及残留文件

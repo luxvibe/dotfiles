@@ -201,3 +201,6 @@ zstyle ':fzf-tab:complete:brew-(install|uninstall|search|info):*-argument-rest' 
 
 zstyle ':fzf-tab:complete:(export|unset|expand):*' fzf-preview \
        'echo ${(P)word} | bat -plhelp --color=always'
+
+# ── navi（Ctrl+G 命令速查）────────────────────────────────────
+(( $+commands[navi] )) && eval "$(navi widget zsh)"
