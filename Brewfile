@@ -61,8 +61,27 @@ brew "jq"
 brew "yq"
 cask "mitmproxy"    # HTTP/HTTPS 中间人代理调试
 
-# ── 容器 / Kubernetes ─────────────────────────────────────
+# ── 容器 / Kubernetes / DevOps ────────────────────────────
 brew "dive"           # Docker 镜像层 analysis
+# K8s 工具（无版本锁定需求，始终用最新）
+brew "k9s"            # K8s TUI 管理器
+brew "kubectx"        # 含 kubens，切换 context/namespace
+brew "kustomize"      # K8s 配置定制
+brew "stern"          # 多 Pod 日志聚合
+brew "kind"           # K8s-in-Docker（本地测试集群）
+brew "kubeconform"    # K8s manifest 结构校验
+# 安全 / Secrets
+brew "trivy"          # 容器 / 代码 / IaC 安全扫描
+brew "sops"           # secrets 文件加密
+brew "age"            # 现代加密工具，sops 的加密后端
+# AWS
+brew "awscli"         # AWS 命令行工具
+brew "aws-vault"      # AWS 凭证安全存储与切换
+# CI/CD / 代码质量
+brew "shellcheck"     # shell 静态分析
+brew "actionlint"     # GitHub Actions 静态分析
+brew "buf"            # Protobuf / gRPC 工具链
+brew "k6"             # 性能 / 负载测试工具
 
 # ── AI / LLM ──────────────────────────────────────────────
 cask "claude"          # Claude Desktop App（Anthropic）
