@@ -16,26 +16,36 @@ command -v brew &>/dev/null || exit 0
 BREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}"
 [[ -d "$BREW_PREFIX" ]] || BREW_PREFIX="/usr/local"
 
-# ── 1. 链接 Keg-Only 软件 (PHP & Lua) ─────────────────────────
-# 直接从 opt/ 目录探测，不依赖 brew list 输出格式
-# （tap 安装的包在不同环境下可能带或不带 tap 前缀，grep 不可靠）
-echo "Linking keg-only packages..."
+# ── 1. 确保 Keg-Only 软件已安装并链接 (PHP & Lua) ────────────
+echo "Checking keg-only packages..."
+
+# Lua：未安装则从 Brewfile 安装
+if ! ls -d "${BREW_PREFIX}/opt"/lua@[0-9]* 2>/dev/null | grep -q .; then
+    echo "lua@5.4 not found, installing..."
+    brew install lua@5.4
+fi
 
 for dir in "${BREW_PREFIX}/opt"/lua@[0-9]*; do
     [[ -d "$dir" ]] || continue
     formula=$(basename "$dir")
     if brew link --overwrite --force "$formula" 2>/dev/null; then
         echo "$formula linked"
-        break  # 只链接最低版本（与 Brewfile 中 lua@5.4 对应），避免高版本覆盖
+        break
     fi
 done
+
+# PHP：未安装则从 Brewfile 安装
+if ! ls -d "${BREW_PREFIX}/opt"/php@[0-9]* 2>/dev/null | grep -q .; then
+    echo "php@8.1 not found, installing..."
+    brew install shivammathur/php/php@8.1
+fi
 
 for dir in "${BREW_PREFIX}/opt"/php@[0-9]*; do
     [[ -d "$dir" ]] || continue
     formula=$(basename "$dir")
     if brew link --overwrite --force "$formula" 2>/dev/null; then
         echo "$formula linked"
-        break  # 只链接最低版本（与 Brewfile 中 php@8.1 对应），避免高版本覆盖
+        break
     fi
 done
 
