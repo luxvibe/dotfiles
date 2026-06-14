@@ -2,6 +2,7 @@
 
 # Homebrew（Apple Silicon）
 eval "$(/opt/homebrew/bin/brew shellenv)"
+export HOMEBREW_BUNDLE_FILE="$HOME/.dotfiles/Brewfile"
 
 # Go
 export GOPATH="$HOME/Workspace/golang"

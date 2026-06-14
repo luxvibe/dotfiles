@@ -45,8 +45,8 @@ alias vim='nvim'
 # ── Homebrew ─────────────────────────────────────────────────
 alias bu='brew upgrade'
 alias bua='brew update && brew upgrade && brew autoremove && brew cleanup --prune=30'
-alias bbd='brew bundle dump --force --file=~/.dotfiles/Brewfile'
-alias bbc='brew bundle cleanup --file=~/.dotfiles/Brewfile --force'  # 卸载不在 Brewfile 里的包
+alias bbd='brew bundle dump --force'
+alias bbc='brew bundle cleanup --force'  # 卸载不在 Brewfile 里的包
 alias flush_dns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
 alias flush_comp='rm -f $ZDOTDIR/.comp_setup_date $ZDOTDIR/.zsh_plugins.zsh ~/.zcompdump && reload'  # 强制刷新所有补全缓存
 

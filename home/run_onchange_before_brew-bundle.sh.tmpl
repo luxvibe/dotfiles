@@ -4,13 +4,9 @@
 
 set -euo pipefail
 
-# CHEZMOI_SOURCE_DIR 指向 home/ 子目录（因为 .chezmoiroot=home）
-# Brewfile 在仓库根，需要上一级
-BREWFILE="$(dirname "${CHEZMOI_SOURCE_DIR:-$HOME/.local/share/chezmoi/home}")/Brewfile"
-[[ -f "$BREWFILE" ]] || BREWFILE="$HOME/.dotfiles/Brewfile"
-
 command -v brew &>/dev/null || exit 0
 
-echo "Running brew bundle (with verbose logs)..."
+echo "Running brew bundle..."
 export HOMEBREW_NO_AUTO_UPDATE=1
-brew bundle --file="$BREWFILE" --verbose
+export HOMEBREW_BUNDLE_FILE="$(dirname "${CHEZMOI_SOURCE_DIR:-$HOME/.local/share/chezmoi/home}")/Brewfile"
+brew bundle --verbose
