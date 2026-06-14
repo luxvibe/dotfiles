@@ -26,9 +26,9 @@ zsh_plugins_out="$ZDOTDIR/.zsh_plugins.zsh"
 # 静态加载：若插件列表有变化则重新生成
 if [[ ! "$zsh_plugins_out" -nt "$zsh_plugins_src" ]]; then
     source "$ANTIDOTE_HOME/antidote.zsh"
-    antidote bundle <"$zsh_plugins_src" >"$zsh_plugins_out"
+    antidote bundle <"$zsh_plugins_src" >"$zsh_plugins_out" || command rm -f "$zsh_plugins_out"
 fi
-source "$zsh_plugins_out"
+[[ -f "$zsh_plugins_out" ]] && source "$zsh_plugins_out"
 
 # ── Homebrew 补全 ─────────────────────────────────────────────
 if [[ -n "$HOMEBREW_PREFIX" ]]; then
@@ -82,9 +82,9 @@ if (( $+commands[carapace] )); then
     _carapace_cache="$ZDOTDIR/completions/_carapace_init.zsh"
     if [[ ! -f "$_carapace_cache" || "$_carapace_cache" -ot "$(command -v carapace)" ]]; then
         mkdir -p "$ZDOTDIR/completions"
-        carapace _carapace zsh >| "$_carapace_cache"
+        carapace _carapace zsh >| "$_carapace_cache" 2>/dev/null || command rm -f "$_carapace_cache"
     fi
-    source "$_carapace_cache"
+    [[ -f "$_carapace_cache" ]] && source "$_carapace_cache"
 fi
 
 # ── FZF 集成 ─────────────────────────────────────────────────

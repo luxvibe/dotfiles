@@ -12,42 +12,31 @@ set -euo pipefail
 
 command -v brew &>/dev/null || exit 0
 
-# Homebrew 根路径（Apple Silicon: /opt/homebrew，Intel: /usr/local）
 BREW_PREFIX="${HOMEBREW_PREFIX:-/opt/homebrew}"
-[[ -d "$BREW_PREFIX" ]] || BREW_PREFIX="/usr/local"
+
+# 与 Brewfile 保持一致，改版本时同步修改此处
+LUA_BREW_FORMULA="lua@5.4"
+PHP_BREW_FORMULA="php@8.1"
 
 # ── 1. 确保 Keg-Only 软件已安装并链接 (PHP & Lua) ────────────
 echo "Checking keg-only packages..."
 
-# Lua：未安装则从 Brewfile 安装
-if ! ls -d "${BREW_PREFIX}/opt"/lua@[0-9]* 2>/dev/null | grep -q .; then
-    echo "lua@5.4 not found, installing..."
-    brew install lua@5.4
-fi
-
-for dir in "${BREW_PREFIX}/opt"/lua@[0-9]*; do
-    [[ -d "$dir" ]] || continue
-    formula=$(basename "$dir")
-    if brew link --overwrite --force "$formula" 2>/dev/null; then
-        echo "$formula linked"
-        break
+_link_keg() {
+    local pattern="$1" fallback="$2"
+    local matched=("${BREW_PREFIX}/opt"/${pattern})
+    if [[ ! -d "${matched[0]}" ]]; then
+        echo "${fallback} not found, installing..."
+        brew install "$fallback"
     fi
-done
+    for dir in "${BREW_PREFIX}/opt"/${pattern}; do
+        [[ -d "$dir" ]] || continue
+        brew link --overwrite --force "$(basename "$dir")" 2>/dev/null && \
+            echo "$(basename "$dir") linked" && break
+    done
+}
 
-# PHP：未安装则从 Brewfile 安装
-if ! ls -d "${BREW_PREFIX}/opt"/php@[0-9]* 2>/dev/null | grep -q .; then
-    echo "php@8.1 not found, installing..."
-    brew install shivammathur/php/php@8.1
-fi
-
-for dir in "${BREW_PREFIX}/opt"/php@[0-9]*; do
-    [[ -d "$dir" ]] || continue
-    formula=$(basename "$dir")
-    if brew link --overwrite --force "$formula" 2>/dev/null; then
-        echo "$formula linked"
-        break
-    fi
-done
+_link_keg "lua@[0-9]*" "$LUA_BREW_FORMULA"
+_link_keg "php@[0-9]*" "$PHP_BREW_FORMULA"
 
 # ── 2. 安装 PHP 扩展 (Pecl swoole & redis) ──────────────────
 # ── 配置区：在此定义需要安装的扩展及其版本/参数 ─────────────────
@@ -85,7 +74,7 @@ else
     SWOOLE_TARGET="swoole" # 其他版本默认使用最新稳定版
 fi
 
-if ! "$PHP_BIN" -r "echo extension_loaded('swoole');" | grep -q 1; then
+if ! "$PHP_BIN" -r "exit(extension_loaded('swoole') ? 0 : 1);" 2>/dev/null; then
     echo "Installing swoole ($SWOOLE_TARGET)..."
     # swoole 编译依赖：pcre2 头文件
     export LDFLAGS="-L${BREW_PREFIX}/opt/pcre2/lib"
@@ -96,7 +85,7 @@ if ! "$PHP_BIN" -r "echo extension_loaded('swoole');" | grep -q 1; then
     echo "swoole installed"
     
     # swoole.use_shortname 必须关闭，否则与部分框架（如 Hyperf）不兼容
-    PHP_INI="$("$PHP_BIN" --ini | grep 'Loaded Configuration' | awk '{print $NF}')"
+    PHP_INI="$("$PHP_BIN" --ini 2>/dev/null | awk '/Loaded Configuration/{print $NF}')" || true
     if [[ -f "$PHP_INI" ]] && ! grep -q "swoole.use_shortname" "$PHP_INI"; then
         echo "swoole.use_shortname = 'Off'" >> "$PHP_INI"
         echo "swoole.use_shortname set to Off in $PHP_INI"
@@ -108,7 +97,7 @@ fi
 # ── phpredis 扩展 ───────────────────────────────────────────
 REDIS_TARGET="redis-${REDIS_VERSION}"
 
-if ! "$PHP_BIN" -r "echo extension_loaded('redis');" | grep -q 1; then
+if ! "$PHP_BIN" -r "exit(extension_loaded('redis') ? 0 : 1);" 2>/dev/null; then
     echo "Installing redis ($REDIS_TARGET)..."
     "$PECL_BIN" install -D "${REDIS_PECL_FLAGS}" "$REDIS_TARGET"
     echo "redis extension installed"

@@ -10,7 +10,7 @@ source "$ZDOTDIR/path.zsh"
 source "$ZDOTDIR/plugins.zsh"
 source "$ZDOTDIR/aliases.zsh"
 source "$ZDOTDIR/functions.zsh"
-source "$ZDOTDIR/ai.zsh"
+[[ -f "$ZDOTDIR/ai.zsh" ]] && source "$ZDOTDIR/ai.zsh"
 
 # 私有配置（token、proxy、GOPRIVATE 等，不入仓库）
 [[ -f "$ZDOTDIR/private.zsh" ]] && source "$ZDOTDIR/private.zsh"

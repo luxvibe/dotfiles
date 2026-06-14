@@ -2,14 +2,18 @@
 
 # 安全删除：移入垃圾桶而非永久删除，用法与 rm 一致
 rm() {
-    if ! (( $+commands[trash] )); then
-        command rm "$@"
-        return
-    fi
-    local targets=()
-    for arg in "$@"; do [[ "$arg" != -* ]] && targets+=("$arg"); done
-    [[ ${#targets[@]} -eq 0 ]] && return
-    trash "${targets[@]}"
+    (( $+commands[trash] )) || { command rm "$@"; return }
+    local targets=() saw_sep=0
+    for arg in "$@"; do
+        if (( saw_sep )); then
+            targets+=("$arg")
+        elif [[ "$arg" == "--" ]]; then
+            saw_sep=1
+        elif [[ "$arg" != -* ]]; then
+            targets+=("$arg")
+        fi
+    done
+    (( ${#targets[@]} )) && trash "${targets[@]}"
 }
 
 # 创建目录并进入

@@ -40,10 +40,7 @@ setup_homebrew() {
         info "安装 Homebrew ..."
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
     fi
-    # Apple Silicon
-    [[ -x /opt/homebrew/bin/brew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
-    # Intel
-    [[ -x /usr/local/bin/brew   ]] && eval "$(/usr/local/bin/brew shellenv)"
+    eval "$(/opt/homebrew/bin/brew shellenv)"
     success "Homebrew 已就绪"
 }
 
@@ -56,7 +53,7 @@ setup_chezmoi() {
     fi
 
     # 初始化并应用配置
-    if [ ! -d "$HOME/.local/share/chezmoi" ]; then
+    if [[ ! -d "$HOME/.local/share/chezmoi" ]]; then
         info "初始化 chezmoi ..."
         chezmoi init --source="$DOTFILES_DIR"
     fi
