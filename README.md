@@ -58,7 +58,7 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /tmp init --apply luxvibe
 | tmux | 终端复用器，会话持久化（无插件，单文件配置） | — |
 | powerlevel10k | zsh 提示符主题（instant prompt，极速启动） | oh-my-zsh 主题 |
 | atuin | Shell 历史记录（SQLite + 同步） | fzf history / `Ctrl-R` |
-| antidote | zsh 插件管理器（静态加载，brew 安装） | zinit / oh-my-zsh / antigen |
+| sheldon | zsh 插件管理器（TOML 配置，zsh-defer 异步加载） | zinit / oh-my-zsh / antidote |
 | iTerm2 | macOS 终端模拟器 | Terminal.app |
 
 ### 配置管理

@@ -37,13 +37,13 @@ source ~/.p10k.zsh
 
 ```bash
 # 计时
-hyperfine --warmup 3 'zsh -i -c exit'
+time zsh -i -c exit
 
 # 详细分析（找到耗时插件）
 zsh -i -c 'zprof; exit'
 ```
 
-目标：< 250ms。若超时，检查 `plugins.zsh` 里是否有慢插件未走 `kind:defer`（antidote 延迟加载标注）。
+目标：< 250ms。若超时，检查 `sheldon/plugins.toml` 里是否有慢插件未设 `apply = ["defer"]`。
 
 ## mise 问题
 

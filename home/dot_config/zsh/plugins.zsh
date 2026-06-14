@@ -66,7 +66,7 @@ compinit -C -d "${ZSH_COMPDUMP:-$HOME/.zcompdump}"
 
 # ── fzf-tab（同步加载）────────────────────────────────────────
 # 必须在 compinit 之后、fast-syntax-highlighting / zsh-autosuggestions 之前
-# 包装补全 widget。antidote 那边用 kind:fpath，仅把目录加进 fpath，
+# 包装补全 widget。sheldon 用 apply=["fpath"] 仅注册目录，
 # 这里再显式 source 一次，避免 defer 队列导致的加载顺序错乱和早按 Tab 落空。
 _fzf_tab_plugin="${XDG_DATA_HOME:-$HOME/.local/share}/sheldon/repos/github.com/Aloxaf/fzf-tab/fzf-tab.plugin.zsh"
 [[ -f "$_fzf_tab_plugin" ]] && source "$_fzf_tab_plugin"

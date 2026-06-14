@@ -28,6 +28,7 @@ github = "Aloxaf/fzf-tab"
 apply = ["fpath"]
 
 # ── Oh My Zsh 插件（延迟）───────────────────────────────────
+# kubectl/helm 补全由 mise completion zsh 生成；docker/docker-compose 由 OrbStack 注入
 [plugins.omz-plugins]
 github = "ohmyzsh/ohmyzsh"
 use = [
@@ -36,10 +37,6 @@ use = [
     "plugins/extract/*.plugin.zsh",
     "plugins/fancy-ctrl-z/*.plugin.zsh",
     "plugins/git/*.plugin.zsh",
-    "plugins/kubectl/*.plugin.zsh",
-    "plugins/helm/*.plugin.zsh",
-    "plugins/docker/*.plugin.zsh",
-    "plugins/docker-compose/*.plugin.zsh",
     "plugins/sudo/*.plugin.zsh",
     "plugins/macos/*.plugin.zsh",
     "plugins/opentofu/*.plugin.zsh",
