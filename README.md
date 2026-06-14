@@ -177,8 +177,6 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /tmp init --apply luxvibe
 
 | 工具 | 用途 | 替代关系 |
 |---|---|---|
-| aichat | 多模型 AI CLI（OpenAI / Claude / Gemini 等统一接口） | — |
-| gh copilot | GitHub Copilot CLI（`gh extension install github/gh-copilot`） | — |
 | Claude Desktop | 桌面 App（cask） | — |
 | Codex CLI | OpenAI coding agent（cask） | — |
 | Kiro | Amazon spec-driven IDE（cask） | — |

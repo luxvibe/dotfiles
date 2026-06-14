@@ -65,7 +65,6 @@ brew "dive"           # Docker 镜像层 analysis
 
 # ── AI / LLM ──────────────────────────────────────────────
 # brew "ollama"
-brew "aichat"          # 多模型 AI CLI（OpenAI / Claude / Gemini 等统一接口）
 cask "claude"          # Claude Desktop App（Anthropic）
 cask "codex"           # OpenAI Codex CLI coding agent
 cask "kiro"            # Amazon Kiro IDE（spec-driven development）
