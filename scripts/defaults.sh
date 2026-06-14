@@ -49,7 +49,6 @@ defaults write com.apple.screencapture type        -string "png"
 defaults write com.apple.screencapture disable-shadow -bool true  # 截图去掉窗口阴影
 
 # ── 安全 / 杂项 ─────────────────────────────────────────────
-defaults write com.apple.LaunchServices LSQuarantine -bool false  # 关闭"来自互联网"提示
 defaults write -g NSWindowResizeTime              -float 0.001  # 窗口缩放动画加速
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode  -bool true  # 保存面板默认展开
 defaults write NSGlobalDomain NSNavPanelExpandedStateForSaveMode2 -bool true

@@ -3,7 +3,7 @@
 ## 快速开始（新机）
 
 ```bash
-sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply shenyuchao
+sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply luxvibe
 ```
 
 首次运行会询问：
@@ -16,7 +16,7 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- init --apply shenyuchao
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/shenyuchao/dotfiles ~/.dotfiles
+git clone https://github.com/luxvibe/dotfiles ~/.dotfiles
 
 # 2. 安装 Homebrew（若未安装）
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"

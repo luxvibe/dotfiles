@@ -58,7 +58,7 @@ alias ml='mise ls'
 alias mr='mise run'
 
 # ── Upgrade ──────────────────────────────────────────────────
-alias upgrade_dotfiles='cd ~/.dotfiles && git pull --rebase && chezmoi apply; cd - >/dev/null; reload'
+alias upgrade_dotfiles='(cd ~/.dotfiles && git pull --rebase && chezmoi apply) && reload'
 alias upgrade_antidote='brew upgrade antidote && reload'
 alias upgrade_mise='mise self-update && mise upgrade'
 alias upgrade_brew='bua'

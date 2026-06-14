@@ -92,16 +92,16 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /tmp init --apply luxvibe
 | pnpm | latest | npm / yarn |
 | deno | latest | — |
 | bun | latest | — |
-| python | 3.12 | pyenv |
+| python | latest | pyenv |
 | uv | latest，现代 Python 包管理（10× pip） | pip / poetry |
 | go | latest | — |
 | rust | stable | rustup（mise 内置） |
 | dotnet | 8（Unity 脚本 & 后端 C#） | — |
 | java | temurin-21（JDK 21 LTS） | sdkman |
-| maven | latest | — |
-| gradle | latest | — |
-| kotlin | latest | — |
-| ruby | 3.3 | rbenv / rvm |
+| maven | 按项目 .mise.toml 声明 | — |
+| gradle | 按项目 .mise.toml 声明 | — |
+| kotlin | 按项目 .mise.toml 声明 | — |
+| ruby | latest | rbenv / rvm |
 | php | 8.1（brew shivammathur/php 安装） | phpenv |
 
 ### 现代 CLI 工具
