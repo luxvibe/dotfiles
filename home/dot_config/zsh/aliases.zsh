@@ -61,7 +61,7 @@ alias mr='mise run'
 # ── Upgrade ──────────────────────────────────────────────────
 alias upgrade_dotfiles='chezmoi update && reload'
 alias upgrade_sheldon='brew upgrade sheldon && reload'
-alias upgrade_mise='mise self-update && mise upgrade'
+alias upgrade_mise='mise self-update && mise upgrade && mise prune --yes'
 alias upgrade_brew='bua'
 (( $+commands[cargo]    )) && alias upgrade_cargo='cargo install cargo-update && cargo install-update -a'
 (( $+commands[gem]      )) && alias upgrade_gem='gem update && gem cleanup'
