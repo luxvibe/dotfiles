@@ -110,17 +110,21 @@ unset _fzf_shell
 
 # ── FZF 配置 ──────────────────────────────────────────────────
 export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --exclude .git"
-export FZF_DEFAULT_OPTS='--height 40% --tmux bottom,40% --layout reverse --border'
+# FZF_DEFAULT_OPTS 只放 inline 参数，确保 fzf-tab（use-fzf-default-opts yes）
+# 能正常嵌入渲染；--tmux 会开 popup 模式，与 fzf-tab 的 inline widget 冲突
+export FZF_DEFAULT_OPTS='--height 40% --layout reverse --border'
 
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_CTRL_T_OPTS="--walker-skip .git,node_modules,target \
+export FZF_CTRL_T_OPTS="--tmux bottom,40% \
+  --walker-skip .git,node_modules,target \
   --preview 'bat -n --color=always {} || cat {}' \
   --bind 'ctrl-/:change-preview-window(down|hidden|)'"
 
-export FZF_CTRL_R_OPTS="--preview 'echo {} | cut -f2 | bat --color=always --plain --language=sh' \
-  --preview-window down:3:wrap --bind '?:toggle-preview' --exact"
+# FZF_CTRL_R_OPTS 已移除：atuin 通过 bindkey '^r' atuin-search 接管了 Ctrl-R，
+# fzf 的 history widget 永远不会执行
 
-export FZF_ALT_C_OPTS="--walker-skip .git,node_modules,target \
+export FZF_ALT_C_OPTS="--tmux bottom,40% \
+  --walker-skip .git,node_modules,target \
   --preview '(eza --tree --level 3 --color=always --icons=auto --group-directories-first {} || tree -NC {}) | head -200'"
 
 export _ZO_FZF_OPTS="--scheme=path --tiebreak=end,chunk,index \
