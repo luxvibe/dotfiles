@@ -18,7 +18,7 @@ _sheldon_cache="${XDG_CACHE_HOME:-$HOME/.cache}/sheldon/init.zsh"
 _sheldon_toml="${XDG_CONFIG_HOME:-$HOME/.config}/sheldon/plugins.toml"
 if [[ ! -f "$_sheldon_cache" || "$_sheldon_toml" -nt "$_sheldon_cache" ]]; then
     mkdir -p "${_sheldon_cache:h}"
-    sheldon source >| "$_sheldon_cache" || command rm -f "$_sheldon_cache"
+    sheldon source 2>/dev/null >| "$_sheldon_cache" || command rm -f "$_sheldon_cache"
 fi
 [[ -f "$_sheldon_cache" ]] && source "$_sheldon_cache"
 unset _sheldon_cache _sheldon_toml
