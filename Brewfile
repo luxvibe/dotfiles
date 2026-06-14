@@ -54,6 +54,7 @@ brew "pcre2"        # swoole 编译依赖（php_pcre.h 需要）
 
 # ── API / 网络调试 ─────────────────────────────────────────
 # httpie 与 xh 功能重叠，xh 是 Rust 实现更快，保留 xh
+brew "wget"
 brew "xh"           # httpie 替代，Rust 实现，更快
 brew "grpcurl"
 brew "jq"
