@@ -1,7 +1,6 @@
 # ── 基础 ────────────────────────────────────────────────────
 alias reload='exec zsh'
 alias zshconf='chezmoi edit ~/.config/zsh/.zshrc'
-alias h='history'
 alias c='clear'
 alias q='exit'
 alias ..='cd ..'
@@ -70,8 +69,7 @@ alias gor='go run'        # Go
 alias got='go test ./...'
 alias gob='go build'
 alias gomod='go mod tidy'
-alias py='python3'        # Python
-alias pip='uv pip'
+alias py='python3'        # Python（uv 别名由 OMZ uv 插件提供：uvp/uvr/uvs/uva 等）
 alias art='php artisan'   # PHP
 # composer/cmp：按需在项目 local.zsh 中定义，全局不强制
 

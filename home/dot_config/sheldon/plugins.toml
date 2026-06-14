@@ -40,13 +40,16 @@ use = [
     "plugins/sudo/*.plugin.zsh",
     "plugins/macos/*.plugin.zsh",
     "plugins/opentofu/*.plugin.zsh",
-    # DevOps / Cloud（补全由 _setup_completions / OrbStack / aws_completer 处理）
+    # DevOps / Cloud
     "plugins/docker/*.plugin.zsh",
     "plugins/docker-compose/*.plugin.zsh",
     "plugins/kubectl/*.plugin.zsh",
+    "plugins/helm/*.plugin.zsh",
     "plugins/aws/*.plugin.zsh",
     # 前端工具链
     "plugins/npm/*.plugin.zsh",
+    # Python 工具链（uv）
+    "plugins/uv/*.plugin.zsh",
 ]
 apply = ["defer"]
 
