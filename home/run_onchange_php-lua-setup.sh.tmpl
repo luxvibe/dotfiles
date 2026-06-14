@@ -24,17 +24,19 @@ echo "Linking keg-only packages..."
 for dir in "${BREW_PREFIX}/opt"/lua@[0-9]*; do
     [[ -d "$dir" ]] || continue
     formula=$(basename "$dir")
-    brew link --overwrite --force "$formula" 2>/dev/null \
-        && echo "$formula linked" \
-        || echo "Warning: failed to link $formula (may already be linked by another formula)"
+    if brew link --overwrite --force "$formula" 2>/dev/null; then
+        echo "$formula linked"
+        break  # 只链接最低版本（与 Brewfile 中 lua@5.4 对应），避免高版本覆盖
+    fi
 done
 
 for dir in "${BREW_PREFIX}/opt"/php@[0-9]*; do
     [[ -d "$dir" ]] || continue
     formula=$(basename "$dir")
-    brew link --overwrite --force "$formula" 2>/dev/null \
-        && echo "$formula linked" \
-        || echo "Warning: failed to link $formula (may already be linked by another formula)"
+    if brew link --overwrite --force "$formula" 2>/dev/null; then
+        echo "$formula linked"
+        break  # 只链接最低版本（与 Brewfile 中 php@8.1 对应），避免高版本覆盖
+    fi
 done
 
 # ── 2. 安装 PHP 扩展 (Pecl swoole & redis) ──────────────────
