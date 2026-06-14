@@ -102,13 +102,7 @@ p10k configure
 ### Shell 性能
 ```bash
 # 冷启动时间（目标 < 500ms）
-hyperfine --warmup 3 'zsh -i -c exit'
-```
-
-### Neovim 性能
-```bash
-# 冷启动时间（目标 < 80ms）
-hyperfine --warmup 3 'nvim --headless +qa'
+time zsh -i -c exit
 ```
 
 ### 语言运行时

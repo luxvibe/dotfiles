@@ -121,10 +121,7 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /tmp init --apply luxvibe
 | procs | 进程列表 | ps |
 | duf | 磁盘使用概览 | df |
 | dust | 目录磁盘占用分析 | du |
-| fastfetch | 系统信息展示 | neofetch |
 | tlrc | 命令速查手册（tldr 客户端） | man / tldr |
-| hyperfine | 命令基准测试 | time |
-| gping | 带折线图的 ping | ping |
 
 ### Git 工具
 
@@ -154,7 +151,7 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /tmp init --apply luxvibe
 
 | 工具 | 用途 | 替代关系 |
 |---|---|---|
-| mysql-client | MySQL CLI（`mysql` 命令） | — |
+| mycli | MySQL 增强 CLI（语法高亮 + 自动补全） | mysql-client |
 | libpq | PostgreSQL CLI（`psql`、`pg_dump`） | — |
 | redis | Redis CLI（`redis-cli`） | — |
 | mongosh | MongoDB Shell | mongo（旧版） |
@@ -180,9 +177,11 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /tmp init --apply luxvibe
 
 | 工具 | 用途 | 替代关系 |
 |---|---|---|
-| aichat | 多模型 AI CLI（OpenAI / Claude / Gemini 等） | — |
-| mods | 管道友好的 AI CLI | — |
-| gh copilot | GitHub Copilot CLI（`gh extension`） | — |
+| aichat | 多模型 AI CLI（OpenAI / Claude / Gemini 等统一接口） | — |
+| gh copilot | GitHub Copilot CLI（`gh extension install github/gh-copilot`） | — |
+| Claude Desktop | 桌面 App（cask） | — |
+| Codex CLI | OpenAI coding agent（cask） | — |
+| Kiro | Amazon spec-driven IDE（cask） | — |
 
 ### 代码质量
 
@@ -209,11 +208,9 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /tmp init --apply luxvibe
 
 | 工具 | 用途 | 替代关系 |
 |---|---|---|
-| gum | 交互式 shell 脚本 UI 组件 | — |
 | viddy | 实时监控命令输出 | watch |
 | git-cliff | 从 commit 自动生成 CHANGELOG | — |
 | trufflehog | git 历史 secrets 扫描 | — |
-| dua-cli | 交互式磁盘空间分析 | ncdu |
 
 ### C++ 工具链
 
@@ -221,13 +218,11 @@ sh -c "$(curl -fsLS get.chezmoi.io)" -- -b /tmp init --apply luxvibe
 |---|---|---|
 | cmake | 跨平台构建系统生成器 | Makefile / Meson |
 | ninja | 高速构建系统（cmake 后端） | make |
-| meson | 现代构建系统（部分项目） | cmake |
 | llvm | Clang/LLVM 工具链（含 clang-format、clang-tidy、clangd） | GCC |
 | ccache | 编译缓存，加速重复编译 | — |
 | cppcheck | C++ 静态分析 | — |
 | bear | 生成 compile_commands.json（clangd 索引必需） | — |
 | include-what-you-use | 头文件依赖分析，配合 clangd | — |
-| conan | C++ 包管理（brew 安装） | vcpkg |
 | lua@5.4 | Lua 5.4（C++ 嵌入脚本，cmake find_package(Lua) 依赖） | — |
 | luarocks | Lua 包管理器 | — |
 

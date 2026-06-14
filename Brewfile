@@ -16,9 +16,6 @@ brew "btop"
 brew "procs"        # ps 替代
 brew "duf"          # df 替代
 brew "dust"         # du 替代
-brew "fastfetch"    # 系统信息展示
-brew "hyperfine"    # 命令基准测试
-brew "gping"        # 带图 ping
 
 # ── Shell / 终端核心 ───────────────────────────────────────
 brew "zsh"
@@ -37,7 +34,6 @@ brew "git-extras"
 
 # ── Go 开发工具 ────────────────────────────────────────────
 brew "protobuf"       # protoc 编译器（系统级二进制，brew 更稳定）
-brew "evans"          # gRPC 交互式 REPL 客户端
 
 # ── 语言版本管理（替代 nvm/pyenv/rbenv/sdkman/phpenv）─────
 brew "mise"
@@ -69,6 +65,7 @@ brew "dive"           # Docker 镜像层 analysis
 
 # ── AI / LLM ──────────────────────────────────────────────
 # brew "ollama"
+brew "aichat"          # 多模型 AI CLI（OpenAI / Claude / Gemini 等统一接口）
 cask "claude"          # Claude Desktop App（Anthropic）
 cask "codex"           # OpenAI Codex CLI coding agent
 cask "kiro"            # Amazon Kiro IDE（spec-driven development）
@@ -77,12 +74,11 @@ cask "kiro-cli"        # Kiro CLI（AI 命令行工具）
 
 # ── 开发效率 ───────────────────────────────────────────────
 brew "topgrade"     # 一键升级所有包管理器（upgrade_all 别名依赖此工具）
-brew "gum"          # 交互式 shell 脚本 UI 组件
+# brew "gum"        # 交互式 shell 脚本 UI 组件（按需安装）
 brew "viddy"        # watch 替代，实时监控命令输出
 brew "tlrc"         # tldr 客户端，快速查命令用法
 brew "git-cliff"    # 从 commit 自动生成 CHANGELOG
 brew "trufflehog"   # git 历史 secrets 扫描，防止敏感信息泄露
-brew "dua-cli"      # 交互式磁盘空间分析（支持直接删除）
 brew "trash"        # 安全删除，移入垃圾桶（rm 函数依赖）
 
 # ── App 管理 ───────────────────────────────────────────────
@@ -101,8 +97,8 @@ brew "ccache"       # 编译缓存，加速重复编译
 brew "cppcheck"     # C++ 静态分析（补充 clang-tidy）
 brew "include-what-you-use"  # 头文件依赖分析，配合 clangd 使用
 brew "bear"         # 生成 compile_commands.json（clangd 索引必需）
-brew "conan"        # C/C++ 包管理器
-brew "meson"        # 现代构建系统，部分项目用（补充 cmake/ninja）
+# brew "conan"      # C/C++ 包管理器（按需安装）
+# brew "meson"      # 现代构建系统，部分项目用（按需安装）
 brew "lua@5.4"      # Lua 5.4（C++ 项目嵌入脚本，cmake find_package(Lua) 依赖）
 brew "luarocks"     # Lua 包管理器（依赖 lua，与 lua@5.4 共存）
 
