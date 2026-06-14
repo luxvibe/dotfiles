@@ -65,11 +65,13 @@ if [[ ! -f "$_comp_cache" || "$_today" != "$(<$_comp_cache)" ]]; then
     [[ -f "${ZSH_COMPDUMP:-$HOME/.zcompdump}" ]] && rm -f "${ZSH_COMPDUMP:-$HOME/.zcompdump}"
 fi
 unset _comp_cache _today
+unfunction _setup_completions
 
 # 补全初始化（在所有插件加载后、FPATH 设置完成后执行）
 # 用 -C 跳过安全检查（每天的 _setup_completions 已处理 zcompdump 刷新）
+export ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
 autoload -Uz compinit
-compinit -C -d "${ZSH_COMPDUMP:-$HOME/.zcompdump}"
+compinit -C -d "$ZSH_COMPDUMP"
 
 # ── fzf-tab（同步加载）────────────────────────────────────────
 # 必须在 compinit 之后、fast-syntax-highlighting / zsh-autosuggestions 之前
