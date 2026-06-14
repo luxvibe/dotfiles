@@ -22,16 +22,28 @@ _sheldon_cache="${XDG_CACHE_HOME:-$HOME/.cache}/sheldon/init.zsh"
 _sheldon_toml="${XDG_CONFIG_HOME:-$HOME/.config}/sheldon/plugins.toml"
 if [[ ! -f "$_sheldon_cache" || "$_sheldon_toml" -nt "$_sheldon_cache" ]]; then
     mkdir -p "${_sheldon_cache:h}"
-    if ! sheldon source >| "$_sheldon_cache" 2>/tmp/sheldon-init.log; then
-        command rm -f "$_sheldon_cache"
-        print -P "%F{red}sheldon source failed — see /tmp/sheldon-init.log%f" >&2
+    if [[ ! -f "$_sheldon_cache" ]]; then
+        # 首次运行：显示进度，让用户看到插件下载过程
+        print -P "%F{yellow}sheldon: 首次初始化，正在下载插件...%f"
+        if sheldon source >| "$_sheldon_cache"; then
+            print -P "%F{green}sheldon: 插件加载完成，重新打开终端生效%f"
+        else
+            command rm -f "$_sheldon_cache"
+            print -P "%F{red}sheldon: 初始化失败，运行 'sheldon source' 查看详情%f" >&2
+        fi
+    else
+        # 后续更新（config 变化）：静默执行，错误记录到日志
+        if ! sheldon source >| "$_sheldon_cache" 2>/tmp/sheldon-init.log; then
+            command rm -f "$_sheldon_cache"
+            print -P "%F{red}sheldon: 更新失败，详情见 /tmp/sheldon-init.log%f" >&2
+        fi
     fi
 fi
 [[ -f "$_sheldon_cache" ]] && source "$_sheldon_cache"
 unset _sheldon_cache _sheldon_toml
 
 # 在所有 deferred 插件加载完成后绑定 history-substring-search 按键
-# zsh-defer 由 sheldon 加载；首次初始化失败时跳过，避免 command not found 报错
+# zsh-defer 由 sheldon 加载；初始化失败时跳过，避免 command not found 报错
 (( $+functions[zsh-defer] )) && zsh-defer _hss_bindkey
 
 # ── Homebrew 补全 ─────────────────────────────────────────────
