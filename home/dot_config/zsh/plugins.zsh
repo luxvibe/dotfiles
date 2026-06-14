@@ -46,7 +46,8 @@ _setup_completions() {
     (( $+commands[helm]    )) && helm completion zsh >| "$comp_dir/_helm" 2>/dev/null
     (( $+commands[gh]      )) && gh completion -s zsh >| "$comp_dir/_gh" 2>/dev/null
     (( $+commands[uv]      )) && uv generate-shell-completion zsh >| "$comp_dir/_uv" 2>/dev/null
-    # docker/docker-compose 由 OrbStack 注入；aws 由 OMZ aws 插件处理
+    (( $+commands[uvx]     )) && uvx --generate-shell-completion zsh >| "$comp_dir/_uvx" 2>/dev/null
+    # docker/docker-compose 由 OrbStack 的 fpath 注入；aws 由 carapace 聚合处理
 }
 
 # 将自定义补全目录加入 FPATH（必须在 compinit 之前，无论目录是否已存在）
@@ -78,14 +79,15 @@ _fzf_tab_plugin="${XDG_DATA_HOME:-$HOME/.local/share}/sheldon/repos/github.com/A
 unset _fzf_tab_plugin
 
 # ── carapace（通用补全聚合器，必须在 compinit 之后初始化）────
-# 缓存到文件避免每次启动都 fork carapace 进程（约 50-100ms）
+# 缓存放在 cache 目录而非 fpath 目录（init 脚本不是补全函数，不应被 compinit 扫描）
 if (( $+commands[carapace] )); then
-    _carapace_cache="$ZDOTDIR/completions/_carapace_init.zsh"
+    _carapace_cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/carapace_init.zsh"
     if [[ ! -f "$_carapace_cache" || "$_carapace_cache" -ot "${commands[carapace]}" ]]; then
-        mkdir -p "$ZDOTDIR/completions"
+        mkdir -p "${_carapace_cache:h}"
         carapace _carapace zsh >| "$_carapace_cache" 2>/dev/null || command rm -f "$_carapace_cache"
     fi
     [[ -f "$_carapace_cache" ]] && source "$_carapace_cache"
+    unset _carapace_cache
 fi
 
 # ── FZF 集成 ─────────────────────────────────────────────────
