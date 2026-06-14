@@ -1,2 +1,5 @@
 # chezmoi 安装脚本会把二进制下载到这里，不需要提交
 bin/
+# AI 工具产生的本地配置
+.antigravitycli/
+.claude/
