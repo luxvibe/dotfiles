@@ -40,7 +40,7 @@ defaults write NSGlobalDomain NSAutomaticPeriodSubstitutionEnabled  -bool false
 # ── 触控板 ──────────────────────────────────────────────────
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true  # 轻触点击
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-defaults write NSGlobalDomain com.apple.swipescrolldirection -bool false  # 自然滚动（关）
+defaults write NSGlobalDomain com.apple.swipescrolldirection -bool true   # 自然滚动（开）
 
 # ── 截图 ────────────────────────────────────────────────────
 mkdir -p "$HOME/Screenshots"

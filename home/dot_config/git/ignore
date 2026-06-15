@@ -65,6 +65,9 @@ GEMINI.md
 .antigravitycli/
 ANTIGRAVITY.md
 
+# superpowers
+docs/superpowers
+
 # ── 编辑器临时文件 ───────────────────────────────────────────
 *.swp
 *.swo
@@ -115,3 +118,6 @@ logs/
 
 # ── 其他 ─────────────────────────────────────────────────────
 *.orig
+
+# hyperf
+tests
