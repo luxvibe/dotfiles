@@ -48,7 +48,7 @@ keybind = cmd+alt+down=goto_split:down
 background-opacity = 1.0
 # 用降饱和+偏冷+压暗的副本,抵消 ghostty 在 macOS P3 空间合成时的抬红/提亮,匹配 iTerm2 背景
 # 原图: /Users/lux/Library/Mobile Documents/com~apple~CloudDocs/Wallpapers/luffy.png (R-B +46 强暖)
-background-image = ~/.config/ghostty/starwar-01.jpg
+background-image = ~/.config/ghostty/background.jpg
 background-image-fit = stretch
 background-image-opacity = 0.05
 
