@@ -34,7 +34,6 @@ export MANROFFOPT="-c"
 (( $+commands[procs]     )) && alias ps='procs'
 
 # ── 编辑器 ───────────────────────────────────────────────────
-alias v='nvim'
 alias vi='nvim'
 alias vim='nvim'
 

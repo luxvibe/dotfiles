@@ -132,6 +132,10 @@ export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --e
 # FZF_DEFAULT_OPTS 只放 inline 参数，确保 fzf-tab（use-fzf-default-opts yes）
 # 能正常嵌入渲染；--tmux 会开 popup 模式，与 fzf-tab 的 inline widget 冲突
 export FZF_DEFAULT_OPTS='--height 40% --layout reverse --border'
+FZF_DEFAULT_OPTS+=' --color=bg+:#313244,bg:#1e1e2e,spinner:#f5c2e7,hl:#f38ba8'
+FZF_DEFAULT_OPTS+=' --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5c2e7'
+FZF_DEFAULT_OPTS+=' --color=marker:#b4befe,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8'
+FZF_DEFAULT_OPTS+=' --color=selected-bg:#45475a,border:#6c7086'
 
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_CTRL_T_OPTS="--tmux bottom,40% \

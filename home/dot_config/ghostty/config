@@ -1,79 +1,41 @@
-# ─── Font ───
-font-family = MesloLGS NF
-# 中文不指定字体,与 iTerm2 一致走系统苹方 (iTerm2: Use Non-ASCII Font = False)
+# Font
+font-family = "JetBrainsMono Nerd Font Mono"
+font-family = "LXGW WenKai Mono"
 font-size = 14
-font-thicken = false
+adjust-cell-height = 16%
 
-# ─── Cursor ───
-cursor-style = bar
-cursor-style-blink = true
+# Cursor
+cursor-style-blink = false
 
-# ─── Window ───
+# Window
 window-width = 80
 window-height = 25
-window-padding-x = 5
-window-padding-y = 5
+window-padding-x = 8
+window-padding-y = 10
 window-padding-balance = true
 window-save-state = always
-# window-colorspace = "display-p3"   # 去掉 P3,颜色柔和度匹配 iTerm2(P3 会过饱和)
+
+# macOS rendering
+alpha-blending = linear-corrected
 macos-titlebar-style = tabs
-macos-titlebar-proxy-icon = visible
 macos-window-buttons = hidden
 macos-non-native-fullscreen = visible-menu
 
-# ─── Mouse / Keyboard ───
+# Mouse / keyboard
 mouse-hide-while-typing = true
 mouse-scroll-multiplier = 2
 macos-option-as-alt = true
 
-# ─── Behavior ───
-shell-integration-features = no-cursor,sudo,no-title
+# Behavior
+shell-integration = none
 working-directory = inherit
 copy-on-select = clipboard
-link-url = true
 auto-update = off
 confirm-close-surface = false
 resize-overlay = never
 scrollback-limit = 100000000
 
-# ─── Keybind (iTerm2 风格分屏) ───
-keybind = cmd+d=new_split:right
-keybind = cmd+shift+d=new_split:down
-keybind = cmd+alt+left=goto_split:left
-keybind = cmd+alt+right=goto_split:right
-keybind = cmd+alt+up=goto_split:up
-keybind = cmd+alt+down=goto_split:down
-
-# ─── Background ───
-background-opacity = 1.0
-# 用降饱和+偏冷+压暗的副本,抵消 ghostty 在 macOS P3 空间合成时的抬红/提亮,匹配 iTerm2 背景
-# 原图: /Users/lux/Library/Mobile Documents/com~apple~CloudDocs/Wallpapers/luffy.png (R-B +46 强暖)
-background-image = ~/.config/ghostty/background.jpg
-background-image-fit = stretch
-background-image-opacity = 0.05
-
-# ─── Colors (iTerm2 plist 真实定义值,非截图采样) ───
-foreground = #e7ebed
-background = #1d262a
-cursor-color = #eaeaea
-cursor-text = #000000
-selection-background = #4e6a78
-selection-foreground = #e7ebed
-bold-is-bright = true
-
-palette = 0=#435b67
-palette = 1=#fc3841
-palette = 2=#5cf19e
-palette = 3=#fed032
-palette = 4=#37b6ff
-palette = 5=#fc226e
-palette = 6=#59ffd1
-palette = 7=#ffffff
-palette = 8=#a1b0b8
-palette = 9=#fc746d
-palette = 10=#adf7be
-palette = 11=#fee16c
-palette = 12=#70cfff
-palette = 13=#fc669b
-palette = 14=#9affe6
-palette = 15=#ffffff
+# Visuals
+theme = light:Catppuccin Frappe,dark:Catppuccin Mocha
+minimum-contrast = 1.2
+custom-shader = "/Users/lux/.config/ghostty/shaders/shader.glsl"
