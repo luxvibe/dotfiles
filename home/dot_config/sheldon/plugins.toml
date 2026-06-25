@@ -8,14 +8,14 @@ defer = "{% for file in files %}zsh-defer source \"{{ file }}\"\n{% endfor %}"
 [plugins.zsh-defer]
 github = "romkatv/zsh-defer"
 
-# ── 主题（同步，instant prompt 需要）────────────────────────
-[plugins.powerlevel10k]
-github = "romkatv/powerlevel10k"
+# ── 主题（已切换到 starship，p10k 保留待确认后清理）─────────
+# [plugins.powerlevel10k]
+# github = "romkatv/powerlevel10k"
 
 # ── Oh My Zsh 库（同步）─────────────────────────────────────
 [plugins.omz-libs]
 github = "ohmyzsh/ohmyzsh"
-use = ["lib/history.zsh", "lib/key-bindings.zsh", "lib/theme-and-appearance.zsh"]
+use = ["lib/history.zsh", "lib/key-bindings.zsh"]
 
 # ── fpath 注册（compinit 前，不 source）──────────────────────
 [plugins.zsh-completions]

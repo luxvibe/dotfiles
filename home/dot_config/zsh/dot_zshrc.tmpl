@@ -1,11 +1,6 @@
 # ~/.config/zsh/.zshrc
 # 编辑源文件：chezmoi edit ~/.config/zsh/.zshrc
 
-# ── Powerlevel10k instant prompt（必须最先执行）──────────────
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 source "$ZDOTDIR/path.zsh"
 source "$ZDOTDIR/plugins.zsh"
 source "$ZDOTDIR/aliases.zsh"
@@ -26,13 +21,14 @@ _cached_eval() {
     fi
     [[ -f "$cache" ]] && source "$cache"
 }
-_cached_eval zoxide init zsh
-_cached_eval mise   activate zsh
-_cached_eval atuin  init zsh --disable-up-arrow
+_cached_eval zoxide  init zsh
+_cached_eval mise    activate zsh
+_cached_eval atuin   init zsh --disable-up-arrow
+_cached_eval starship init zsh
 unfunction _cached_eval
 
-# 加载 p10k 配置
-[[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
+# p10k 配置保留，待确认不再使用后清理
+# [[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
 
 # iTerm2 shell integration
 [[ -f "$HOME/.iterm2_shell_integration.zsh" ]] && \
