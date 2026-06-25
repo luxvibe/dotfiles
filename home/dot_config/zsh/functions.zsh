@@ -132,16 +132,6 @@ mitmweb_off() {
     echo "终端代理已清除"
 }
 
-# ── SSH wrapper（防止 Ghostty 焦点事件污染远端 shell）────────
-# Ghostty shell integration 开启焦点追踪（\e[?1004h），切换 tab 时会向输入流
-# 发送 \e[I（焦点获得序列）。SSH 阻塞期间该序列穿透管道到达远端，被 readline
-# 解析为光标后移指令，导致切回 tab 时出现空格/光标乱跳。
-# 连接前关闭焦点追踪，断开后由 Ghostty integration 在下次 precmd 时自动恢复。
-ssh() {
-    printf '\e[?1004l'          # 关闭焦点追踪
-    command ssh "$@"
-}
-
 # ── Yazi（退出后自动 cd 到最后所在目录）─────────────────────
 y() {
     local tmp cwd
