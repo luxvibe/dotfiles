@@ -23,7 +23,6 @@ brew "tmux"
 brew "sheldon"      # zsh 插件管理器
 brew "atuin"
 brew "chezmoi"      # dotfiles 管理
-brew "carapace"     # 通用命令补全聚合器（500+ 命令）
 brew "sshs"         # fzf 风格 SSH 主机选择器
 
 # ── Git ────────────────────────────────────────────────────

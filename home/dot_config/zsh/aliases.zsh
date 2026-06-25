@@ -49,7 +49,7 @@ alias bua='brew update && brew upgrade && brew autoremove && brew cleanup --prun
 alias bbd='brew bundle dump --force'
 alias bbc='brew bundle cleanup --force'  # 卸载不在 Brewfile 里的包
 alias flush_dns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
-alias flush_comp='rm -f $ZDOTDIR/.comp_setup_date ${ZSH_COMPDUMP:-~/.zcompdump} ${XDG_CACHE_HOME:-$HOME/.cache}/sheldon/init.zsh ${XDG_CACHE_HOME:-$HOME/.cache}/zsh/{zoxide,mise,atuin,carapace_init}.zsh && reload'  # 强制刷新所有缓存
+alias flush_comp='rm -f $ZDOTDIR/.comp_setup_date ${ZSH_COMPDUMP:-~/.zcompdump} ${XDG_CACHE_HOME:-$HOME/.cache}/sheldon/init.zsh ${XDG_CACHE_HOME:-$HOME/.cache}/zsh/{zoxide,mise,atuin}.zsh && reload'  # 强制刷新所有缓存
 
 # ── mise ─────────────────────────────────────────────────────
 alias mi='mise install'

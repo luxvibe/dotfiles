@@ -63,7 +63,7 @@ _setup_completions() {
     (( $+commands[uv]      )) && uv generate-shell-completion zsh >| "$comp_dir/_uv" 2>/dev/null
     (( $+commands[uvx]     )) && uvx --generate-shell-completion zsh >| "$comp_dir/_uvx" 2>/dev/null
     # docker/docker-compose: OrbStack fpath 注入
-    # aws/k9s/trivy/terragrunt/tofu 等: carapace 聚合处理
+    # aws/k9s/trivy 等已由 Homebrew site-functions 提供
 }
 
 # 将自定义补全目录加入 FPATH（必须在 compinit 之前，无论目录是否已存在）
@@ -97,26 +97,6 @@ _fzf_tab_plugin="${XDG_DATA_HOME:-$HOME/.local/share}/sheldon/repos/github.com/A
 [[ -f "$_fzf_tab_plugin" ]] && source "$_fzf_tab_plugin"
 unset _fzf_tab_plugin
 
-# ── carapace（通用补全聚合器，必须在 compinit 之后初始化）────
-# 缓存放在 cache 目录而非 fpath 目录（init 脚本不是补全函数，不应被 compinit 扫描）
-if (( $+commands[carapace] )); then
-    _carapace_cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/carapace_init.zsh"
-    if [[ ! -f "$_carapace_cache" || "$_carapace_cache" -ot "${commands[carapace]}" ]]; then
-        mkdir -p "${_carapace_cache:h}"
-        carapace _carapace zsh >| "$_carapace_cache" 2>/dev/null || command rm -f "$_carapace_cache"
-    fi
-    [[ -f "$_carapace_cache" ]] && source "$_carapace_cache"
-    unset _carapace_cache
-    # carapace 的 compdef 会覆盖 compinit 注册的原生补全函数；
-    # 对已有本地高质量补全文件的工具恢复原生优先级（动态资源补全更准确）
-    local _cd="$ZDOTDIR/completions" _hb="$HOMEBREW_PREFIX/share/zsh/site-functions"
-    [[ -f "$_cd/_kubectl" ]] && compdef _kubectl kubectl
-    [[ -f "$_cd/_helm"    ]] && compdef _helm helm
-    [[ -f "$_cd/_uv"      ]] && compdef _uv uv
-    [[ -f "$_cd/_uvx"     ]] && compdef _uvx uvx
-    [[ -f "$_hb/_gh"      ]] && compdef _gh gh
-    unset _cd _hb
-fi
 
 # ── FZF 集成 ─────────────────────────────────────────────────
 # 只加载 key-bindings.zsh（Ctrl-R / Ctrl-T / Alt-C）。
