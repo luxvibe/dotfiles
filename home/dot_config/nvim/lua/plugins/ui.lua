@@ -8,7 +8,8 @@ return {
         priority = 1000,
         opts = {
             flavour = "mocha",
-            transparent_background = true,  -- 背景透明，透出 Ghostty 的透明/模糊
+            transparent_background = true,
+            float = { transparent = true },  -- 浮动窗口也透明（补全/Lazy/Mason 面板等）
             integrations = {
                 telescope   = true,
                 gitsigns    = true,
