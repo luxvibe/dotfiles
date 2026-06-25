@@ -33,6 +33,10 @@ confirm-close-surface = false
 resize-overlay = never
 scrollback-limit = 100000000
 
+# Terminal type — 用 xterm-256color 而非默认的 xterm-ghostty，
+# 避免远程机器因缺少 ghostty terminfo 导致 Ctrl-U 等按键失效
+term = xterm-256color
+
 # Visuals
 theme = iterm2-default
 custom-shader = "/Users/lux/.config/ghostty/shaders/shader.glsl"
