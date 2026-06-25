@@ -1,5 +1,7 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
+scan_timeout = 1000  # ms，默认 30ms 在大目录容易超时
+
 # Pure preset — https://starship.rs/presets/pure-preset
 format = """
 $username\
@@ -49,3 +51,4 @@ format = "[$virtualenv]($style) "
 style = "bright-black"
 detect_extensions = []
 detect_files = []
+detect_folders = []
