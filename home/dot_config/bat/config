@@ -1,4 +1,4 @@
---theme="Catppuccin Mocha"
+--theme="ansi"
 --style="numbers,changes,header"
 --italic-text=always
 --map-syntax="*.conf:INI"
