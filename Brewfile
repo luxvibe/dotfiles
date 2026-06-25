@@ -144,7 +144,7 @@ cask "karabiner-elements"
 cask "maczip"
 cask "keycastr"
 cask "ghostty"      # GPU 加速终端模拟器
-# herdr: agent multiplexer（无 brew cask，安装：curl -fsSL https://herdr.dev/install.sh | sh）
+brew "herdr"        # agent multiplexer（tmux for coding agents）
 
 # 编辑器（按需取消注释）
 cask "cursor"
