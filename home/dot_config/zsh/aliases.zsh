@@ -14,6 +14,8 @@ alias cza='chezmoi apply'
 alias cze='chezmoi edit'
 
 # ── 现代 Unix 替代 ───────────────────────────────────────────
+# 仅 ls 系列使用 eza 别名；其他现代工具（fd/btop/rg/duf/dust/procs 等）
+# 保留原生命令，不做 alias 覆盖，需要时直接调用工具本名。
 if (( $+commands[eza] )); then
     alias ls='eza --color=auto --icons=auto --group-directories-first'
     alias ll='ls -lh'
@@ -25,13 +27,6 @@ fi
 # bat 接管 man 手册，显示带语法高亮的彩色文档
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANROFFOPT="-c"
-(( $+commands[fd]        )) && alias ff='fd'
-(( $+commands[btop]      )) && alias top='btop'
-(( $+commands[rg]        )) && alias gg='rg'
-# delta 仅作为 git/pager 渲染器，不覆盖系统 diff 命令（接口不兼容）
-(( $+commands[duf]       )) && alias df='duf'
-(( $+commands[dust]      )) && alias du='dust'
-(( $+commands[procs]     )) && alias ps='procs'
 
 # ── 编辑器 ───────────────────────────────────────────────────
 alias vi='nvim'
