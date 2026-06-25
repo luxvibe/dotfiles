@@ -36,5 +36,5 @@ scrollback-limit = 100000000
 # Visuals
 theme = iterm2-default
 custom-shader = "/Users/lux/.config/ghostty/shaders/shader.glsl"
-background-opacity = 0.85
+background-opacity = 0.95
 background-blur = true
