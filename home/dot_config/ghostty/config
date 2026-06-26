@@ -25,7 +25,7 @@ macos-option-as-alt = true
 
 # Behavior
 shell-integration = detect
-shell-integration-features = no-cursor,no-title,no-sudo
+shell-integration-features = no-cursor,no-title,no-sudo,ssh-env
 working-directory = inherit
 copy-on-select = clipboard
 auto-update = off
