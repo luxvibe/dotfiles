@@ -1,0 +1,22 @@
+# Warp 合规配置（纳入 dotfiles / chezmoi 管理）
+# 仅当终端用：关闭遥测/崩溃上报 + 禁用自带 AI/Agent。
+# 注意：app.warp.dev 域名阻断不在此文件，需 /etc/hosts 或公司防火墙单独处理。
+# 背景与验证步骤见 memory: project_warp-terminal-eval
+
+[privacy]
+telemetry_enabled = false
+crash_reporting_enabled = false
+
+[agents.warp_agent]
+is_any_ai_enabled = false
+
+[agents.warp_agent.active_ai]
+enabled = false
+code_suggestions_enabled = false
+intelligent_autosuggestions_enabled = false
+agent_mode_query_suggestions_enabled = false
+shared_block_title_generation_enabled = false
+
+[agents.warp_agent.input]
+ai_auto_detection_enabled = false
+nld_in_terminal_enabled = false
