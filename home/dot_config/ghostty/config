@@ -33,8 +33,8 @@ confirm-close-surface = false
 resize-overlay = never
 scrollback-limit = 100000000
 
-# Terminal type — 用 xterm-256color 而非默认的 xterm-ghostty，
-# 避免远程机器因缺少 ghostty terminfo 导致 Ctrl-U 等按键失效
+# 本机无 xterm-ghostty terminfo，用 xterm-256color 兼容本地 TUI 工具；
+# 远端通过 ssh-terminfo 自动安装 ghostty terminfo 处理
 term = xterm-256color
 
 # Visuals
