@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+# claude settings hash: {{ include (joinPath .chezmoi.sourceDir "dot_claude/settings.json") | sha256sum }}
+# settings.json 内容变化时自动重跑，同步安装缺失的插件
+
+set -euo pipefail
+
+command -v claude &>/dev/null || exit 0
+command -v jq &>/dev/null || { echo "jq not found, skipping plugin sync"; exit 0; }
+
+SETTINGS="$HOME/.claude/settings.json"
+INSTALLED="$HOME/.claude/plugins/installed_plugins.json"
+
+ENABLED=$(jq -r '.enabledPlugins | keys[]' "$SETTINGS" 2>/dev/null) || exit 0
+[ -z "$ENABLED" ] && exit 0
+
+echo "Syncing Claude plugins..."
+
+while IFS= read -r plugin; do
+  # 已安装则跳过
+  [ -f "$INSTALLED" ] && jq -e --arg p "$plugin" '.plugins[$p]' "$INSTALLED" &>/dev/null && continue
+  echo "  installing: $plugin"
+  claude plugin install "$plugin" || echo "  failed: $plugin"
+done <<< "$ENABLED"
+
+echo "Done."
