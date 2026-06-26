@@ -144,7 +144,6 @@ cask "karabiner-elements"
 # 工具
 cask "maczip"
 cask "keycastr"
-cask "warp"         # 终端（仅终端用，关遥测/AI，配置见 ~/.warp/settings.toml）
 
 # 编辑器（按需取消注释）
 cask "cursor"
