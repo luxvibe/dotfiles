@@ -112,7 +112,7 @@ export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --e
 # FZF_DEFAULT_OPTS 只放 inline 参数，确保 fzf-tab（use-fzf-default-opts yes）
 # 能正常嵌入渲染；--tmux 会开 popup 模式，与 fzf-tab 的 inline widget 冲突
 export FZF_DEFAULT_OPTS='--height 40% --layout reverse --border'
-# 配色跟随终端 ANSI 调色板：-1=终端默认前/背景（背景留空才能透出 Ghostty 透明/模糊），
+# 配色跟随终端 ANSI 调色板：-1=终端默认前/背景（背景留空才能透出终端透明/模糊），
 # 1=红 2=绿 4=蓝 5=洋红 8=亮黑。换终端主题时 fzf 自动跟随，无需改这里。
 FZF_DEFAULT_OPTS+=' --color=fg:-1,bg:-1,fg+:-1,bg+:8,hl:1,hl+:1'
 FZF_DEFAULT_OPTS+=' --color=info:4,prompt:5,pointer:5,marker:2,spinner:5'

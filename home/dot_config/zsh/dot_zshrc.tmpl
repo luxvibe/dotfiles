@@ -34,11 +34,6 @@ unfunction _cached_eval
 [[ -f "$HOME/.iterm2_shell_integration.zsh" ]] && \
     source "$HOME/.iterm2_shell_integration.zsh"
 
-# Ghostty shell integration（手动 source，因自定义 ZDOTDIR 导致自动注入失效）
-# 同时检查文件存在：libghostty 派生终端（如 cmux）也会设 GHOSTTY_RESOURCES_DIR 但无此文件
-[[ -n "$GHOSTTY_RESOURCES_DIR" && -f "$GHOSTTY_RESOURCES_DIR/shell-integration/zsh/ghostty-integration" ]] && \
-    source "$GHOSTTY_RESOURCES_DIR/shell-integration/zsh/ghostty-integration"
-
 # 本机局部覆盖（不入仓库）
 [[ -f "$ZDOTDIR/local.zsh" ]] && source "$ZDOTDIR/local.zsh"
 

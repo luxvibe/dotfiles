@@ -144,8 +144,6 @@ cask "karabiner-elements"
 # 工具
 cask "maczip"
 cask "keycastr"
-cask "ghostty"      # GPU 加速终端模拟器
-brew "herdr"        # agent multiplexer（tmux for coding agents）
 
 # 编辑器（按需取消注释）
 cask "cursor"
