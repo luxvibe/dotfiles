@@ -12,7 +12,8 @@ export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 # ── 语言 / 编码 ─────────────────────────────────────────────
 export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
-export TERM="${TERM:-xterm-256color}"
+# 本机无 xterm-ghostty terminfo，libghostty 派生终端（cmux 等）设此值须降级
+[[ -z "$TERM" || "$TERM" == "xterm-ghostty" ]] && export TERM="xterm-256color"
 
 # ── 编辑器 ──────────────────────────────────────────────────
 export EDITOR="nvim"
