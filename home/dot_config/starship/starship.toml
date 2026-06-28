@@ -13,10 +13,9 @@ $git_state\
 $git_status\
 $cmd_duration\
 $line_break\
-$python\
 $character"""
 
-right_format = """$all"""
+right_format = """$nodejs$bun$deno$golang$rust$php$c$dotnet$lua$python$package$aws$docker_context"""
 
 [directory]
 style = "blue"
@@ -50,8 +49,4 @@ format = "[$duration]($style) "
 style = "yellow"
 
 [python]
-format = "[$virtualenv]($style) "
 style = "bright-black"
-detect_extensions = []
-detect_files = []
-detect_folders = []
