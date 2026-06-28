@@ -15,7 +15,7 @@ github = "romkatv/zsh-defer"
 # ── Oh My Zsh 库（同步）─────────────────────────────────────
 [plugins.omz-libs]
 github = "ohmyzsh/ohmyzsh"
-use = ["lib/history.zsh", "lib/key-bindings.zsh"]
+use = ["lib/history.zsh", "lib/key-bindings.zsh", "lib/theme-and-appearance.zsh"]
 
 # ── fpath 注册（compinit 前，不 source）──────────────────────
 [plugins.zsh-completions]
