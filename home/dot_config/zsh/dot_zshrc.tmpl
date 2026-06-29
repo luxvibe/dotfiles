@@ -2,6 +2,13 @@
 # 编辑源文件：chezmoi edit ~/.config/zsh/.zshrc
 
 source "$ZDOTDIR/path.zsh"
+
+# Ghostty shell integration — tmux / exec zsh 内不会自动注入，需手动加载
+# 启用后 ssh-env 会把远程 TERM 设为 xterm-256color
+if [[ -n $GHOSTTY_RESOURCES_DIR ]]; then
+  source "$GHOSTTY_RESOURCES_DIR/shell-integration/zsh/ghostty-integration"
+fi
+
 source "$ZDOTDIR/plugins.zsh"
 source "$ZDOTDIR/aliases.zsh"
 source "$ZDOTDIR/functions.zsh"

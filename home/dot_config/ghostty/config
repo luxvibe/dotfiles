@@ -1,0 +1,16 @@
+# Ghostty Configuration (Modular)
+# Load configuration from separate files for better organization
+# Paths are relative to this config file's directory
+
+config-file = ui.conf
+config-file = behavior.conf
+config-file = macos.conf
+config-file = keybindings.conf
+
+# TMUX INTEGRATION:
+# tmux prefix is C-a (~/.config/tmux/tmux.conf). Use Caps Lock as Control
+# (Karabiner) so the physical prefix is Caps+a — easier on the pinky.
+# Ghostty Cmd+hjkl / Cmd+1-9 proxy C-a combos; Ctrl+h/j/k/l stay unbound for vim/tmux.
+#
+# For reference, Ghostty native tmux-style bindings are archived in:
+# tmux-style-keybindings.conf.disabled

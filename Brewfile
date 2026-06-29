@@ -126,11 +126,11 @@ brew "neovim"       # 主编辑器（LazyVim 配置，chezmoi 管理）
 brew "mkcert"       # 本地开发 HTTPS 证书生成
 
 # ── macOS casks ────────────────────────────────────────────
+cask "ghostty"      # 主终端（配置见 dot_config/ghostty/）
 cask "iterm2"
 cask "orbstack"     # Docker runtime（替代 Docker Desktop）
 
 # 字体
-cask "font-meslo-lg-nerd-font"
 cask "font-jetbrains-mono-nerd-font"
 cask "font-maple-mono-nf-cn"
 

@@ -9,6 +9,9 @@ Host *
     IdentityFile ~/.ssh/id_ed25519
     ServerAliveInterval 60
     ServerAliveCountMax 3
+    # 远程无 xterm-ghostty terminfo 时用 xterm-256color（OpenSSH 8.7+）
+    SetEnv TERM=xterm-256color
+    SendEnv COLORTERM TERM_PROGRAM TERM_PROGRAM_VERSION
 
 # ── 自建 GitLab（按实际 HostName 修改）──────────────────────
 # Host gitlab.company.com
