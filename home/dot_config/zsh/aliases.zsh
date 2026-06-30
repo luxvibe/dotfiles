@@ -44,7 +44,7 @@ alias bua='brew update && brew upgrade && brew autoremove && brew cleanup --prun
 alias bbd='brew bundle dump --force'
 alias bbc='brew bundle cleanup --force'  # 卸载不在 Brewfile 里的包
 alias flush_dns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
-alias flush_comp='rm -f $ZDOTDIR/.comp_setup_date ${ZSH_COMPDUMP:-~/.zcompdump} ${XDG_CACHE_HOME:-$HOME/.cache}/sheldon/init.zsh ${XDG_CACHE_HOME:-$HOME/.cache}/zsh/{zoxide,mise,atuin}.zsh && reload'  # 强制刷新所有缓存
+alias flush_comp='rm -f $ZDOTDIR/.comp_setup_date ${ZSH_COMPDUMP:-~/.zcompdump} ${XDG_CACHE_HOME:-$HOME/.cache}/zsh/{zoxide,mise,atuin}.zsh && reload'  # 强制刷新所有缓存
 
 # ── mise ─────────────────────────────────────────────────────
 alias mi='mise install'
@@ -54,7 +54,7 @@ alias mr='mise run'
 
 # ── Upgrade ──────────────────────────────────────────────────
 alias upgrade_dotfiles='chezmoi update && reload'
-alias upgrade_sheldon='brew upgrade sheldon && reload'
+alias upgrade_zinit='zinit self-update && zinit update --all && reload'
 alias upgrade_mise='mise self-update && mise upgrade && mise prune --yes'
 alias upgrade_brew='bua'
 (( $+commands[cargo]    )) && alias upgrade_cargo='cargo install cargo-update && cargo install-update -a'
