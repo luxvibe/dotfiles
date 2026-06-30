@@ -6,7 +6,6 @@ brew "fzf"          # 模糊查找器
 brew "ripgrep"      # grep 替代
 brew "sd"           # sed 替代
 brew "zoxide"       # 智能 cd
-brew "starship"     # 跨 shell 提示符
 brew "git-delta"    # 美化 git diff
 brew "yazi"         # 终端文件管理器
 brew "watchexec"    # 文件变化触发命令

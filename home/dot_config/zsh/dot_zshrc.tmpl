@@ -1,6 +1,12 @@
 # ~/.config/zsh/.zshrc
 # 编辑源文件：chezmoi edit ~/.config/zsh/.zshrc
 
+# Powerlevel10k instant prompt —— 必须保持在 .zshrc 顶部附近，
+# 早于任何会产生 console 输出的初始化
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 source "$ZDOTDIR/path.zsh"
 
 # Ghostty shell integration — tmux / exec zsh 内不会自动注入，需手动加载
@@ -31,11 +37,10 @@ _cached_eval() {
 _cached_eval zoxide  init zsh
 _cached_eval mise    activate zsh
 _cached_eval atuin   init zsh --disable-up-arrow
-_cached_eval starship init zsh
 unfunction _cached_eval
 
-# p10k 配置保留，待确认不再使用后清理
-# [[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
+# Powerlevel10k 提示符配置（主题本体已在 plugins.zsh 加载）
+[[ -f "$HOME/.p10k.zsh" ]] && source "$HOME/.p10k.zsh"
 
 # iTerm2 shell integration
 [[ -f "$HOME/.iterm2_shell_integration.zsh" ]] && \

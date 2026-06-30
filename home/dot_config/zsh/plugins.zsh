@@ -27,6 +27,10 @@ source "${ZINIT_HOME}/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
+# ── Powerlevel10k 主题（同步加载，配合 instant prompt）──────────
+zinit ice depth=1
+zinit light romkatv/powerlevel10k
+
 # ── Homebrew 补全 ─────────────────────────────────────────────
 if [[ -n "$HOMEBREW_PREFIX" ]]; then
     FPATH="${HOMEBREW_PREFIX}/share/zsh/site-functions:${FPATH}"
