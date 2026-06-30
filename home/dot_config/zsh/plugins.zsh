@@ -89,7 +89,6 @@ zinit wait lucid for \
     OMZP::fancy-ctrl-z \
     OMZP::git \
     OMZP::sudo \
-    OMZP::macos \
     OMZP::opentofu \
     OMZP::docker \
     OMZP::docker-compose \
@@ -98,6 +97,10 @@ zinit wait lucid for \
     OMZP::aws \
     OMZP::npm \
     OMZP::uv
+
+# macos 插件依赖同目录的 music/spotify 脚本，需用 svn 下载完整目录
+zinit ice svn wait lucid
+zinit snippet OMZP::macos
 
 # ── 交互体验插件（Turbo）────────────────────────────────────
 zinit wait lucid for \
