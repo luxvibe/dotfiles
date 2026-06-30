@@ -20,7 +20,6 @@ brew "dust"         # du 替代
 # ── Shell / 终端核心 ───────────────────────────────────────
 brew "zsh"
 brew "tmux"
-brew "sheldon"      # zsh 插件管理器
 brew "atuin"
 brew "chezmoi"      # dotfiles 管理
 brew "sshs"         # fzf 风格 SSH 主机选择器
@@ -32,7 +31,7 @@ brew "glab"         # 自建 GitLab CLI
 brew "git-extras"
 
 # ── Go 开发工具 ────────────────────────────────────────────
-brew "protobuf"       # protoc 编译器（系统级二进制，brew 更稳定）
+brew "protobuf@21"       # protoc 编译器（系统级二进制，brew 更稳定）
 
 # ── 语言版本管理（替代 nvm/pyenv/rbenv/sdkman/phpenv）─────
 brew "mise"
