@@ -22,6 +22,7 @@ if [[ ! -d "$ZINIT_HOME" ]]; then
     mkdir -p "$(dirname "$ZINIT_HOME")"
     git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
+[[ -f "${ZINIT_HOME}/zinit.zsh" ]] || { print -P "%F{red}zinit: 安装失败，请检查网络后重新打开终端%f" >&2; return }
 source "${ZINIT_HOME}/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
@@ -50,13 +51,14 @@ FPATH="$ZDOTDIR/completions:${FPATH}"
 typeset -U fpath  # 去除重复项
 
 # 每天重新生成一次补全脚本
+export ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
 _comp_cache="$ZDOTDIR/.comp_setup_date"
 zmodload zsh/datetime
 strftime -s _today '%Y%m%d' $EPOCHSECONDS
 if [[ ! -f "$_comp_cache" || "$_today" != "$(<$_comp_cache)" ]]; then
     _setup_completions
     print -r -- "$_today" >| "$_comp_cache"
-    [[ -f "${ZSH_COMPDUMP:-$HOME/.zcompdump}" ]] && rm -f "${ZSH_COMPDUMP:-$HOME/.zcompdump}"
+    [[ -f "$ZSH_COMPDUMP" ]] && rm -f "$ZSH_COMPDUMP"
 fi
 unset _comp_cache _today
 unfunction _setup_completions
@@ -66,7 +68,6 @@ zinit ice blockf atpull'zinit creinstall -q .'
 zinit light zsh-users/zsh-completions
 
 # ── 补全初始化 ──────────────────────────────────────────────
-export ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
 autoload -Uz compinit
 compinit -C -d "$ZSH_COMPDUMP"
 
