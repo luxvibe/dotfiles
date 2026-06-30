@@ -1,6 +1,6 @@
-# sheldon 插件管理（配置：~/.config/sheldon/plugins.toml）
+# zsh 插件管理（zinit）
 
-# zsh-history-substring-search 按键绑定，由 zsh-defer 在插件加载后调用
+# zsh-history-substring-search 按键绑定，由 zinit atload 在插件加载后调用
 _hss_bindkey() {
     zmodload zsh/terminfo
     for keymap in main emacs viins; do
@@ -15,36 +15,16 @@ _hss_bindkey() {
 export ZSH_CACHE_DIR="${XDG_CACHE_HOME:-$HOME/.cache}/oh-my-zsh"
 mkdir -p "$ZSH_CACHE_DIR/completions"
 
-(( $+commands[sheldon] )) || { print -P "%F{33}sheldon not found, run: brew install sheldon%f"; return }
-
-# 缓存 sheldon source 输出，config 变化时重新生成
-_sheldon_cache="${XDG_CACHE_HOME:-$HOME/.cache}/sheldon/init.zsh"
-_sheldon_toml="${XDG_CONFIG_HOME:-$HOME/.config}/sheldon/plugins.toml"
-if [[ ! -f "$_sheldon_cache" || "$_sheldon_toml" -nt "$_sheldon_cache" ]]; then
-    mkdir -p "${_sheldon_cache:h}"
-    if [[ ! -f "$_sheldon_cache" ]]; then
-        # 首次运行：显示进度，让用户看到插件下载过程
-        print -P "%F{yellow}sheldon: 首次初始化，正在下载插件...%f"
-        if sheldon source >| "$_sheldon_cache"; then
-            print -P "%F{green}sheldon: 插件加载完成，重新打开终端生效%f"
-        else
-            command rm -f "$_sheldon_cache"
-            print -P "%F{red}sheldon: 初始化失败，运行 'sheldon source' 查看详情%f" >&2
-        fi
-    else
-        # 后续更新（config 变化）：静默执行，错误记录到日志
-        if ! sheldon source >| "$_sheldon_cache" 2>/tmp/sheldon-init.log; then
-            command rm -f "$_sheldon_cache"
-            print -P "%F{red}sheldon: 更新失败，详情见 /tmp/sheldon-init.log%f" >&2
-        fi
-    fi
+# ── zinit 自动安装 + 初始化 ──────────────────────────────────
+ZINIT_HOME="${XDG_DATA_HOME:-$HOME/.local/share}/zinit/zinit.git"
+if [[ ! -d "$ZINIT_HOME" ]]; then
+    print -P "%F{yellow}zinit: 首次初始化，正在安装...%f"
+    mkdir -p "$(dirname "$ZINIT_HOME")"
+    git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
-[[ -f "$_sheldon_cache" ]] && source "$_sheldon_cache"
-unset _sheldon_cache _sheldon_toml
-
-# 在所有 deferred 插件加载完成后绑定 history-substring-search 按键
-# zsh-defer 由 sheldon 加载；初始化失败时跳过，避免 command not found 报错
-(( $+functions[zsh-defer] )) && zsh-defer _hss_bindkey
+source "${ZINIT_HOME}/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
 
 # ── Homebrew 补全 ─────────────────────────────────────────────
 if [[ -n "$HOMEBREW_PREFIX" ]]; then
@@ -57,7 +37,6 @@ _setup_completions() {
     local comp_dir="$ZDOTDIR/completions"
     mkdir -p "$comp_dir"
     # 只生成 mise 管理且 Homebrew site-functions 未提供的工具
-    # mise/gh/atuin/eza/fd/rg 等已由 Homebrew 在 site-functions 自动提供，无需重复生成
     (( $+commands[kubectl] )) && kubectl completion zsh >| "$comp_dir/_kubectl" 2>/dev/null
     (( $+commands[helm]    )) && helm completion zsh >| "$comp_dir/_helm" 2>/dev/null
     (( $+commands[uv]      )) && uv generate-shell-completion zsh >| "$comp_dir/_uv" 2>/dev/null
@@ -66,37 +45,70 @@ _setup_completions() {
     # aws/k9s/trivy 等已由 Homebrew site-functions 提供
 }
 
-# 将自定义补全目录加入 FPATH（必须在 compinit 之前，无论目录是否已存在）
+# 将自定义补全目录加入 FPATH（必须在 compinit 之前）
 FPATH="$ZDOTDIR/completions:${FPATH}"
-typeset -U fpath  # 去除重复项（OrbStack/sheldon 的 fpath+= 可能造成重复）
+typeset -U fpath  # 去除重复项
 
-# 每天重新生成一次补全脚本（避免每次启动都执行）
+# 每天重新生成一次补全脚本
 _comp_cache="$ZDOTDIR/.comp_setup_date"
 zmodload zsh/datetime
 strftime -s _today '%Y%m%d' $EPOCHSECONDS
 if [[ ! -f "$_comp_cache" || "$_today" != "$(<$_comp_cache)" ]]; then
     _setup_completions
     print -r -- "$_today" >| "$_comp_cache"
-    # 生成新补全后强制刷新 zcompdump
     [[ -f "${ZSH_COMPDUMP:-$HOME/.zcompdump}" ]] && rm -f "${ZSH_COMPDUMP:-$HOME/.zcompdump}"
 fi
 unset _comp_cache _today
 unfunction _setup_completions
 
-# 补全初始化（在所有插件加载后、FPATH 设置完成后执行）
-# 用 -C 跳过安全检查（每天的 _setup_completions 已处理 zcompdump 刷新）
+# ── zsh-completions（fpath 注册，同步）──────────────────────
+zinit ice blockf atpull'zinit creinstall -q .'
+zinit light zsh-users/zsh-completions
+
+# ── 补全初始化 ──────────────────────────────────────────────
 export ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
 autoload -Uz compinit
 compinit -C -d "$ZSH_COMPDUMP"
 
-# ── fzf-tab（同步加载）────────────────────────────────────────
+# ── fzf-tab（同步，compinit 后）──────────────────────────────
 # 必须在 compinit 之后、fast-syntax-highlighting / zsh-autosuggestions 之前
-# 包装补全 widget。sheldon 用 apply=["fpath"] 仅注册目录，
-# 这里再显式 source 一次，避免 defer 队列导致的加载顺序错乱和早按 Tab 落空。
-_fzf_tab_plugin="${XDG_DATA_HOME:-$HOME/.local/share}/sheldon/repos/github.com/Aloxaf/fzf-tab/fzf-tab.plugin.zsh"
-[[ -f "$_fzf_tab_plugin" ]] && source "$_fzf_tab_plugin"
-unset _fzf_tab_plugin
+zinit light Aloxaf/fzf-tab
 
+# ── OMZ 库文件（Turbo）──────────────────────────────────────
+zinit wait lucid for \
+    OMZL::history.zsh \
+    OMZL::key-bindings.zsh \
+    OMZL::theme-and-appearance.zsh
+
+# ── OMZ 插件（Turbo）────────────────────────────────────────
+zinit wait lucid for \
+    OMZP::colored-man-pages \
+    OMZP::cp \
+    OMZP::extract \
+    OMZP::fancy-ctrl-z \
+    OMZP::git \
+    OMZP::sudo \
+    OMZP::macos \
+    OMZP::opentofu \
+    OMZP::docker \
+    OMZP::docker-compose \
+    OMZP::kubectl \
+    OMZP::helm \
+    OMZP::aws \
+    OMZP::npm \
+    OMZP::uv
+
+# ── 交互体验插件（Turbo）────────────────────────────────────
+zinit wait lucid for \
+    atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
+        zdharma-continuum/fast-syntax-highlighting \
+    atload"!_zsh_autosuggest_start" \
+        zsh-users/zsh-autosuggestions \
+    atload"_hss_bindkey" \
+        zsh-users/zsh-history-substring-search \
+    djui/alias-tips \
+    hlissner/zsh-autopair \
+    wfxr/forgit
 
 # ── FZF 集成 ─────────────────────────────────────────────────
 # 只加载 key-bindings.zsh（Ctrl-R / Ctrl-T / Alt-C）。
