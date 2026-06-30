@@ -3,3 +3,5 @@ bin/
 # AI 工具产生的本地配置
 .antigravitycli/
 .claude/
+# RDoc 生成的文档，勿入库
+doc/
