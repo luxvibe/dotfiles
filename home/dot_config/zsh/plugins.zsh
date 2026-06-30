@@ -80,12 +80,10 @@ compinit -C -d "$ZSH_COMPDUMP"
 zinit light Aloxaf/fzf-tab
 
 # ── OMZ 库文件（Turbo）──────────────────────────────────────
-# theme-and-appearance.zsh 会设 alias ls='ls -G'，用 atload 在加载后覆盖回 eza
 zinit wait lucid for \
     OMZL::history.zsh \
     OMZL::key-bindings.zsh \
-    atload"(( \$+commands[eza] )) && alias ls='eza --color=auto --icons=auto --group-directories-first'" \
-        OMZL::theme-and-appearance.zsh
+    OMZL::theme-and-appearance.zsh
 
 # ── OMZ 插件（Turbo）────────────────────────────────────────
 zinit wait lucid for \
