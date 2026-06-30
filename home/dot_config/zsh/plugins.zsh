@@ -79,13 +79,13 @@ compinit -C -d "$ZSH_COMPDUMP"
 # 必须在 compinit 之后、fast-syntax-highlighting / zsh-autosuggestions 之前
 zinit light Aloxaf/fzf-tab
 
-# theme-and-appearance 同步加载（提供 LS_COLORS，aliases.zsh 的 eza alias 在其后覆盖 ls -G）
+# OMZ 库文件同步加载（theme-and-appearance 提供 LS_COLORS；key-bindings 确保按键立即可用）
 zinit snippet OMZL::theme-and-appearance.zsh
+zinit snippet OMZL::key-bindings.zsh
 
 # ── OMZ 库文件（Turbo）──────────────────────────────────────
 zinit wait lucid for \
-    OMZL::history.zsh \
-    OMZL::key-bindings.zsh
+    OMZL::history.zsh
 
 # ── OMZ 插件（Turbo）────────────────────────────────────────
 zinit wait lucid for \
