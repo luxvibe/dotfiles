@@ -1,9 +1,9 @@
-# 动态补全：mise 清单 + gencomp 按需（brew 由 site-functions 自动处理）
+# 动态补全：mise 清单 + gencomp 手动生成（brew 由 site-functions 自动处理）
 
 export ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
 typeset -g ZSH_COMPLETIONS_DIR="$ZDOTDIR/completions"
 
-# 与 mise config.toml 对齐的 CLI 工具（语言运行时不放这里）
+# 与 mise config.toml 对齐的 CLI 工具（语言运行时不放这里）；只在 gencomp --all 时使用
 typeset -ga COMPLETION_MISE_TOOLS=(
     kubectl helm tofu
     uv uvx
@@ -16,33 +16,7 @@ typeset -gA COMPLETION_OVERRIDES=(
     uvx '--generate-shell-completion zsh'
 )
 
-local -a _comp_patterns=( 'completion zsh' 'complete zsh' 'generate-shell-completion zsh' )
-
-_comp_run_timeout() {
-    # 部分二进制（如 Go 程序）默认忽略 SIGALRM/SIGTERM，
-    # perl alarm / `timeout` 的默认信号无法保证其退出，
-    # 因此用后台 watchdog 强制 SIGKILL 兜底，确保调用方绝不会被挂起。
-    # nomonitor：避免 & 产生的后台 job 把 "[1] done/terminated" 之类的
-    # job-control 通知打到终端上（这类通知不走 stdout/stderr 重定向）。
-    setopt local_options nomonitor
-    "$@" &
-    local pid=$!
-    (
-        sleep 1
-        # 目标进程可能自己 fork 出子进程（如构建产物）；kill -9 只杀
-        # 直接子进程会让这些子进程沦为孤儿继续运行，故先记录再一并杀掉。
-        local -a kids
-        kids=(${(f)"$(pgrep -P "$pid" 2>/dev/null)"})
-        kill -9 "$pid" 2>/dev/null
-        (( $#kids )) && kill -9 $kids 2>/dev/null
-    ) 2>/dev/null &
-    local watchdog=$!
-    wait "$pid" 2>/dev/null
-    local ret=$?
-    kill "$watchdog" 2>/dev/null
-    wait "$watchdog" 2>/dev/null
-    return $ret
-}
+typeset -ga _comp_patterns=( 'completion zsh' 'complete zsh' 'generate-shell-completion zsh' )
 
 _comp_pattern_for() {
     local cmd="$1" out="$ZSH_COMPLETIONS_DIR/_$cmd"
@@ -51,98 +25,102 @@ _comp_pattern_for() {
     print -r -- 'completion zsh'
 }
 
-_comp_refresh() {
-    local cmd="$1" bin out pat
-    bin="${commands[$cmd]:A}"
-    out="$ZSH_COMPLETIONS_DIR/_$cmd"
-    [[ -n "$bin" ]] || return 1
-    [[ -n "$HOMEBREW_PREFIX" && -f "$HOMEBREW_PREFIX/share/zsh/site-functions/_$cmd" ]] && return 1
-    [[ -f "$out" && -s "$out" && ! "$bin" -nt "$out" ]] && return 1
-
-    pat="$(_comp_pattern_for "$cmd")"
+# 前台直接执行并校验输出；卡住由调用者（人）Ctrl-C 处理，不做超时保护——
+# 因为现在只由 gencomp 手动触发，不再在无人看管的 shell 启动阶段跑任意二进制。
+_comp_write_completion() {
+    local cmd="$1" bin="$2" out="$ZSH_COMPLETIONS_DIR/_$1"
+    shift 2
     mkdir -p "$ZSH_COMPLETIONS_DIR"
-    if ! _comp_run_timeout "$bin" ${=pat} >|"$out" 2>/dev/null; then
+    "$bin" "$@" >|"$out" 2>/dev/null
+    if [[ "$(head -1 "$out" 2>/dev/null)" != *'#compdef'* ]]; then
         command rm -f "$out"
         return 1
     fi
-    [[ "$(head -1 "$out")" == *'#compdef'* ]] || { command rm -f "$out"; return 1; }
+    print -r -- "$*" >|"$out.pat"
 }
 
 _comp_try_discover() {
-    local cmd="$1" bin="$2" out="$3" pat
+    local cmd="$1" bin="$2" pat
     for pat in $_comp_patterns; do
-        _comp_run_timeout "$bin" ${=pat} >|"$out" 2>/dev/null || continue
-        [[ "$(head -1 "$out")" == *'#compdef'* ]] || { command rm -f "$out"; continue; }
-        print -r -- "$pat" >|"$out.pat"
-        return 0
+        _comp_write_completion "$cmd" "$bin" ${=pat} && return 0
     done
-    command rm -f "$out"
     return 1
 }
 
-# ── 启动：刷新清单 + 已有 gencomp 文件 ───────────────────────
-local -i _comp_stale=0
-local cmd f
-mkdir -p "$ZSH_COMPLETIONS_DIR"
-for cmd in $COMPLETION_MISE_TOOLS; do
-    if _comp_refresh "$cmd"; then (( _comp_stale++ )); fi
-done
-for f in "$ZSH_COMPLETIONS_DIR"/_*(N); do
-    cmd="${${f:t}#_}"
-    if [[ -z "${commands[$cmd]}" ]]; then
-        command rm -f "$f" "$f.pat"
-        (( _comp_stale++ ))
-        continue
-    fi
-    [[ ${COMPLETION_MISE_TOOLS[(Ie)$cmd]} -gt 0 ]] && continue
-    if _comp_refresh "$cmd"; then (( _comp_stale++ )); fi
-done
-if (( _comp_stale > 0 )) && [[ -f "$ZSH_COMPDUMP" ]]; then
-    command rm -f "$ZSH_COMPDUMP"
-fi
-
+# ── 启动：只挂 FPATH，不做任何检测/生成 ─────────────────────
 FPATH="$ZSH_COMPLETIONS_DIR:${FPATH}"
 typeset -U fpath
 
-# ── 手动生成（curl / npm 等）──────────────────────────────────
-gencomp() {
-    local cmd="$1"
-    if [[ -z "$cmd" ]]; then
-        print -u2 "用法: gencomp <cmd> [completion-args...] | gencomp --list | gencomp --flush <cmd>"
-        return 2
-    fi
-    if [[ "$cmd" == --list ]]; then
-        local f
-        for f in "$ZSH_COMPLETIONS_DIR"/_*(N); do print -r -- "${f:t}"; done
-        return 0
-    fi
-    if [[ "$cmd" == --flush ]]; then
-        [[ -z "$2" ]] && { print -u2 "gencomp: 请指定命令名"; return 2; }
-        command rm -f "$ZSH_COMPLETIONS_DIR/_$2" "$ZSH_COMPLETIONS_DIR/_$2.pat"
-        [[ -f "$ZSH_COMPDUMP" ]] && command rm -f "$ZSH_COMPDUMP"
-        return 0
-    fi
-
+# ── 手动生成/刷新/清理 ──────────────────────────────────────
+_gencomp_one() {
+    local cmd="$1"; shift
     local bin="${commands[$cmd]:A}" out="$ZSH_COMPLETIONS_DIR/_$cmd"
     [[ -z "$bin" ]] && { print -u2 "gencomp: 命令未找到: $cmd"; return 1; }
     if [[ -n "$HOMEBREW_PREFIX" && -f "$HOMEBREW_PREFIX/share/zsh/site-functions/_$cmd" ]]; then
         print -P "%F{yellow}提示:%f $cmd 已由 brew site-functions 提供补全"
         return 0
     fi
-
-    shift
+    mkdir -p "$ZSH_COMPLETIONS_DIR"
     if (( $# )); then
-        mkdir -p "$ZSH_COMPLETIONS_DIR"
-        _comp_run_timeout "$bin" "$@" >|"$out" 2>/dev/null || { print -u2 "gencomp: 生成失败"; return 1; }
-        [[ "$(head -1 "$out")" == *'#compdef'* ]] || { command rm -f "$out"; print -u2 "gencomp: 输出无效"; return 1; }
-        print -r -- "$*" >|"$out.pat"
-    elif ! _comp_try_discover "$cmd" "$bin" "$out" && ! _comp_refresh "$cmd"; then
-        [[ -f "$out" ]] && { print -P "%F{yellow}补全已是最新:%f $out"; return 0; }
-        print -u2 "gencomp: $cmd 不支持常见 completion，请手动指定参数"
+        _comp_write_completion "$cmd" "$bin" "$@" && return 0
+        print -u2 "gencomp: 生成失败或输出不含 #compdef"
         return 1
     fi
+    local pat; pat="$(_comp_pattern_for "$cmd")"
+    _comp_write_completion "$cmd" "$bin" ${=pat} && return 0
+    _comp_try_discover "$cmd" "$bin" && return 0
+    print -u2 "gencomp: $cmd 不支持常见 completion 写法，请手动指定参数，如 gencomp $cmd completion zsh"
+    return 1
+}
 
+_gencomp_rebuild_dump() {
     [[ -f "$ZSH_COMPDUMP" ]] && command rm -f "$ZSH_COMPDUMP"
     autoload -Uz compinit && compinit -C -d "$ZSH_COMPDUMP"
-    print -P "%F{green}✓%f 已生成 $out"
+}
+
+gencomp() {
+    local cmd="$1"
+    if [[ -z "$cmd" ]]; then
+        print -u2 "用法: gencomp <cmd> [completion-args...] | gencomp --all | gencomp --list | gencomp --flush <cmd>"
+        return 2
+    fi
+    case "$cmd" in
+        --list)
+            local f
+            for f in "$ZSH_COMPLETIONS_DIR"/_*(N); do print -r -- "${f:t}"; done
+            return 0
+            ;;
+        --flush)
+            [[ -z "$2" ]] && { print -u2 "gencomp: 请指定命令名"; return 2; }
+            command rm -f "$ZSH_COMPLETIONS_DIR/_$2" "$ZSH_COMPLETIONS_DIR/_$2.pat"
+            [[ -f "$ZSH_COMPDUMP" ]] && command rm -f "$ZSH_COMPDUMP"
+            return 0
+            ;;
+        --all)
+            local t failed=()
+            for t in $COMPLETION_MISE_TOOLS; do
+                _gencomp_one "$t" || failed+=("$t")
+            done
+            local f cmdname
+            for f in "$ZSH_COMPLETIONS_DIR"/_*(N); do
+                cmdname="${${f:t}#_}"
+                [[ -z "${commands[$cmdname]}" ]] && command rm -f "$f" "$f.pat"
+            done
+            _gencomp_rebuild_dump
+            if (( $#failed )); then
+                print -P "%F{yellow}以下工具生成失败:%f ${(j:, :)failed}"
+                return 1
+            fi
+            print -P "%F{green}✓%f 全部补全已刷新"
+            return 0
+            ;;
+    esac
+
+    shift
+    if _gencomp_one "$cmd" "$@"; then
+        _gencomp_rebuild_dump
+        print -P "%F{green}✓%f 已生成 $ZSH_COMPLETIONS_DIR/_$cmd"
+        return 0
+    fi
+    return 1
 }
