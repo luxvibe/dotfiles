@@ -22,9 +22,20 @@ _comp_run_timeout() {
     # 部分二进制（如 Go 程序）默认忽略 SIGALRM/SIGTERM，
     # perl alarm / `timeout` 的默认信号无法保证其退出，
     # 因此用后台 watchdog 强制 SIGKILL 兜底，确保调用方绝不会被挂起。
+    # nomonitor：避免 & 产生的后台 job 把 "[1] done/terminated" 之类的
+    # job-control 通知打到终端上（这类通知不走 stdout/stderr 重定向）。
+    setopt local_options nomonitor
     "$@" &
     local pid=$!
-    ( sleep 1; kill -9 "$pid" ) 2>/dev/null &
+    (
+        sleep 1
+        # 目标进程可能自己 fork 出子进程（如构建产物）；kill -9 只杀
+        # 直接子进程会让这些子进程沦为孤儿继续运行，故先记录再一并杀掉。
+        local -a kids
+        kids=(${(f)"$(pgrep -P "$pid" 2>/dev/null)"})
+        kill -9 "$pid" 2>/dev/null
+        (( $#kids )) && kill -9 $kids 2>/dev/null
+    ) 2>/dev/null &
     local watchdog=$!
     wait "$pid" 2>/dev/null
     local ret=$?
