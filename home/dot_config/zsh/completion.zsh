@@ -65,7 +65,8 @@ _comp_try_discover() {
 }
 
 # ── 启动：刷新清单 + 已有 gencomp 文件 ───────────────────────
-local -i _comp_stale=0 cmd f
+local -i _comp_stale=0
+local cmd f
 mkdir -p "$ZSH_COMPLETIONS_DIR"
 for cmd in $COMPLETION_MISE_TOOLS; do
     if _comp_refresh "$cmd"; then (( _comp_stale++ )); fi
