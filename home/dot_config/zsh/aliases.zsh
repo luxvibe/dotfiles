@@ -44,7 +44,7 @@ alias bua='brew update && brew upgrade && brew autoremove && brew cleanup --prun
 alias bbd='brew bundle dump --force'
 alias bbc='brew bundle cleanup --force'  # 卸载不在 Brewfile 里的包
 alias flush_dns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
-alias flush_comp='rm -f $ZDOTDIR/.comp_setup_date ${ZSH_COMPDUMP:-~/.zcompdump} ${XDG_CACHE_HOME:-$HOME/.cache}/zsh/{zoxide,mise,atuin}.zsh && reload'  # 强制刷新所有缓存
+alias flush_comp='rm -f $ZDOTDIR/completions/_*(N) $ZDOTDIR/completions/*.pat(N) ${ZSH_COMPDUMP:-~/.zcompdump} ${XDG_CACHE_HOME:-$HOME/.cache}/zsh/{zoxide,mise,atuin}.zsh && reload'
 
 # ── mise ─────────────────────────────────────────────────────
 alias mi='mise install'
@@ -66,7 +66,13 @@ alias gor='go run'        # Go
 alias got='go test ./...'
 alias gob='go build'
 alias gomod='go mod tidy'
-alias py='python3'        # Python（uv 别名由 OMZ uv 插件提供：uvp/uvr/uvs/uva 等）
+alias py='python3'        # Python
+(( $+commands[uv] )) && {
+    alias uvp='uv pip'
+    alias uvr='uv run'
+    alias uvs='uv sync'
+    alias uva='uv add'
+}
 alias art='php artisan'   # PHP
 # composer/cmp：按需在项目 local.zsh 中定义，全局不强制
 

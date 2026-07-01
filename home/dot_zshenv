@@ -20,5 +20,5 @@ export EDITOR="nvim"
 export VISUAL="nvim"
 
 # ── PATH 基础层（后面 path.zsh / mise 会补充）──────────────
-export PATH="$HOME/bin:$HOME/.local/bin:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 typeset -U path  # 防止 exec zsh / reload 多次执行时 PATH 重复累积

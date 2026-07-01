@@ -36,36 +36,8 @@ if [[ -n "$HOMEBREW_PREFIX" ]]; then
     FPATH="${HOMEBREW_PREFIX}/share/zsh/site-functions:${FPATH}"
 fi
 
-# ── 工具动态补全注册（只在 zcompdump 过期时执行，避免每次启动都慢）──
-# 各工具的补全脚本输出到 $ZDOTDIR/completions/，由 FPATH 统一加载
-_setup_completions() {
-    local comp_dir="$ZDOTDIR/completions"
-    mkdir -p "$comp_dir"
-    # 只生成 mise 管理且 Homebrew site-functions 未提供的工具
-    (( $+commands[kubectl] )) && kubectl completion zsh >| "$comp_dir/_kubectl" 2>/dev/null
-    (( $+commands[helm]    )) && helm completion zsh >| "$comp_dir/_helm" 2>/dev/null
-    (( $+commands[uv]      )) && uv generate-shell-completion zsh >| "$comp_dir/_uv" 2>/dev/null
-    (( $+commands[uvx]     )) && uvx --generate-shell-completion zsh >| "$comp_dir/_uvx" 2>/dev/null
-    # docker/docker-compose: OrbStack fpath 注入
-    # aws/k9s/trivy 等已由 Homebrew site-functions 提供
-}
-
-# 将自定义补全目录加入 FPATH（必须在 compinit 之前）
-FPATH="$ZDOTDIR/completions:${FPATH}"
-typeset -U fpath  # 去除重复项
-
-# 每天重新生成一次补全脚本
-export ZSH_COMPDUMP="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump"
-_comp_cache="$ZDOTDIR/.comp_setup_date"
-zmodload zsh/datetime
-strftime -s _today '%Y%m%d' $EPOCHSECONDS
-if [[ ! -f "$_comp_cache" || "$_today" != "$(<$_comp_cache)" ]]; then
-    _setup_completions
-    print -r -- "$_today" >| "$_comp_cache"
-    [[ -f "$ZSH_COMPDUMP" ]] && rm -f "$ZSH_COMPDUMP"
-fi
-unset _comp_cache _today
-unfunction _setup_completions
+# mise 自动探测 + gencomp 手动生成（见 completion.zsh）
+source "$ZDOTDIR/completion.zsh"
 
 # ── zsh-completions（fpath 注册，同步）──────────────────────
 zinit ice blockf atpull'zinit creinstall -q .'
@@ -95,14 +67,11 @@ zinit wait lucid for \
     OMZP::fancy-ctrl-z \
     OMZP::git \
     OMZP::sudo \
-    OMZP::opentofu \
     OMZP::docker \
     OMZP::docker-compose \
-    OMZP::kubectl \
-    OMZP::helm \
     OMZP::aws \
-    OMZP::npm \
-    OMZP::uv
+    OMZP::npm
+# kubectl/helm/tofu/uv 等 mise 补全由 completion.zsh 生成，不再加载对应 OMZ 插件
 
 # ── 交互体验插件（Turbo）────────────────────────────────────
 zinit wait lucid for \

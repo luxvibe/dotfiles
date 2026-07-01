@@ -1,0 +1,23 @@
+# PATH 管理
+
+# Homebrew — 静态展开，避免每次启动 fork brew 进程
+# 架构由 chezmoi 模板渲染（arm64 → /opt/homebrew，amd64 → /usr/local）
+{{ $brew_prefix := "/opt/homebrew" }}
+{{ if eq .chezmoi.arch "amd64" }}{{ $brew_prefix = "/usr/local" }}{{ end }}
+export HOMEBREW_PREFIX="{{ $brew_prefix }}"
+export HOMEBREW_CELLAR="{{ $brew_prefix }}/Cellar"
+export HOMEBREW_REPOSITORY="{{ $brew_prefix }}"
+path=("{{ $brew_prefix }}/bin" "{{ $brew_prefix }}/sbin" $path)
+[ -z "${MANPATH-}" ] || export MANPATH=":${MANPATH#:}"
+export INFOPATH="{{ $brew_prefix }}/share/info:${INFOPATH:-}"
+export HOMEBREW_BUNDLE_FILE="$HOME/.dotfiles/Brewfile"
+
+# Go
+export GOPATH="$HOME/Workspace/golang"
+export PATH="${GOPATH}/bin:$PATH"
+# GOPROXY 在 private.zsh 中按网络环境配置
+
+# Rust
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# 用户可执行目录由 ~/.zshenv 统一注入（~/.local/bin）

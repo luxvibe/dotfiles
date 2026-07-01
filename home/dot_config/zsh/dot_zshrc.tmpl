@@ -15,14 +15,6 @@ if [[ -n $GHOSTTY_RESOURCES_DIR ]]; then
   source "$GHOSTTY_RESOURCES_DIR/shell-integration/zsh/ghostty-integration"
 fi
 
-source "$ZDOTDIR/plugins.zsh"
-source "$ZDOTDIR/aliases.zsh"
-source "$ZDOTDIR/functions.zsh"
-[[ -f "$ZDOTDIR/ai.zsh" ]] && source "$ZDOTDIR/ai.zsh"
-
-# 私有配置（token、proxy、GOPRIVATE 等，不入仓库）
-[[ -f "$ZDOTDIR/private.zsh" ]] && source "$ZDOTDIR/private.zsh"
-
 # ── 工具初始化（缓存输出，binary 更新时才重新生成）──────────
 _cached_eval() {
     local name="$1" bin="${commands[$1]}" cache="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/$1.zsh"
@@ -34,8 +26,20 @@ _cached_eval() {
     fi
     [[ -f "$cache" ]] && source "$cache"
 }
+
+# mise 须在 plugins.zsh 之前激活，供动态补全生成时找到 PATH 中的二进制
+_cached_eval mise activate zsh
+
+source "$ZDOTDIR/plugins.zsh"
+source "$ZDOTDIR/aliases.zsh"
+source "$ZDOTDIR/functions.zsh"
+[[ -f "$ZDOTDIR/ai.zsh" ]] && source "$ZDOTDIR/ai.zsh"
+
+# 私有配置（token、proxy、GOPRIVATE 等，不入仓库）
+[[ -f "$ZDOTDIR/private.zsh" ]] && source "$ZDOTDIR/private.zsh"
+
+# zoxide / atuin 须在 plugins 之后：atuin 接管 Ctrl-R，避免被 fzf key-bindings 覆盖
 _cached_eval zoxide  init zsh
-_cached_eval mise    activate zsh
 _cached_eval atuin   init zsh --disable-up-arrow
 unfunction _cached_eval
 
