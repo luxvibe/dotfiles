@@ -31,7 +31,10 @@ _comp_write_completion() {
     local cmd="$1" bin="$2" out="$ZSH_COMPLETIONS_DIR/_$1"
     shift 2
     mkdir -p "$ZSH_COMPLETIONS_DIR"
-    "$bin" "$@" >|"$out" 2>/dev/null
+    if ! "$bin" "$@" >|"$out" 2>/dev/null; then
+        command rm -f "$out"
+        return 1
+    fi
     if [[ "$(head -1 "$out" 2>/dev/null)" != *'#compdef'* ]]; then
         command rm -f "$out"
         return 1
