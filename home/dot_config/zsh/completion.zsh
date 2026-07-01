@@ -7,7 +7,7 @@ typeset -g ZSH_COMPLETIONS_DIR="$ZDOTDIR/completions"
 typeset -ga COMPLETION_MISE_TOOLS=(
     kubectl helm tofu
     uv uvx
-    air sqlc migrate shfmt golangci-lint
+    sqlc migrate shfmt golangci-lint
 )
 
 # 非标准 completion 子命令
@@ -19,13 +19,18 @@ typeset -gA COMPLETION_OVERRIDES=(
 local -a _comp_patterns=( 'completion zsh' 'complete zsh' 'generate-shell-completion zsh' )
 
 _comp_run_timeout() {
-    if (( $+commands[timeout] )); then
-        command timeout 1 "$@"
-    elif (( $+commands[perl] )); then
-        perl -e 'alarm 1; exec @ARGV' -- "$@"
-    else
-        "$@"
-    fi
+    # 部分二进制（如 Go 程序）默认忽略 SIGALRM/SIGTERM，
+    # perl alarm / `timeout` 的默认信号无法保证其退出，
+    # 因此用后台 watchdog 强制 SIGKILL 兜底，确保调用方绝不会被挂起。
+    "$@" &
+    local pid=$!
+    ( sleep 1; kill -9 "$pid" ) 2>/dev/null &
+    local watchdog=$!
+    wait "$pid" 2>/dev/null
+    local ret=$?
+    kill "$watchdog" 2>/dev/null
+    wait "$watchdog" 2>/dev/null
+    return $ret
 }
 
 _comp_pattern_for() {
